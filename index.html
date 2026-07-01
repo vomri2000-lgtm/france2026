@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>דרום צרפת · מדריך הטיול</title>
+<script>/* תמיד לפתוח בראש העמוד ברענון — ביטול שחזור הגלילה של הדפדפן */
+if('scrollRestoration' in history)history.scrollRestoration='manual';
+addEventListener('load',()=>window.scrollTo(0,0));</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css"/>
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Assistant",system-ui,sans-serif;
+    --bg:#F6F5F3; --surface:#FFFFFF; --ink:#1C1A18; --muted:#6B6661;
+    --line:#E7E3DD; --line-soft:#EFEBE5;
+    --prov:#C0892C; --nice:#1E7A93;
+    --accent:var(--prov);
+    --r:18px; --shadow:0 14px 40px -24px rgba(40,30,18,.5);
+    --maxw:1180px; --ease:cubic-bezier(.22,.8,.22,1);
+  }
+  body[data-tab="nice"]{--accent:var(--nice)}
+  body[data-tab="drone"]{--accent:#3F6CB4}
+  body[data-tab="map"]{--accent:#2E7D52}
+  html{overflow-x:hidden;scroll-behavior:smooth}
+  body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.6;
+    -webkit-font-smoothing:antialiased;overflow-x:hidden;padding-bottom:60px}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(16px,4vw,40px)}
+
+  header.top{padding:30px 0 0;background:
+     radial-gradient(120% 140% at 90% -10%, color-mix(in srgb,var(--accent) 16%,transparent), transparent 55%);
+     transition:background .5s var(--ease)}
+  .brand{font-size:13px;font-weight:600;color:var(--accent);margin-bottom:4px}
+  header.top h1{font-size:clamp(30px,5.4vw,50px);font-weight:800;letter-spacing:-.03em;line-height:1.02}
+  header.top h1 .light{color:var(--muted);font-weight:500}
+  .sub{color:var(--muted);font-size:15.5px;margin-top:8px;max-width:62ch}
+
+  .tabs{position:sticky;top:0;z-index:30;margin-top:22px;
+     background:color-mix(in srgb,var(--bg) 85%,transparent);
+     backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .tabs .wrap{display:flex;gap:28px}
+  .tab{background:none;border:0;cursor:pointer;font-family:inherit;font-size:16px;font-weight:700;
+     color:var(--muted);padding:16px 2px;position:relative;transition:color .2s}
+  .tab .cnt{font-size:12.5px;font-weight:600;color:var(--muted);margin-right:6px;opacity:.8}
+  .tab[aria-selected="true"]{color:var(--ink)}
+  .tab[aria-selected="true"]::after{content:"";position:absolute;inset:auto 0 -1px 0;height:3px;
+     border-radius:3px 3px 0 0;background:var(--accent)}
+  /* פילטר מפה "כולל את ניס" */
+  .nice-toggle{display:inline-flex;align-items:center;gap:9px;margin-inline-start:auto;cursor:pointer;
+     user-select:none;font-weight:700;font-size:13.5px;color:var(--muted);white-space:nowrap}
+  .nice-toggle input{position:absolute;opacity:0;width:0;height:0;pointer-events:none}
+  .nt-track{position:relative;width:38px;height:22px;border-radius:999px;background:#cfc9c0;
+     transition:background .2s var(--ease);flex:0 0 auto}
+  .nt-thumb{position:absolute;top:2px;inset-inline-start:2px;width:18px;height:18px;border-radius:50%;
+     background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.35);transition:transform .2s var(--ease)}
+  .nice-toggle input:checked + .nt-track{background:var(--nice)}
+  .nice-toggle input:checked + .nt-track .nt-thumb{transform:translateX(-16px)}
+  .nice-toggle input:focus-visible + .nt-track{outline:2px solid var(--nice);outline-offset:2px}
+  .nice-toggle input:checked ~ .nt-label{color:var(--ink)}
+
+  .view{display:none;padding-top:26px}
+  .view.show{display:block;animation:fade .38s var(--ease)}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  .intro{margin-bottom:8px}
+  .intro h2{font-size:23px;font-weight:800;letter-spacing:-.02em}
+  .intro p{color:var(--muted);font-size:14.5px;max-width:72ch;margin-top:4px}
+
+  .day{margin:32px 0 8px}
+  .day-h{display:flex;align-items:baseline;gap:12px;margin-bottom:16px;
+     padding-bottom:10px;border-bottom:1px solid var(--line)}
+  .day-dot{font-size:13px;font-weight:800;color:#fff;background:var(--accent);border-radius:9px;padding:5px 11px;flex:0 0 auto}
+  .day-h h3{font-size:19px;font-weight:800;letter-spacing:-.01em}
+  .day-h .route{font-size:12.5px;color:var(--muted);margin-right:auto;direction:ltr;text-align:left}
+
+  .filters{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 24px}
+  .filters button{border:1px solid var(--line);background:var(--surface);border-radius:999px;
+     padding:9px 16px;font-family:inherit;font-size:13.5px;font-weight:600;color:var(--muted);cursor:pointer;transition:.18s var(--ease)}
+  .filters button:hover{border-color:color-mix(in srgb,var(--accent) 50%,var(--line))}
+  .filters button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:26px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
+     display:flex;flex-direction:column;box-shadow:var(--shadow);transition:transform .25s var(--ease),border-color .2s}
+  .card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--accent) 40%,var(--line))}
+  .ph{position:relative;aspect-ratio:3/2;background:#E4DFD7;overflow:hidden;cursor:pointer}
+  .ph img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s var(--ease)}
+  .card:hover .ph img{transform:scale(1.04)}
+  .ph .cat{position:absolute;top:12px;right:12px;background:rgba(0,0,0,.58);color:#fff;
+     font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;backdrop-filter:blur(4px)}
+  .ph .time{position:absolute;bottom:12px;right:12px;background:rgba(255,255,255,.92);color:var(--ink);
+     font-size:12px;font-weight:700;padding:4px 10px;border-radius:8px;direction:ltr}
+  .ph .gem{position:absolute;top:12px;left:12px;display:inline-flex;align-items:center;gap:5px;
+     background:linear-gradient(135deg,#2BB3A3,#1E7A93);color:#fff;font-size:11.5px;font-weight:700;
+     padding:5px 11px;border-radius:999px;box-shadow:0 4px 14px -4px rgba(30,122,147,.7)}
+  .ph .status{position:absolute;top:12px;left:12px;font-size:11.5px;font-weight:700;
+     padding:5px 11px;border-radius:999px;color:#fff;box-shadow:0 4px 14px -6px rgba(0,0,0,.5)}
+  .st-ok{background:#2E7D52}.st-caution{background:#C98A1E}.st-no{background:#C0392B}
+  .ph .gem.must{background:linear-gradient(135deg,#E6A817,#C98A1E);box-shadow:0 4px 14px -4px rgba(201,138,30,.7)}
+  /* map hover mini-card (MapLibre popup, chrome stripped) */
+  .mapcard-tip .maplibregl-popup-content{background:none;border:0;box-shadow:none;padding:0;border-radius:0}
+  .mapcard-tip .maplibregl-popup-tip{display:none}
+  .mapcard-tip.maplibregl-popup{filter:drop-shadow(0 8px 22px rgba(0,0,0,.28))}
+  .maplibregl-marker{cursor:pointer}
+  .mapcard{width:236px;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);direction:rtl;text-align:right;animation:mcIn .18s var(--ease)}
+  .mapcard-img{height:118px;background-size:cover;background-position:center;background-color:#E4DFD7;position:relative}
+  .mc-badge{position:absolute;top:9px;right:9px;display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:800;padding:4px 9px;border-radius:999px;color:#fff;box-shadow:0 4px 12px -4px rgba(0,0,0,.5)}
+  .mc-must{background:linear-gradient(135deg,#E6A817,#C98A1E)}
+  .mc-gem{background:linear-gradient(135deg,#2BB3A3,#1E7A93)}
+  .mapcard-body{padding:9px 12px 11px}
+  .mapcard-name{font-size:14.5px;font-weight:800;color:var(--ink);display:flex;align-items:center;gap:6px;letter-spacing:-.01em}
+  .mapcard-sub{font-size:12px;color:var(--muted);margin-top:2px}
+  .mapcard-meta{margin-top:5px}
+  .mc-rate{font-size:12px;font-weight:700;color:var(--accent)}
+  .mc-dot{width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+  .mc-dot.st-ok{background:#2E7D52}.mc-dot.st-caution{background:#C98A1E}.mc-dot.st-no{background:#C0392B}
+  @keyframes mcIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.mapcard{animation:none}}
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+     padding:20px 22px;box-shadow:var(--shadow);margin-bottom:26px}
+  .panel h3{font-size:17px;font-weight:800;margin-bottom:4px}
+  .panel p{font-size:14px;color:var(--muted);margin-bottom:6px}
+  .panel ul{margin:8px 18px 0 0;padding:0;list-style:none}
+  .panel li{font-size:14px;color:#544f4a;margin-bottom:7px;padding-right:20px;position:relative}
+  .panel li::before{content:"✓";position:absolute;right:0;color:var(--accent);font-weight:800}
+  .panel .links{display:flex;flex-wrap:wrap;gap:10px;margin-top:15px}
+  .panel .links a{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-weight:700;
+     font-size:13.5px;color:#fff;background:var(--accent);padding:10px 15px;border-radius:11px;transition:.18s var(--ease)}
+  .panel .links a:hover{filter:brightness(.95);transform:translateY(-1px)}
+  .panel .warn{background:#FBF1EC;border:1px solid #F0D8CC;color:#9A4A2E;border-radius:10px;
+     padding:10px 13px;margin-top:14px;font-size:13px;font-weight:600}
+  .body{padding:18px 20px 20px;display:flex;flex-direction:column;flex:1}
+  .name{font-size:20px;font-weight:800;letter-spacing:-.015em;line-height:1.18}
+  .name .fr{display:block;font-size:13px;font-weight:600;color:var(--accent);direction:ltr;text-align:right;margin-top:3px}
+  .meta{display:flex;gap:12px;align-items:center;margin-top:8px;font-size:13.5px}
+  .meta .rate{color:#C0892C;font-weight:700}
+  .meta .price{color:var(--muted);font-weight:700}
+  .desc{font-size:14.5px;color:#544f4a;margin-top:10px;flex:1}
+  .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+  .tg{font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:7px;background:var(--line-soft);color:#5b5651}
+  .near{font-size:12.5px;color:#5b5651;margin-top:11px;padding-top:11px;border-top:1px dashed var(--line)}
+  .near b{color:var(--accent);font-weight:700}
+  .note{font-size:12.5px;color:#544f4a;background:#FBF6EC;border:1px solid #F0E6D3;border-radius:10px;padding:9px 12px;margin-top:11px}
+  .note b{color:var(--ink)}
+  .foot{display:flex;gap:10px;margin-top:15px;align-items:center}
+  .maplink{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:7px;text-decoration:none;
+     font-weight:700;font-size:14.5px;color:#fff;background:var(--accent);padding:12px;border-radius:11px;transition:.18s var(--ease)}
+  .maplink:hover{filter:brightness(.95);transform:translateY(-1px)}
+  .infolink{display:inline-flex;align-items:center;justify-content:center;gap:6px;text-decoration:none;
+     font-weight:700;font-size:13.5px;color:var(--accent);background:var(--surface);border:1px solid color-mix(in srgb,var(--accent) 45%,var(--line));
+     padding:12px 13px;border-radius:11px;transition:.18s var(--ease);white-space:nowrap}
+  .infolink:hover{background:color-mix(in srgb,var(--accent) 8%,var(--surface));transform:translateY(-1px)}
+  .fav{width:46px;height:46px;flex:0 0 auto;border:1px solid var(--line);background:var(--surface);
+     border-radius:11px;cursor:pointer;font-size:18px;color:var(--muted);transition:.18s var(--ease)}
+  .fav[aria-pressed="true"]{background:#FCEBEC;border-color:#F0B6BC;color:#D6354A}
+  .mineMap{flex:0 0 auto;height:46px;display:inline-flex;align-items:center;gap:6px;padding:0 14px;border:1px solid color-mix(in srgb,var(--accent) 45%,var(--line));background:var(--surface);color:var(--accent);font-family:inherit;font-weight:700;font-size:13.5px;border-radius:13px;cursor:pointer;transition:.18s var(--ease)}
+  .mineMap:hover{background:color-mix(in srgb,var(--accent) 8%,var(--surface));transform:translateY(-1px)}
+  .mineMap:active{transform:translateY(0)}
+
+  .lb{position:fixed;inset:0;z-index:100;background:rgba(15,12,10,.85);display:none;
+     align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(5px)}
+  .lb.open{display:flex;animation:fade .25s var(--ease)}
+  .lb img{max-width:min(900px,92vw);max-height:84vh;border-radius:14px;object-fit:contain}
+  .lb .x{position:absolute;top:18px;left:18px;width:44px;height:44px;border-radius:50%;border:0;
+     background:rgba(255,255,255,.16);color:#fff;font-size:20px;cursor:pointer}
+  .ph .more{position:absolute;bottom:12px;left:12px;background:rgba(0,0,0,.5);color:#fff;
+     font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:8px;backdrop-filter:blur(3px)}
+  .card{cursor:pointer}
+  /* detail modal */
+  .detail{position:fixed;inset:0;z-index:120;background:rgba(15,12,10,.72);display:none;
+     align-items:flex-start;justify-content:center;padding:28px 16px;overflow-y:auto;backdrop-filter:blur(6px)}
+  .detail.open{display:flex;animation:fade .25s var(--ease)}
+  .dcard{background:var(--surface);border-radius:20px;max-width:760px;width:100%;overflow:hidden;
+     box-shadow:0 30px 90px -20px rgba(0,0,0,.6);position:relative;animation:pop .3s var(--ease)}
+  @keyframes pop{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+  .detail.closing{animation:dfadeOut .2s var(--ease) forwards}
+  .detail.closing .dcard{animation:dpopOut .2s var(--ease) forwards}
+  @keyframes dfadeOut{to{opacity:0}}
+  @keyframes dpopOut{to{opacity:0;transform:translateY(10px) scale(.98)}}
+  .dgal{position:relative;aspect-ratio:16/10;background:#E4DFD7}
+  .dgal img{width:100%;height:100%;object-fit:cover;display:block}
+  .dnav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;
+     border:0;background:rgba(0,0,0,.45);color:#fff;font-size:26px;line-height:1;cursor:pointer;display:grid;place-items:center}
+  .dnav.prev{right:12px}.dnav.next{left:12px}
+  .ddots{position:absolute;bottom:14px;left:0;right:0;display:flex;gap:7px;justify-content:center}
+  .ddots span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.5);transition:.2s}
+  .ddots span.on{background:#fff;width:22px;border-radius:4px}
+  .dx{position:absolute;top:14px;left:14px;z-index:2;width:42px;height:42px;border-radius:50%;border:0;
+     background:rgba(0,0,0,.5);color:#fff;font-size:18px;cursor:pointer}
+  .dbody{padding:22px 24px 26px}
+  .dbody h3{font-size:25px;font-weight:800;letter-spacing:-.02em;line-height:1.15}
+  .dbody .fr{font-size:14px;color:var(--accent);font-weight:600;direction:ltr;text-align:right;margin-top:3px}
+  .dbody .ddesc{font-size:15.5px;color:#3f3b37;margin-top:13px;line-height:1.75}
+  .checklist{list-style:none;margin-top:12px}
+  .checklist li{margin-bottom:10px;padding-right:0}
+  .checklist li::before{content:none}
+  .checklist label{display:flex;gap:11px;align-items:flex-start;font-size:14.5px;color:#3f3b37;cursor:pointer}
+  .checklist input{margin-top:3px;width:18px;height:18px;accent-color:var(--accent);flex:0 0 auto}
+  .checklist input:checked + span{color:var(--muted);text-decoration:line-through}
+  /* map */
+  #map{height:72vh;min-height:460px;border-radius:16px;border:1px solid var(--line);overflow:hidden;position:relative;z-index:1}
+  .maplibregl-map{font-family:var(--font)}
+  .maplibregl-ctrl-attrib{font-size:10px}
+  .mk{width:34px;height:34px;border-radius:50%;border:2px solid #fff;
+     box-shadow:0 3px 10px -2px rgba(0,0,0,.55);display:grid;place-items:center;font-size:17px;cursor:pointer}
+  .maplegend{display:flex;flex-wrap:wrap;gap:8px 14px;margin:6px 0 16px}
+  .maplegend span{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:#544f4a;font-weight:600}
+  .maplegend i{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:12px;
+     border:1.5px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.3);font-style:normal}
+  .maplegend .lg{cursor:pointer;padding:5px 9px;border-radius:999px;border:1px solid transparent;transition:.15s}
+  .maplegend .lg:hover{background:var(--line-soft)}
+  .maplegend .lg.off{opacity:.38;text-decoration:line-through}
+  .maplegend .lg-all{font-weight:800;border:1px solid var(--line)}
+  .maplegend .lg-all.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .maptools{display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+  .locbtn{border:0;background:var(--accent);color:#fff;font-family:inherit;font-weight:700;font-size:14px;
+     padding:11px 18px;border-radius:11px;cursor:pointer;transition:.18s var(--ease)}
+  .locbtn:hover{filter:brightness(.95);transform:translateY(-1px)}
+  .loc-status{font-size:13px;color:var(--muted);font-weight:600}
+  .mk-villa{box-shadow:0 0 0 3px #fff,0 0 0 6px #C0392B,0 4px 14px -2px rgba(0,0,0,.5)!important}
+  .dist{margin-top:10px;font-size:13.5px;font-weight:700;color:var(--accent);
+     background:color-mix(in srgb,var(--accent) 9%,#fff);border-radius:9px;padding:8px 12px;display:inline-block}
+  footer{text-align:center;color:var(--muted);font-size:13px;padding:40px 16px 0}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  /* scroll reveal — day headers only; cards are handled by the single system in enhance.js */
+  @media (prefers-reduced-motion:no-preference){
+    body.anim .day-h{opacity:0;transform:translateY(10px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
+    body.anim .day-h.in{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body data-tab="provence">
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand">קיץ 2026 · מדריך הטיול שלנו</div>
+    <h1>דרום צרפת <span class="light">— פרובאנס &amp; הריביירה</span></h1>
+    <p class="sub">שני חלקים, מסע אחד. עברו בין הטאבים: פרובאנס עם כל המשפחה (לו"ז מסודר יום-יום), וניס עם המשפחה המצומצמת (מאגר אופציות לבחירה, כולל חופים נסתרים).</p>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="wrap" role="tablist">
+    <button class="tab" role="tab" aria-selected="true" data-tab="provence">המשפחה בפרובאנס<span class="cnt">6 ימים</span></button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="nice">המשפחה בניס<span class="cnt">אופציות</span></button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="drone">הטסה 🚁<span class="cnt">רחפנים</span></button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="map">מפה 🗺️<span class="cnt">כל הנקודות</span></button>
+  </div>
+</nav>
+
+<main class="wrap">
+  <section class="view show" id="view-provence">
+    <div class="intro">
+      <h2>פרובאנס</h2>
+      <p>הבסיס בווילה ב־Mérindol שבלב הלוברון, מרביעי עד שני. הלו"ז כאן כבר סגור — ולכל תחנה יש תיאור, תגיות, דירוג, מסעדה מומלצת ונקודות לציון בסביבה.</p>
+    </div>
+    <div id="prov-days"></div>
+  </section>
+
+  <section class="view" id="view-nice">
+    <div class="intro">
+      <h2>ניס &amp; הריביירה</h2>
+      <p>החלק הגמיש. כל האופציות על השולחן — ערים, כפרים נסתרים, חופים יפים, אמנות, ערב למבוגרים ומסעדות. סננו לפי קטגוריה, סמנו מועדפים, ומשם תחליטו מה נכנס לכל יום.</p>
+    </div>
+    <div class="filters" id="nice-filters"></div>
+    <div class="grid" id="nice-grid"></div>
+  </section>
+
+  <section class="view" id="view-drone">
+    <div class="intro">
+      <h2>הטסת רחפנים 🚁</h2>
+      <p>כל מה שצריך לדעת כדי להטיס נכון וחוקי בטיול — הכללים בצרפת, ואיפה מותר, מותר-בזהירות או אסור בכל אזור שאנחנו עוברים בו.</p>
+    </div>
+
+    <div class="panel">
+      <h3>לפני שטסים — הכללים בצרפת</h3>
+      <p>צרפת פועלת לפי חוקי האיחוד האירופי (EASA). בקצרה:</p>
+      <ul>
+        <li>רישום כ<b>מפעיל רחפן</b> ב-AlphaTango (חובה לכל רחפן עם מצלמה, גם מתחת 250 גרם), וסימון מספר המפעיל על הרחפן.</li>
+        <li>גובה מקסימלי <b>120 מטר</b>, תמיד בקו ראייה ישיר, ולא מעל אנשים או קהל.</li>
+        <li>חובה לבדוק <b>אזורים אסורים (geozones)</b> לפני כל טיסה — שדות תעופה, ערים, פארקים לאומיים ואזורי צבא.</li>
+        <li>רחפן מעל 250 גרם מחייב גם <b>מבחן ידע מקוון</b> (תעודת כשירות A1/A3 של EASA).</li>
+        <li><b>ביטוח אחריות צד ג'</b> — חובה להטסה באירופה; לוודא שהפוליסה בתוקף ומכסה רחפנים. אסור להטיס בלילה ללא היתר.</li>
+      </ul>
+      <div class="links">
+        <a href="https://www.drones.gouv.fr" target="_blank" rel="noopener">🔗 drones.gouv.fr — האתר הרשמי</a>
+        <a href="https://www.geoportail.gouv.fr/donnees/restrictions-pour-drones-de-loisir" target="_blank" rel="noopener">🗺️ מפת אזורי הטסה (Géoportail)</a>
+        <a href="https://alphatango.aviation-civile.gouv.fr" target="_blank" rel="noopener">📝 רישום מפעיל (AlphaTango)</a>
+      </div>
+      <div class="warn">⚠️ החוקים והאזורים משתנים — תמיד לאמת במפה הרשמית ובאפליקציית הרחפן (DJI Fly / GEO) ביום הטיסה עצמו, במיקום עצמו.</div>
+    </div>
+
+    <div class="panel">
+      <h3>✅ צ'קליסט לפני כל טיסה</h3>
+      <p>לעבור על הרשימה לפני שמשחררים את הרחפן:</p>
+      <ul class="checklist">
+        <li><label><input type="checkbox"><span>הרחפן רשום ומספר המפעיל מודבק עליו</span></label></li>
+        <li><label><input type="checkbox"><span>ביטוח אחריות צד ג' בתוקף</span></label></li>
+        <li><label><input type="checkbox"><span>בדקתי geozone במפה/אפליקציה — האזור מותר להטסה</span></label></li>
+        <li><label><input type="checkbox"><span>לא בקרבת שדה תעופה, מסוקים, צבא או פארק לאומי</span></label></li>
+        <li><label><input type="checkbox"><span>מזג אוויר תקין — רוח מתחת ל-~30 קמ"ש, בלי גשם</span></label></li>
+        <li><label><input type="checkbox"><span>סוללות טעונות + כרטיס זיכרון פנוי</span></label></li>
+        <li><label><input type="checkbox"><span>Remote ID פעיל (אם הרחפן דורש)</span></label></li>
+        <li><label><input type="checkbox"><span>טיסה עד 120מ', בקו ראייה, לא מעל אנשים או רכוש</span></label></li>
+        <li><label><input type="checkbox"><span>כיבוד פרטיות — לא מעל בתים/אנשים ללא רשות</span></label></li>
+      </ul>
+    </div>
+
+    <div class="grid" id="drone-grid"></div>
+  </section>
+
+  <section class="view" id="view-map">
+    <div class="intro">
+      <h2>כל הנקודות על המפה</h2>
+      <p>כל המקומות שאספנו — פרובאנס והריביירה — על מפה אחת. הצבע והאייקון מציינים את הקטגוריה, ולחיצה על נקודה פותחת את התצוגה המורחבת.</p>
+    </div>
+    <div class="maptools">
+      <button id="locate-btn" class="locbtn">📍 המיקום שלי</button>
+      <span id="loc-status" class="loc-status"></span>
+      <label class="nice-toggle" title="הצג או הסתר את נקודות ניס והריביירה — כל מה שממזרח לערוצי הוורדון">
+        <input type="checkbox" id="niceSwitch" checked>
+        <span class="nt-track"><span class="nt-thumb"></span></span>
+        <span class="nt-label">כולל את ניס</span>
+      </label>
+    </div>
+    <div class="maplegend" id="map-legend"></div>
+    <div id="map"></div>
+  </section>
+</main>
+
+<footer>נבנה במיוחד לטיול שלנו · "פתח במפה" = ניווט ישיר ב-Google Maps · "אתר ותמונות" = האתר הרשמי · לחיצה על תמונה מגדילה</footer>
+
+<div class="detail" id="detail" role="dialog" aria-modal="true" aria-label="פרטי מקום">
+  <div class="dcard">
+    <button class="dx" aria-label="סגירה">✕</button>
+    <div class="dgal">
+      <img id="dimg" alt="" onerror="this.style.visibility='hidden'">
+      <button class="dnav prev" aria-label="הקודם">‹</button>
+      <button class="dnav next" aria-label="הבא">›</button>
+      <div class="ddots" id="ddots"></div>
+    </div>
+    <div class="dbody" id="dbody"></div>
+  </div>
+</div>
+
+<script>
+const CAT={city:"עיר",village:"כפר",nature:"טבע",market:"שוק",culture:"תרבות",beach:"חופים",sea:"ים ואגמים",shop:"קניות",history:"היסטוריה",view:"תצפית",art:"אמנות",evening:"ערב",kids:"ילדים",hidden:"פינה נסתרת",restaurant:"מסעדה",logistics:"לוגיסטיקה",winery:"יקב"};
+function pic(x){return `images/${x}.webp`;}
+function map(q){return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;}
+const GALLERY={"provence/g-oysterbar": ["provence/g-oysterbar", "provence/g-oysterbar-2", "provence/g-oysterbar-3", "provence/g-oysterbar-4"], "provence/g-camille": ["provence/g-camille", "provence/g-camille-2", "provence/g-camille-3", "provence/g-camille-4"], "provence/g-cantine": ["provence/g-cantine", "provence/g-cantine-2", "provence/g-cantine-3", "provence/g-cantine-4"], "provence/g-trinquette": ["provence/g-trinquette", "provence/g-trinquette-2", "provence/g-trinquette-3", "provence/g-trinquette-4"], "riviera/g-clay": ["riviera/g-clay", "riviera/g-clay-2", "riviera/g-clay-3", "riviera/g-clay-4", "riviera/g-clay-5"], "provence/villa": ["provence/villa", "provence/villa-2", "provence/villa-3", "provence/villa-4", "provence/villa-5", "provence/villa-6", "provence/villa-7", "provence/villa-8", "provence/villa-9", "provence/villa-10", "provence/villa-11", "provence/villa-12", "provence/villa-13", "provence/villa-14", "provence/villa-15", "provence/villa-16", "provence/villa-17", "provence/villa-18", "provence/villa-19", "provence/villa-20"], "provence/aix": ["provence/aix", "provence/aix-2", "provence/aix-3", "provence/aix-4"], "provence/avignon": ["provence/avignon", "provence/avignon-2", "provence/avignon-3", "provence/avignon-4"], "provence/carrieres": ["provence/carrieres", "provence/carrieres-2", "provence/carrieres-3", "provence/carrieres-4"], "provence/cassis": ["provence/cassis", "provence/cassis-2", "provence/cassis-3", "provence/cassis-4", "provence/cassis-5", "provence/cassis-6", "provence/cassis-7", "provence/cassis-8"], "provence/en-vau": ["provence/en-vau", "provence/en-vau-2", "provence/en-vau-3", "provence/en-vau-4", "provence/en-vau-5", "provence/en-vau-6", "provence/en-vau-7", "provence/en-vau-8"], "provence/fontaine": ["provence/fontaine", "provence/fontaine-2", "provence/fontaine-4"], "provence/gordes": ["provence/gordes", "provence/gordes-2", "provence/gordes-3", "provence/gordes-4", "provence/gordes-5", "provence/gordes-6", "provence/gordes-7", "provence/gordes-8"], "provence/isle-sorgue": ["provence/isle-sorgue", "provence/isle-sorgue-2", "provence/isle-sorgue-3", "provence/isle-sorgue-4"], "provence/lac-sainte-croix": ["provence/lac-sainte-croix", "provence/lac-sainte-croix-2", "provence/lac-sainte-croix-3", "provence/lac-sainte-croix-4", "provence/lac-sainte-croix-5", "provence/lac-sainte-croix-6", "provence/lac-sainte-croix-7", "provence/lac-sainte-croix-8"], "provence/les-baux": ["provence/les-baux", "provence/les-baux-2", "provence/les-baux-3", "provence/les-baux-4"], "provence/lourmarin": ["provence/lourmarin", "provence/lourmarin-2", "provence/lourmarin-3", "provence/lourmarin-4"], "provence/marseille": ["provence/marseille", "provence/marseille-2", "provence/marseille-3", "provence/marseille-4"], "provence/merindol": ["provence/merindol", "provence/merindol-2", "provence/merindol-3", "provence/merindol-4"], "provence/moustiers": ["provence/moustiers", "provence/moustiers-2", "provence/moustiers-3", "provence/moustiers-4"], "provence/outlet": ["provence/outlet", "provence/outlet-2", "provence/outlet-3"], "provence/roussillon": ["provence/roussillon", "provence/roussillon-2", "provence/roussillon-3", "provence/roussillon-4", "provence/roussillon-5", "provence/roussillon-6", "provence/roussillon-7", "provence/roussillon-8"], "provence/senanque": ["provence/senanque", "provence/senanque-2", "provence/senanque-3", "provence/senanque-4", "provence/senanque-5", "provence/senanque-6", "provence/senanque-7"], "provence/st-remy": ["provence/st-remy", "provence/st-remy-3"], "provence/valensole": ["provence/valensole", "provence/valensole-2", "provence/valensole-3", "provence/valensole-4", "provence/valensole-5", "provence/valensole-6", "provence/valensole-7", "provence/valensole-8"], "provence/verdon": ["provence/verdon", "provence/verdon-2", "provence/verdon-3", "provence/verdon-4", "provence/verdon-5", "provence/verdon-6", "provence/verdon-7", "provence/verdon-8"], "riviera/antibes": ["riviera/antibes", "riviera/antibes-2", "riviera/antibes-3", "riviera/antibes-4"], "riviera/bars-nice": ["riviera/bars-nice", "riviera/bars-nice-2", "riviera/bars-nice-3", "riviera/bars-nice-4"], "riviera/beaulieu": ["riviera/beaulieu", "riviera/beaulieu-3", "riviera/beaulieu-4"], "riviera/cap-dail": ["riviera/cap-dail", "riviera/cap-dail-2", "riviera/cap-dail-3", "riviera/cap-dail-4"], "riviera/cap-ferrat": ["riviera/cap-ferrat", "riviera/cap-ferrat-2", "riviera/cap-ferrat-3", "riviera/cap-ferrat-4"], "riviera/casino": ["riviera/casino", "riviera/casino-2", "riviera/casino-3", "riviera/casino-4"], "riviera/casino-nice": ["riviera/casino-nice", "riviera/casino-nice-2", "riviera/casino-nice-3", "riviera/casino-nice-4"], "riviera/cimiez": ["riviera/cimiez", "riviera/cimiez-2", "riviera/cimiez-3", "riviera/cimiez-4"], "riviera/coaraze": ["riviera/coaraze", "riviera/coaraze-2", "riviera/coaraze-3"], "riviera/eze": ["riviera/eze", "riviera/eze-2", "riviera/eze-5", "riviera/eze-6", "riviera/eze-7"], "riviera/garoupe": ["riviera/garoupe", "riviera/garoupe-2", "riviera/garoupe-3", "riviera/garoupe-4"], "riviera/gourdon": ["riviera/gourdon", "riviera/gourdon-2", "riviera/gourdon-3"], "riviera/la-turbie": ["riviera/la-turbie", "riviera/la-turbie-2", "riviera/la-turbie-3", "riviera/la-turbie-4"], "riviera/larvotto": ["riviera/larvotto", "riviera/larvotto-2", "riviera/larvotto-3", "riviera/larvotto-4"], "riviera/menton": ["riviera/menton", "riviera/menton-2", "riviera/menton-3", "riviera/menton-4", "riviera/menton-5", "riviera/menton-6", "riviera/menton-7"], "riviera/monaco": ["riviera/monaco", "riviera/monaco-2", "riviera/monaco-3", "riviera/monaco-4", "riviera/monaco-5", "riviera/monaco-6", "riviera/monaco-7", "riviera/monaco-8"], "riviera/nice": ["riviera/nice", "riviera/nice-2", "riviera/nice-3", "riviera/nice-4", "riviera/nice-5", "riviera/nice-6", "riviera/nice-7"], "riviera/passable": ["riviera/passable", "riviera/passable-2", "riviera/passable-3", "riviera/passable-4"], "riviera/peillon": ["riviera/peillon", "riviera/peillon-2", "riviera/peillon-3"], "riviera/promenade": ["riviera/promenade", "riviera/promenade-2", "riviera/promenade-3", "riviera/promenade-4", "riviera/promenade-5", "riviera/promenade-6", "riviera/promenade-7", "riviera/promenade-8"], "riviera/sainte-agnes": ["riviera/sainte-agnes", "riviera/sainte-agnes-2", "riviera/sainte-agnes-3", "riviera/sainte-agnes-4"], "riviera/st-paul": ["riviera/st-paul", "riviera/st-paul-2", "riviera/st-paul-3", "riviera/st-paul-4", "riviera/st-paul-5", "riviera/st-paul-6", "riviera/st-paul-7"], "riviera/villefranche": ["riviera/villefranche", "riviera/villefranche-2", "riviera/villefranche-3", "riviera/villefranche-4", "riviera/villefranche-5", "riviera/villefranche-6", "riviera/villefranche-7"], "riviera/g-hotel": ["riviera/g-hotel", "riviera/g-hotel-2", "riviera/g-hotel-3", "riviera/g-hotel-4"], "riviera/casino-square": ["riviera/casino-square", "riviera/casino-square-2", "riviera/casino-square-3", "riviera/casino-square-4", "riviera/casino-square-5", "riviera/casino-square-6", "riviera/casino-square-7", "riviera/casino-square-8"], "riviera/f1": ["riviera/f1", "riviera/f1-2", "riviera/f1-3", "riviera/f1-4"], "riviera/tete-de-chien": ["riviera/tete-de-chien", "riviera/tete-de-chien-2", "riviera/tete-de-chien-3", "riviera/tete-de-chien-4"], "riviera/jardin-exotique": ["riviera/jardin-exotique", "riviera/jardin-exotique-2", "riviera/jardin-exotique-3", "riviera/jardin-exotique-4", "riviera/jardin-exotique-5", "riviera/jardin-exotique-6", "riviera/jardin-exotique-7", "riviera/jardin-exotique-8"], "riviera/place-massena": ["riviera/place-massena","riviera/place-massena-2","riviera/place-massena-3"], "riviera/place-garibaldi": ["riviera/place-garibaldi","riviera/place-garibaldi-2","riviera/place-garibaldi-3"], "riviera/chateau-nice": ["riviera/chateau-nice","riviera/chateau-nice-2","riviera/chateau-nice-3"], "riviera/port-lympia": ["riviera/port-lympia","riviera/port-lympia-2","riviera/port-lympia-3"], "riviera/marinieres": ["riviera/marinieres","riviera/marinieres-2","riviera/marinieres-3"], "riviera/le-plongeoir": ["riviera/le-plongeoir","riviera/le-plongeoir-2","riviera/le-plongeoir-3"]};
+let UID=0;const REG={};
+
+const PROVENCE=[
+ {day:"רביעי",route:"נחיתה מרסיי → מרינדול",title:"נחיתה והתארגנות",stops:[
+   {name:"נחיתה במרסיי",fr:"Marseille · טיסה 0321 · 14:15",cat:"logistics",tags:["הגעה","איסוף רכבים"],q:"Marseille Provence Airport",img:"provence/marseille",t:"14:15",desc:"נחיתה בשדה התעופה של מרסיי. אוספים את הרכבים השכורים ויוצאים צפונה — כ-45 דקות נסיעה דרך נופי פרובאנס אל הבסיס בכפר מרינדול."},
+   {name:"הווילה שלנו · Maison Grégoire",fr:"Maison Grégoire · Mérindol",cat:"logistics",tags:["לינה","בריכה","ערב על האש"],q:"Mérindol France",img:"provence/villa",info:"https://www.maison-gregoire.com",t:"20:00",desc:"הבסיס שלנו לשבוע — בית אבן פרובנסאלי במרינדול שבלב הלוברון, עם בריכה, גינה וקמרונות אבן. הערב הראשון נינוח: מתמקמים, קנייה ראשונה בסופר המקומי, וערב על האש ליד הבריכה.",near:"בלב הלוברון — דקות מהכפרים Lauris, Cadenet ו-Cucuron.",note:"תמונות אמיתיות של הבית מאתר ההשכרה Maison Grégoire."},
+ ]},
+ {day:"חמישי",route:"Aix → Cassis → אאוטלט",title:"אקס־אן־פרובאנס וקסיס",stops:[
+   {name:"אקס-אן-פרובאנס",fr:"Aix-en-Provence",cat:"city",rate:"★ 4.6",tags:["עיר","שוק","קפה","סזאן"],q:"Cours Mirabeau Aix-en-Provence",img:"provence/aix",t:"10:30",desc:"עיר הסטודנטים האלגנטית של פרובאנס, עיר הולדתו של סזאן. שדרת Cours Mirabeau מוצלת בדולבים ענקיים ומלאה מזרקות ובתי קפה היסטוריים, ובסמטאות שמאחור שווקים יומיים, מגדניות ובוטיקים. אווירה תוססת ומלוטשת.",near:"בסביבה: מחצבת Bibémus וסטודיו סזאן, וכפר Ventabren לשקיעה.",note:"לשמור ביקור ממוקד כדי להספיק ל-Cassis אחרי הצהריים."},
+   {name:"קאסי",fr:"Cassis",cat:"sea",rate:"★ 4.7",tags:["נמל","קלנקים","שייט"],q:"Port de Cassis",img:"provence/cassis",t:"13:30",desc:"עיירת נמל ססגונית כלואה בין כרמים לצוק Cap Canaille האדום — הגבוה באירופה. יושבים על צהריים מול הסירות, ואז יוצאים בשייט אל הקלנקים: שורת מפרצונים צרים בצבע טורקיז בין צוקי גיר לבנים, שאפשר גם לשחות בהם.",near:"בסביבה: כביש התצפיות Route des Crêtes והקלנקים Port-Miou ו-Port-Pin.",note:"השייט תלוי במזג האוויר ובמצב הים."},
+   {name:"קלנק אן-וו",must:true,fr:"Calanque d'En-Vau",cat:"beach",gem:true,rate:"★ 4.8",tags:["חוף נסתר","קלנק","שחייה"],q:"Calanque d'En-Vau",img:"provence/en-vau",desc:"היפהפייה שבקלנקים — מפרצון חוף חלוקים לבן הכלוא בין מצוקים אנכיים מתנשאים, עם מים צלולים כמו בריכה. מגיעים בהליכה (כשעה במורד) או בסירה מקאסי. מעט מאמץ, הרבה תגמול.",near:"בדרך: הקלנקים Port-Pin ו-Port-Miou, קצרים יותר להגעה."},
+   {name:"Le petit Oyster Bar",fr:"Cassis · בר צדפות",cat:"restaurant",tags:["צדפות","פירות ים","€€"],rate:"★ 4.8",price:"€€",q:"Le petit OYSTER BAR Cassis",img:"provence/g-oysterbar",desc:"בר צדפות ופירות ים אינטימי ליד הנמל. צדפות Isigny טריות, יין לבן מקומי קר ואווירה נינוחה על המים. פתוח כל יום — מושלם לצהריים אחרי השייט."},
+   {name:"McArthurGlen Provence",fr:"Miramas",cat:"shop",rate:"★ 4.3",tags:["אאוטלט","מותגים"],q:"McArthurGlen Provence Miramas",img:"provence/outlet",t:"בדרך",desc:"אאוטלט מותגים גדול וסגור בדרך חזרה לכיוון הבסיס — אופנה, ספורט ומותגי בית במחירים מוזלים, למי שרוצה לעצור לקניות."},
+ ]},
+ {day:"שישי",route:"Lourmarin → St-Rémy → Les Baux → Avignon",title:"היום התרבותי",stops:[
+   {name:"לורמרן",fr:"Lourmarin",cat:"market",rate:"★ 4.7",tags:["שוק שישי","כפר","טירה"],q:"Lourmarin France",img:"provence/lourmarin",t:"10:15",desc:"אחד הכפרים היפים בצרפת ושער הלוברון. בבוקר שישי הכיכרות מתמלאות בשוק פרובנסאלי תוסס — גבינות, זיתים, בדים ולבנדר — ומסביב סמטאות אבן, בתי קפה וטירת רנסאנס מרשימה.",near:"בסביבה: הכפרים Cucuron ו-Ansouis, ומעבר ההרים Combe de Lourmarin."},
+   {name:"סן-רמי-דה-פרובאנס",fr:"Saint-Rémy-de-Provence",cat:"culture",rate:"★ 4.6",tags:["ואן גוך","מרכז עתיק","גלריות"],q:"Saint-Rémy-de-Provence",img:"provence/st-remy",t:"12:00",desc:"עיירה מלאת קסם שבה ואן גוך אושפז וצייר עשרות יצירות. מרכז עתיק חמים עם מזרקות, בוטיקים וגלריות, ומסביב חורשות זיתים ושדות. אווירה אמנותית ורגועה.",near:"בסביבה: האתר הרומי Glanum והמנזר Saint-Paul de Mausole של ואן גוך.",note:"לשקול ביקור במנזר/מוזיאון ואן גוך."},
+   {name:"לֶה בּוֹ-דה-פרובאנס",fr:"Les Baux-de-Provence",cat:"village",rate:"★ 4.7",tags:["כפר מבוצר","טירה","תצפיות"],q:"Les Baux-de-Provence",img:"provence/les-baux",t:"13:30",desc:"כפר מבוצר חצוב בסלע על פסגת רכס באלפיי, ובראשו חורבות מצודת ימי-ביניים ענקית עם מכונות מצור. מהחומות נשקף נוף עוצר נשימה אל העמק והמטעים — אחד האתרים הדרמטיים בפרובאנס.",near:"בסביבה: Carrières des Lumières (דקה משם) ומטעי הזיתים של עמק Les Alpilles.",note:"לא להעמיס — להגיע בזמן למחצבות."},
+   {name:"Camille Ô Baux",fr:"Les Baux · קפה-מסעדה",cat:"restaurant",tags:["נוף","צהריים","€€"],rate:"★ 4.7",price:"€€",q:"Camille Ô Baux Les Baux",img:"provence/g-camille",desc:"קפה-מסעדה מקסים עם נוף פתוח לעמק. ניוקי בטראפל, סלטים ומנות יום נעימות, ושירות חביב. נוח מאוד לעצירת צהריים באמצע היום התרבותי."},
+   {name:"קארייר דה לומייר",fr:"Carrières des Lumières",cat:"art",rate:"★ 4.7",tags:["מיצג אור","מחצבות","חוויה"],q:"Carrières des Lumières",info:"https://www.carrieres-lumieres.com",img:"provence/carrieres",t:"15:45",desc:"מיצג אמנות עוצר נשימה בתוך מחצבת אבן ענקית: יצירות מופת (ואן גוך, קלימט ועוד) מוקרנות על קירות בגובה עשרות מטרים ועוטפות אתכם מכל כיוון, עם פסקול עוצמתי. חוויה שקשה לשכוח, גם לילדים.",near:"בתוך אתר Les Baux — נוח לשלב עם הכפר שמעל.",note:"מומלץ מאוד להזמין כרטיסים מראש."},
+   {name:"Avignon בערב",fr:"Avignon",cat:"history",rate:"★ 4.6",tags:["עיר מוקפת חומה","ארמון האפיפיורים","ערב"],q:"Palais des Papes Avignon",info:"https://www.palais-des-papes.com",img:"provence/avignon",t:"20:30",desc:"עיר האפיפיורים, מוקפת חומות ימי-ביניים מרשימות על גדת הרון. בערב נעים להסתובב בעיר העתיקה: ארמון האפיפיורים המואר מבחוץ, כיכר השעון התוססת עם בתי הקפה, וגשר אביניון המפורסם.",near:"בסביבה: גשר Pont du Gard הרומי וכפר היין Châteauneuf-du-Pape.",note:"בערב זה בעיקר סיור חיצוני + יין, לא ביקור מלא בארמון."},
+ ]},
+ {day:"שבת",route:"Valensole → Moustiers → Verdon",title:"ורדון ושדות הלבנדר",stops:[
+   {name:"מישור ולנסול",fr:"Plateau de Valensole",cat:"nature",rate:"★ 4.7",tags:["לבנדר","צילום","שדות"],q:"Plateau de Valensole",img:"provence/valensole",t:"11:00",desc:"מישור עצום שמתכסה בקיץ בים סגול — שדות לבנדר עד האופק, לצד כתמי חמניות צהובות ומזקקות קטנות. גן עדן לצילום ולריח (שיא הפריחה סוף יוני–תחילת יולי).",near:"בסביבה: מזקקות לבנדר לאורך הדרך ועיירת Riez."},
+   {name:"מוסטייה-סנט-מארי",fr:"Moustiers-Sainte-Marie",cat:"village",rate:"★ 4.7",tags:["כפר","קרמיקה","כוכב תלוי"],q:"Moustiers-Sainte-Marie",img:"provence/moustiers",t:"12:00",desc:"כפר ציורי הנצמד למצוק לבן, עם כוכב זהב מסתורי תלוי על שרשרת בין שני ראשי ההר, מפל זורם בלב הכפר ומסורת קרמיקה (faïence) בת מאות שנים. שער הכניסה לוורדון.",near:"בסביבה: הכניסה לערוצי הוורדון ואגם Sainte-Croix שלמטה."},
+   {name:"La Cantine",fr:"Moustiers · צרפתי",cat:"restaurant",tags:["מנות נדיבות","מחיר הוגן","€€"],rate:"★ 4.7",price:"€€",q:"La Cantine Moustiers",img:"provence/g-cantine",desc:"מטבח צרפתי ביתי עם מנות נדיבות ומחירים הוגנים — מרק בצל ובורגרים שמקבלים שבחים. אווירה כפרית ונעימה. סגור בימי ראשון."},
+   {name:"אגם סנט-קרואה",fr:"Lac de Sainte-Croix",cat:"beach",rate:"★ 4.7",tags:["אגם","פדלבוט","טורקיז"],q:"Lac de Sainte-Croix",img:"provence/lac-sainte-croix",t:"14:00",desc:"אגם טורקיז ענק וצלול בכניסה לערוצי הוורדון. שוכרים פדלבוט או קיאק ושטים בין המצוקים אל פתח הקניון — חוויה משפחתית מהנה. סביבו חופים נעימים לפיקניק ושחייה.",near:"בסביבה: כפר Bauduen על שפת האגם וגשר Galetas בכניסה לקניון.",note:"תלוי מזג אוויר ועומסים."},
+   {name:"ערוצי הוורדון",fr:"Gorges du Verdon · Aiguines",cat:"view",rate:"★ 4.8",tags:["קניון","תצפיות","אקסטרים"],q:"Gorges du Verdon Aiguines",img:"provence/verdon",t:"16:00",desc:"\"הגרנד קניון של אירופה\" — ערוץ עמוק ודרמטי שחצב נהר הוורדון, במים בצבע ירוק-טורקיז זוהר. מקטע התצפיות לכיוון Aiguines פותח נופים אדירים, ולמרפתקנים מחכים הייקינג, קיאקים וטיפוס.",near:"בסביבה: כביש הצוקים Route des Crêtes (D71) עם 14 תצפיות."},
+ ]},
+ {day:"ראשון",route:"L'Isle-sur-la-Sorgue → Gordes → Roussillon",title:"הלוברון ושוק יום ראשון",stops:[
+   {name:"ליל-סור-לה-סורג",fr:"L'Isle-sur-la-Sorgue",cat:"market",rate:"★ 4.5",tags:["שוק יום ראשון","תעלות","עתיקות"],q:"L'Isle-sur-la-Sorgue Market",img:"provence/isle-sorgue",t:"10:30",desc:"\"ונציה של פרובאנס\" — עיירה חצויה בתעלות מים ירוקות וגלגלי טחנה מסתובבים. בימי ראשון נפרש כאן אחד משוקי העתיקות הגדולים בצרפת, לצד דוכני אוכל, פרחים ובדים. קסום ושוקק.",near:"בסביבה: Fontaine-de-Vaucluse וכפרי הלוברון הצפוני.",note:"העוגן המרכזי של היום — לצאת מוקדם בגלל החניה והעומס."},
+   {name:"פונטֵן-דה-ווקלוז",fr:"Fontaine-de-Vaucluse",cat:"nature",rate:"★ 4.5",tags:["מעיין","נהר","עצירה קצרה"],q:"Fontaine-de-Vaucluse",img:"provence/fontaine",t:"בדרך",desc:"אחד המעיינות העוצמתיים בעולם — מים ירוקים-צלולים פורצים מתחתית מצוק אנכי ויוצרים את נהר הסורג. הליכה קצרה ויפה לאורך הנהר אל בריכת המעיין. עצירה רעננה בדרך.",near:"בסביבה: L'Isle-sur-la-Sorgue ושביל הנהר Sorgue."},
+   {name:"גורד",must:true,fr:"Gordes",cat:"village",rate:"★ 4.7",tags:["כפר תצפית","אבן","קלאסי"],q:"Town View Point Gordes",img:"provence/gordes",t:"12:30",desc:"הכפר התלוי המפורסם ביותר בלוברון — בתי אבן בהירים מטפסים זה מעל זה במדרון, עם טירה וכנסייה בפסגה. התצפית מהכביש בכניסה היא תמונת הפרסומת הקלאסית, ובפנים סמטאות, גלריות ובתי קפה.",near:"בסביבה: כפר ה-Bories (בקתות אבן עתיקות) ומנזר Sénanque.",note:"שווה מאוד גם בלי שוק."},
+   {name:"La Trinquette",fr:"Gordes · פרובנסאלי",cat:"restaurant",tags:["נוף","פרובנסאלי","€€"],rate:"★ 4.6",price:"€€",q:"La Trinquette Gordes",img:"provence/g-trinquette",desc:"מהמסעדות הטובות בגורד — מטבח פרובנסאלי טרי, אווירה חמה ונוף יפה אל העמק. סגור שלישי-רביעי ונפתח מ-16:00, אז כדאי להזמין מראש."},
+   {name:"מנזר סנאנק",must:true,fr:"Abbaye de Sénanque",cat:"history",rate:"★ 4.6",tags:["מנזר","לבנדר","צילום"],q:"Abbaye Notre-Dame de Sénanque",img:"provence/senanque",t:"14:30",desc:"מנזר ציסטרציאני שקט מהמאה ה-12, שוכן בעמק מבודד עם שדה לבנדר פורח לפניו — אחת התמונות האייקוניות של פרובאנס. עדיין פעיל ומאוכלס בנזירים. עצירת צילום קצרה ויפהפייה.",near:"בסביבה: Gordes וכפר ה-Bories."},
+   {name:"רוסיון",fr:"Roussillon",cat:"village",rate:"★ 4.6",tags:["אוקר","כפר אדום","שביל"],q:"Le Sentier des Ocres Roussillon",img:"provence/roussillon",t:"15:30",desc:"הכפר האדום — בתים בעשרות גוונים של אוקר וחֵמר, מהצהוב הבוהק ועד אדום-עז. שביל ה-Sentier des Ocres עובר בין מצוקי אוקר שנראים כמו נוף ממאדים. מרהיב במיוחד באור אחר הצהריים.",near:"בסביבה: Colorado Provençal של Rustrel וכפר Lacoste של דה-סאד.",note:"חזרה דרך Lacoste והרי הלוברון — דרך יפה מאוד. בערב חגיגת יום הולדת לרונה."},
+ ]},
+ {day:"שני",route:"מרינדול → התפזרות",title:"יום התפזרות",stops:[
+   {name:"פינוי הווילה",fr:"Mérindol",cat:"logistics",tags:["פרידה","ארוחת בוקר"],q:"Mérindol France",img:"provence/merindol",t:"12:00",desc:"ארוחת בוקר אחרונה בנחת בווילה, אריזה, פינוי ופרידה מהבסיס שליווה אותנו לאורך השבוע."},
+   {name:"קניות באאוטלט (אופציונלי)",fr:"McArthurGlen Provence",cat:"shop",rate:"★ 4.3",tags:["אאוטלט","אופציונלי"],q:"McArthurGlen Provence Miramas",img:"provence/outlet",t:"12:00",desc:"בדרך לשדה התעופה — למי שרוצה, עצירת קניות אחרונה באאוטלט המותגים לפני הטיסה הביתה."},
+ ]},
+];
+
+const NICE=[
+ {name:"המלון שלנו · Crisol Mozart",fr:"Crisol Mozart · 9 Av. Baquis, Nice",cat:"logistics",tags:["לינה","מלון","בסיס בניס"],q:"Crisol Mozart Nice",img:"riviera/g-hotel",desc:"הבסיס שלנו בניס לחלק השני של הטיול — מלון Crisol Mozart במרכז העיר. מכאן יוצאים לכל הריביירה, קרוב לטיילת, לעיר העתיקה ולים.",near:"9 Av. Baquis, ניס — דקות הליכה מהפרומנד ומתחנת הרכבת."},
+ {name:"Clay · פטיסרי וקפה",fr:"Clay · Nice",cat:"restaurant",rate:"★ 4.7",tags:["קפה","מאפים","המלצה חמה"],q:"Clay Nice",img:"riviera/g-clay",desc:"פטיסרי וקפה מקסים בניס — מאפים, עוגות וקפה מצוין באווירה נעימה. עצירה מושלמת לבוקר או לאחר-צהריים מתוק.",note:"המלצה חמה שלנו — שווה לתפוס בוקר טרי."},
+ {name:"ניס · העיר העתיקה",fr:"Vieux Nice · Cours Saleya",cat:"city",rate:"★ 4.6",tags:["שוק פרחים","סוקה","סמטאות"],q:"Cours Saleya Nice",img:"riviera/nice",desc:"לב ניס הפועם. שוק הפרחים והפירות ב-Cours Saleya, סמטאות צרות בגוון אוקר עם כביסה תלויה מעל, כנסיות בארוק וריח של סוקה (פנקייק חומוס חם) באוויר. משלבים שוטטות, אוכל מקומי וקרבה לים.",near:"בסביבה: גבעת הטירה לתצפית, נמל ניס ושכונת Cimiez הרומית."},
+ {name:"פּרומנד דֶז-אנגלֶה (הטיילת)",fr:"Promenade des Anglais",cat:"city",rate:"★ 4.7",tags:["טיילת","ים","שקיעה"],q:"Promenade des Anglais Nice",img:"riviera/promenade",desc:"הטיילת האייקונית המשתרעת לאורך מפרץ המלאכים — הכיסאות הכחולים המפורסמים, רוכבי אופניים, גלגיליות וגלידה. מושלמת להליכת בוקר רגועה או לשקיעה ורודה מעל הים.",near:"בסביבה: גבעת הטירה עם מפל ותצפית, ושוק Cours Saleya."},
+ {name:"אֶז",fr:"Èze Village",cat:"view",rate:"★ 4.7",tags:["כפר מצוק","תצפית","גן קקטוסים"],q:"Vue panoramique Èze",img:"riviera/eze",desc:"כפר נשרים מימי-ביניים תלוי 400 מ' מעל הים, רשת סמטאות אבן מטפסות וגן קקטוסים אקזוטי בפסגה עם אחת התצפיות היפות בריביירה. אפשר אף לרדת ממנו לים בשביל Nietzsche. להגיע מוקדם לפני ההמון.",near:"בסביבה: שביל Nietzsche היורד לים, וכפר La Turbie מעל."},
+ {name:"וילפראנש-סור-מר",fr:"Villefranche-sur-Mer",cat:"beach",rate:"★ 4.8",tags:["מפרץ","חוף","דגים"],q:"Villefranche-sur-Mer beach",img:"riviera/villefranche",desc:"מהמפרצים היפים בעולם — בתים פסטליים מתנשאים מעל מים שקטים וכחולים, עיר עתיקה ססגונית עם רחוב מקורה מימי הביניים (Rue Obscure), וחוף חול נעים מול שורת מסעדות דגים. אידילי.",near:"בסביבה: קאפ פרא, חוף Paloma ושביל החוף Sentier du Littoral."},
+ {name:"חוף פלומה · קאפ פרא",fr:"Saint-Jean-Cap-Ferrat",cat:"beach",gem:true,rate:"★ 4.5",tags:["חוף נסתר","משפחתי","מים שקטים"],q:"Plage Paloma Saint-Jean-Cap-Ferrat",img:"riviera/cap-ferrat",desc:"מפרצון מוסתר בקצה חצי-האי היוקרתי קאפ פרא, עם מים רגועים וצלולים שמושלמים לילדים. מסביב משתרע שביל החוף Sentier du Littoral — אחת ההליכות החופיות היפות באזור.",near:"בסביבה: וילה Ephrussi de Rothschild ושביל Sentier du Littoral."},
+ {name:"חוף פאסאבְּל",fr:"Cap-Ferrat",cat:"beach",gem:true,rate:"★ 4.3",tags:["חוף נסתר","שקט","נוף"],q:"Plage de Passable Cap-Ferrat",img:"riviera/passable",desc:"חוף חלוקים שקט בצד המערבי של קאפ פרא, עם נוף ישיר אל מבצר Villefranche ולשקיעה. אהוב על המקומיים ורחוק מהמולת התיירים — בא לכאן מי שיודע. כדאי להקדים בקיץ.",near:"בסביבה: וילה Ephrussi de Rothschild ומגדלור קאפ פרא."},
+ {name:"חוף מאלָה · קאפ דאיי",fr:"Cap-d'Ail",cat:"beach",gem:true,rate:"★ 4.5",tags:["חוף נסתר","מצוקים","שחייה"],q:"Plage Mala Cap-d'Ail",img:"riviera/cap-dail",desc:"פנינה חבויה מתחת למצוקי קאפ דאיי, עם מים בצבע אזמרגד. יורדים אליה בשביל מדרגות מהכפר (כ-10 דק') ומגלים מפרצון כמעט פרטי עם שתי מסעדות חוף קטנות. שווה כל מדרגה.",near:"בסביבה: שביל החוף של קאפ דאיי, ומונקו ממש לידו."},
+ {name:"חוף לָה גארוּפּ",fr:"Cap d'Antibes",cat:"beach",rate:"★ 4.4",tags:["חוף","חול","קאפ דאנטיב"],q:"Plage de la Garoupe Antibes",img:"riviera/garoupe",desc:"מפרץ חול נדיר באזור (רוב החופים כאן חלוקים), במימי קאפ דאנטיב הצלולים. חוף ציבורי נעים לצד מועדוני חוף אופנתיים, ובקרבת מקום שביל חופי יפהפה סביב הכף.",near:"בסביבה: שביל Sentier du Littoral של קאפ דאנטיב ומגדלור La Garoupe."},
+ {name:"חוף לארבוטו · מונקו",fr:"Larvotto, Monaco",cat:"beach",rate:"★ 4.3",tags:["חוף","משפחתי","מונקו"],q:"Larvotto Beach Monaco",img:"riviera/larvotto",desc:"חוף העיר של מונקו — מסודר, נגיש ומשופץ לאחרונה, עם מים רגועים, מסעדות וטיילת. הכי נוח לשלב עם ביקור במונקו או יום ים עם הילדים בלי לחפש חניה רחוקה.",near:"בסביבה: המוזיאון האוקיינוגרפי וקזינו מונטה-קרלו."},
+ {name:"מפרץ פוֹרמי · בּוֹליֶה",fr:"Beaulieu-sur-Mer",cat:"beach",gem:true,rate:"★ 4.5",tags:["מפרץ","בל-אפוק","שקט"],q:"Baie des Fourmis Beaulieu-sur-Mer",img:"riviera/beaulieu",desc:"עיירת בל-אפוק רגועה ואלגנטית בין ניס למונקו, עם מפרץ מוגן (Baie des Fourmis), טיילת דקלים ווילה יוונית משוחזרת (Villa Kérylos). פינה שקטה ומעודנת, רחוקה מההמון.",near:"בסביבה: וילה Kérylos היוונית וקאפ פרא הסמוך."},
+ {name:"מונקו &amp; המוזיאון האוקיינוגרפי",fr:"Monaco",cat:"city",rate:"★ 4.6",tags:["אקווריום","ארמון","🏎️ מכוניות-על","🧒 ידידותי לילדים"],q:"Musée océanographique de Monaco",info:"https://www.oceano.org",img:"riviera/monaco",desc:"הנסיכות הזעירה והנוצצת. המוזיאון האוקיינוגרפי המרהיב על הצוק (אקווריום ענק — להיט אצל ילדים), ארמון הנסיכים עם חילוף משמרות ב-11:55, והעיר העתיקה Monaco-Ville על הסלע.",near:"נקודות במונקו: 🏎️ כיכר הקזינו עם מצעד מכוניות-העל · מסלול הפורמולה 1 וההרפין המפורסם של Fairmont · 🔭 הגן האקזוטי ותצפית Tête de Chien · נמל היאכטות Port Hercule · חוף Larvotto."},
+ {name:"קזינו מונטה-קרלו",fr:"Casino de Monte-Carlo",cat:"evening",rate:"★ 4.5",tags:["ערב","🏎️ מכוניות-על","דרֶס-קוד"],q:"Casino de Monte-Carlo",info:"https://www.montecarlosbm.com",img:"riviera/casino",desc:"מקדש ההימורים המפואר של מונקו, ולפניו <b>כיכר הקזינו</b> — המקום שבו חונות ומתגודדות מכוניות-העל (פרארי, למבורגיני, בוגאטי). כאן גם עובר מסלול הפורמולה 1. אפשר להיכנס לשחק, או רק לעמוד ולצלם את האווירה והמכוניות.",near:"בסביבה: כיכר הקזינו (ספוט מכוניות-העל), מלון de Paris, Café de Paris, ומסלול ה-F1.",note:"יש דרֶס-קוד ודמי כניסה לאולמות. מגיל 18."},
+ {name:"כיכר הקזינו · מכוניות-על",must:true,fr:"Place du Casino, Monaco",cat:"city",rate:"★ 4.7",tags:["🏎️ מכוניות-על","כיכר","גלמור"],q:"Place du Casino Monaco",img:"riviera/casino-square",desc:"הכיכר המפוארת מול קזינו מונטה-קרלו — כאן חונות ומתגודדות מכוניות-העל (פרארי, למבורגיני, בוגאטי), לצד מלון de Paris ו-Café de Paris. ספוט חובה לחובבי רכב, ביום ובלילה.",near:"בסביבה: הקזינו, מסלול ה-F1 ונמל Port Hercule."},
+ {name:"מסלול הפורמולה 1",fr:"Circuit de Monaco · Fairmont Hairpin",cat:"city",rate:"★ 4.6",tags:["🏁 פורמולה 1","הרפין","מסלול רחוב"],q:"Fairmont Hairpin Monaco",img:"riviera/f1",desc:"מסלול ה-GP האגדי עובר ברחובות מונקו, ואפשר ללכת על חלקים ממנו: ההרפין המפורסם של Fairmont (הפנייה האיטית במסלולי ה-F1), המנהרה, וכנסיית Sainte-Dévote. מרגש גם בלי מירוץ.",near:"בסביבה: כיכר הקזינו ונמל Port Hercule."},
+ {name:"Tête de Chien · תצפית",fr:"Tête de Chien, La Turbie",cat:"view",rate:"★ 4.8",tags:["תצפית","מעל מונקו","נוף"],q:"Tête de Chien viewpoint La Turbie",img:"riviera/tete-de-chien",desc:"צוק מתנשא כ-550 מ' ישירות מעל מונקו — אחת התצפיות הדרמטיות בריביירה על הנסיכות, החוף והים עד איטליה. מושלם לפנות ערב.",near:"בסביבה: La Turbie והכפר Èze."},
+ {name:"הגן האקזוטי של מונקו",fr:"Jardin Exotique de Monaco",cat:"view",rate:"★ 4.4",tags:["גן","קקטוסים","תצפית"],q:"Jardin Exotique de Monaco",img:"riviera/jardin-exotique",desc:"גן צמחי מדבר ענק התלוי על מצוק, עם אלפי קקטוסים וסוקולנטים, מערת נטיפים ותצפית פנורמית על מונקו והים. שילוב נדיר של טבע ונוף.",near:"בסביבה: מרכז מונקו והמוזיאון האוקיינוגרפי."},
+ {name:"קזינו ניס · Palais de la Méditerranée",fr:"Casino Barrière, Nice",cat:"evening",rate:"★ 4.2",tags:["ערב","ניס","על הטיילת"],q:"Palais de la Méditerranée Casino Nice",info:"https://www.casinosbarriere.com/fr/nice.html",img:"riviera/casino-nice",desc:"חלופה נוחה למונטה-קרלו בלי לצאת מניס — קזינו בתוך מלון בל-אפוק מפואר על הפרומנד, עם אולמות משחק ומסעדות. אווירה נינוחה יותר וקרוב לבסיס. צמוד אליו פועל גם Casino Ruhl.",near:"על הפרומנד — צמוד לטיילת ולעיר העתיקה."},
+ {name:"ברים בעיר העתיקה",fr:"Vieux Nice — bars",cat:"evening",rate:"★ 4.4",tags:["ערב","יין","קוקטיילים"],q:"Vieux Nice bars",img:"riviera/bars-nice",desc:"עם רדת הערב סמטאות העיר העתיקה מתמלאות בבארות יין קטנים, פאבים וקוקטייל-בארים תוססים. ערב נעים ואינטימי למבוגרים — אחרי שהילדים נרדמים.",near:"בלב העיר העתיקה — דקות מ-Cours Saleya ומהנמל."},
+ {name:"סן-פול-דה-ואנס",fr:"Saint-Paul-de-Vence",cat:"art",rate:"★ 4.7",tags:["כפר אמנים","גלריות","Maeght"],q:"Saint-Paul-de-Vence",info:"https://www.fondation-maeght.com",img:"riviera/st-paul",desc:"כפר אמנים מבוצר מהיפים בריביירה, שבו חיו ויצרו שאגאל ואחרים — היום כל סמטה היא גלריה. ממש לידו Fondation Maeght, מאוספי האמנות המודרנית החשובים באירופה, עם גן פסלים של מירו וג'אקומטי.",near:"בסביבה: Fondation Maeght והעיר Vence עם קפלת מאטיס."},
+ {name:"אנטיב · העיר העתיקה",fr:"Antibes · Musée Picasso",cat:"art",rate:"★ 4.6",tags:["חומות","פיקסו","שוק"],q:"Vieil Antibes",img:"riviera/antibes",desc:"עיר עתיקה מקסימה מוקפת חומות מול הים, עם שוק פרובנסאלי מקורה (Marché Provençal), נמל יאכטות מרשים ומוזיאון פיקסו בטירה שבה עבד האמן. שילוב נדיר של חוף, היסטוריה ואמנות.",near:"בסביבה: קאפ דאנטיב, חוף La Garoupe ועיירת Juan-les-Pins."},
+ {name:"מנטון",fr:"Menton",cat:"village",rate:"★ 4.6",tags:["עיר לימונים","גנים","גבול איטליה"],q:"Menton France",img:"riviera/menton",desc:"\"פנינת צרפת\" על גבול איטליה — חזית בתים ססגונית בגווני לימון, אפרסק וורוד, גנים סוב-טרופיים מפורסמים והאקלים החמים בריביירה. רגועה, צבעונית ואיטלקית באופייה.",near:"בסביבה: גני Serre de la Madone והכפר Sainte-Agnès מעל."},
+ {name:"לָה טוּרבּי · תצפית",fr:"La Turbie",cat:"view",rate:"★ 4.6",tags:["תצפית","אתר רומי","מעל מונקו"],q:"La Turbie Trophée d'Auguste",img:"riviera/la-turbie",desc:"כפר קטן הצופה ישירות אל מונקו, ובמרכזו אנדרטת ניצחון רומית ענקית (Trophée d'Auguste) מ-6 לפנה\"ס. התצפית מכאן על כל קו החוף, במיוחד לפנות ערב, פשוט עוצרת נשימה.",near:"בסביבה: מונקו ממש למטה וכפר Èze הסמוך."},
+ {name:"פֵּייוֹן",fr:"Peillon",cat:"hidden",gem:true,rate:"★ 4.7",tags:["כפר מצוק","נסתר","אותנטי"],q:"Peillon France",img:"riviera/peillon",desc:"כפר נשרים מימי-ביניים שלם ומשומר, תלוי על צוק מעל עמק ה-Paillon — סמטאות מדרגות, קמרונות אבן וכיכר זעירה, וכמעט אפס תיירים. אחד הכפרים האותנטיים והשלמים שנותרו בריביירה.",near:"בסביבה: הכפר התאום Peille ועמק ה-Paillon."},
+ {name:"סנט-אנייס",fr:"Sainte-Agnès",cat:"hidden",gem:true,rate:"★ 4.6",tags:["כפר גבוה","מבצר","תצפית"],q:"Sainte-Agnès Alpes-Maritimes",img:"riviera/sainte-agnes",desc:"הכפר המאוכלס הגבוה ביותר על קו החוף באירופה (כ-800 מ'), עם מבצר חצוב בסלע משרידי קו מאז'ינו ותצפית פתוחה מהים ועד פסגות האלפים. דרמטי, קריר ושקט.",near:"בסביבה: מנטון למטה והכפר Gorbio הסמוך."},
+ {name:"גוּרדוֹן",fr:"Gourdon",cat:"hidden",gem:true,rate:"★ 4.6",tags:["כפר תלוי","נוף לים","מפל"],q:"Gourdon Alpes-Maritimes",img:"riviera/gourdon",desc:"כפר זעיר תלוי על צוק מעל ערוצי ה-Loup, עם נוף שמשתרע עד הים בניס. סמטאות אבן, היסטוריה של בשמים ומרפסות תצפית. בדרך אפשר לעצור במפל Courmes ובנקיק הירוק של ה-Gorges du Loup.",near:"בסביבה: מפל Courmes, ערוצי ה-Loup וכפר Tourrettes-sur-Loup."},
+ {name:"קוּאראז · כפר השמש",fr:"Coaraze",cat:"hidden",gem:true,rate:"★ 4.6",tags:["שעוני שמש","צבעוני","שקט"],q:"Coaraze",img:"riviera/coaraze",desc:"\"כפר השמש\" — סמטאות עולות מקושטות בשעוני שמש שציירו אמנים (בהם ז'אן קוקטו), פינות צל, כיכרות שקטות וצמחייה. אחד הכפרים הצבעוניים והאותנטיים שמעל ניס.",near:"בסביבה: כפרי עמק ה-Paillon ו-Lucéram עם פרסקאות."},
+ {name:"שכונת סימייה · ניס",fr:"Cimiez · Nice",cat:"hidden",gem:true,rate:"★ 4.5",tags:["רומי","מאטיס","גנים"],q:"Cimiez Nice",img:"riviera/cimiez",desc:"הצד הרגוע והאצילי של ניס, על גבעה מעל העיר: זירה ומרחצאות רומיים עתיקים, מנזר פרנציסקני עם גנים ונוף, ומוזיאון מאטיס בווילה בגוון אוקר. ירוק, תרבותי ורחוק מהמולת הטיילת.",near:"בסביבה: מוזיאון מאטיס, מוזיאון שאגאל והעיר העתיקה למטה."},
+ {name:"כיכר מסֶנה",must:true,fr:"Place Masséna",cat:"city",tags:["כיכר","מרכז העיר","אדריכלות","לילה"],q:"Place Masséna Nice",img:"riviera/place-massena",desc:"הכיכר הראשית של ניס, מרוצפת שחור-לבן בדוגמה גיאומטרית ומוקפת מבנים אדומים בסגנון איטלקי. במרכזה מזרקת השמש (Fontaine du Soleil), ובלילה נדלקים פסלי Plensa היושבים על עמודים מעל הכיכר.",near:"פרומנד דז'אנגלה, העיר העתיקה ושדרת ז'אן מדסן.",note:"בערב הפסלים המוארים מחליפים צבעים — שווה לחזור אחרי החשכה."},
+ {name:"כיכר גריבלדי",gem:true,fr:"Place Garibaldi",cat:"city",tags:["כיכר","בארוק","היסטוריה","בתי קפה"],q:"Place Garibaldi Nice",img:"riviera/place-garibaldi",desc:"הכיכר העתיקה ביותר בניס (1773), בסגנון בארוק סרדיני עם חזיתות אחידות בצבע צהוב-אוקר וקשתות. במרכזה פסלו של ג'וזפה גריבלדי, יליד ניס, וסביבה בתי קפה היסטוריים.",near:"קצה צפוני של העיר העתיקה, ליד נמל לימפיה.",note:"פחות הומה מכיכר מסֶנה — טובה לעצירת קפה רגועה."},
+ {name:"גבעת הטירה",must:true,fr:"Colline du Château",cat:"view",tags:["תצפית","פארק","טיול רגלי"],q:"Colline du Château Nice",img:"riviera/chateau-nice",desc:"גבעה ירוקה בקצה המזרחי של העיר העתיקה, ובראשה תצפית פנורמית על מפרץ המלאכים, הטיילת והגגות האדומים של ניס. הטירה עצמה נהרסה במאה ה-18, ובמקומה פארק עם מפל מים ושבילי טיול.",near:"מעל העיר העתיקה ונמל לימפיה.",note:"אפשר לעלות במעלית מצד הפרומנד ולחסוך את המדרגות; בצהריים נורה ירי תותח יומי."},
+ {name:"נמל לימפיה",gem:true,fr:"Port Lympia",cat:"sea",tags:["נמל","מסעדות","סירות צבעוניות"],q:"Port Lympia Nice",img:"riviera/port-lympia",desc:"נמל השיט ההיסטורי של ניס (מ-1748), מוקף מבנים בצבעי פסטל, סירות pointu מסורתיות ויאכטות. סביבו מסעדות דגים ובתי קפה, וממנו יוצאות מעבורות לקורסיקה ולסרדיניה.",near:"מזרחית לעיר העתיקה, מתחת לגבעת הטירה.",note:"מדי חודש נערך כאן שוק עתיקות; אזור פחות תיירותי ממרכז העיר."},
+ {name:"חוף מרינייר",must:true,fr:"Plage des Marinières",cat:"beach",tags:["חול-וחצץ","מפרץ רגוע","משפחות"],q:"Plage des Marinières Villefranche-sur-Mer",img:"riviera/marinieres",desc:"החוף הציבורי הארוך במפרץ וילפראנש (כ-700 מ׳ עד קילומטר), חול וחצץ עדין למרגלות העיר העתיקה הצבעונית. המים במפרץ רגועים ורדודים יחסית — נוח למשפחות.",near:"מפרץ וילפראנש-סור-מר, לצד קאפ פרא.",note:"צמוד לתחנת הרכבת — נוח מאוד להגיע ברכבת מניס (5 דק׳)."},
+ {name:"לֶה פלונז'ואר",must:true,fr:"Le Plongeoir",cat:"restaurant",tags:["על הים","שקיעה","איקוני"],q:"Le Plongeoir Nice",img:"riviera/le-plongeoir",desc:"מסעדה ובר הבנויים על סלע בולט אל הים ב-Mont Boron, על בסיס קרש-קפיצה ישן — אחד המקומות המצולמים של ניס. מטבח ים-תיכוני מודרני, ובקומה העליונה בר עם נוף לשקיעה.",near:"Mont Boron, מזרחית לנמל ניס.",note:"חובה הזמנה מראש (לעיתים שבועות מראש)."},
+ {name:"מפרץ המיליארדרים",gem:true,fr:"Baie des Milliardaires",cat:"beach",tags:["מפרץ","מים טורקיז","נסתר"],q:"Baie des Milliardaires Cap d'Antibes",img:"riviera/billionaires-bay",desc:"מפרץ מוצנע בקאפ ד'אנטיב עם מים צלולים בגוון טורקיז, שהחוף המרכזי שבו (Anse de l'Argent Faux) היה פעם נחלת בעלי היאכטות בלבד. היום מגיעים אליו בשביל החוף Chemin des Douaniers החולף לצד וילות פאר.",near:"קאפ ד'אנטיב, נגיש משביל החוף ליד חוף La Garoupe.",note:"אין תשתית בחוף וההליכה דורשת נעליים טובות; הגיעו מוקדם."},
+ {name:"חוף סן-לורן",gem:true,fr:"Plage Saint Laurent",cat:"beach",tags:["פראי","אבנים","נסתר","שקט"],q:"Plage Èze-sur-Mer",img:"riviera/st-laurent-eze",desc:"חוף אבנים פראי ושקט במפרץ סן-לורן שבאז-סור-מר (החלק החופי שמתחת לכפר אז שעל ההר). מוסתר, ומגיעים אליו בשביל יער החוצה נחל — למי שמחפש טבע ושקט.",near:"אז-סור-מר, למרגלות כפר אז.",note:"פראי לגמרי — בלי שירותים/מטריות; הביאו מים ונעליים לשביל."},
+{name:"מרנה",gem:true,fr:"Maranna",cat:"restaurant",tags:["ברנץ'","עיר עתיקה","gluten-free"],q:"Maranna Nice",img:"riviera/maranna",desc:"מקום ברנץ' קטן ומעוצב בעיר העתיקה של ניס, בניהול שתי אחיות. מגישים ברנץ' לאורך כל היום — פנקייק, אבוקדו-טוסט וביצים, באווירה חמה וביתית.",near:"בעיר העתיקה, ליד כיכר Rossetti.",note:"יש אופציות gluten-free; מקום קטן — שווה לבוא מוקדם.",info:"https://www.explorenicecotedazur.com/en/shop/maranna/"},
+ {name:"פנוקיו",must:true,fr:"Fenocchio",cat:"restaurant",tags:["גלידה","כיכר Rossetti","עיר עתיקה"],q:"Fenocchio Place Rossetti Nice",img:"riviera/fenocchio",desc:"גלידרייה אגדית שפועלת מ-1966 בכיכר Rossetti שבלב העיר העתיקה, שלושה דורות של אותה משפחה. כ-90 טעמים, כולל אקזוטיים ולא שגרתיים.",near:"כיכר Rossetti, בעיר העתיקה.",note:"בדרך כלל תור בעונה.",info:"https://www.facebook.com/glacier.fenocchio/"},
+ {name:"לו פילה לבה",gem:true,fr:"Lou Pilha Leva",cat:"restaurant",tags:["סטריט-פוד","socca","זול","עיר עתיקה"],q:"Lou Pilha Leva Nice",img:"riviera/lou-pilha-leva",desc:"דוכן סטריט-פוד ניסואזי לא-רשמי בעיר העתיקה, עם ספסלי עץ בחוץ. מגישים מנות מקומיות כמו socca, pissaladière ו-moules-frites במחירים נמוכים.",near:"בעיר העתיקה, rue du Collet.",note:"casual וזול — לארוחה מהירה. (בתמונה: סוקה, המנה האיקונית של המקום.)",info:"https://www.tripadvisor.com/Restaurant_Review-g187234-d1105097-Reviews-Lou_Pilha_Leva-Nice.html"},
+ {name:"לה טאן דן אטה",fr:"Le Temps d'un Été",cat:"beach",tags:["ביץ'-קלאב","פרומנד","שקיעה","קוקטיילים"],q:"Le Temps d'un Été Nice",img:"riviera/temps-dun-ete",desc:"ביץ'-קלאב עם מסעדה ובר-לאונג' על הפרומנד דז-אנגלה, בין מלון Negresco ל-Palais de la Méditerranée. מטבח ים-תיכוני וקוקטיילים מול השקיעה.",near:"על הפרומנד, בין ה-Negresco ל-Palais de la Méditerranée.",note:"אופציה נעימה לדרינק מול השקיעה.",info:"https://www.letempsdunete-plage.fr/en/"},
+ {name:"לולו פיראט",gem:true,fr:"Loulou Pirate",cat:"restaurant",tags:["נוף פנורמי","רוקברון","מוזיקה חיה"],q:"Loulou Pirate Roquebrune-Cap-Martin",img:"riviera/loulou-pirate",desc:"מסעדת נוף על הסלעים ב-Roquebrune-Cap-Martin (מזרחית לניס, לא בעיר), מתחת לטירת רוקברון ומול פנורמה רחבה של הים. שחזור של המסעדה האגדית Pirate — פיצת כמהין, דגים וקונצרטים חיים בערב.",near:"Roquebrune-Cap-Martin, כ-20 דק' מזרחית לניס.",note:"מחוץ לניס — צריך רכב; הזמנה מראש בערבי קונצרטים.",info:"https://www.loulou-pirate.com/"},
+ {name:"קאסטל פלאז'",fr:"Castel Plage",cat:"beach",tags:["ביץ'-קלאב","מסעדה","נוף לעיר העתיקה"],q:"Castel Plage Nice",img:"riviera/castel-plage",desc:"מועדון-חוף פרטי ומסעדה בקצה המזרחי של מפרץ המלאכים, למרגלות גבעת הטירה, עם נוף אל העיר העתיקה. מיטות שיזוף ומטריות בתשלום, ואפשר לאכול מול הים.",near:"מפרץ המלאכים, מתחת לגבעת הטירה.",note:"מיטות שיזוף בתשלום (יקר יחסית).",info:"https://www.castelplage.com/en/home-castel-plage/"},
+ {name:"בו ריוואז'",fr:"Beau Rivage",cat:"beach",tags:["ביץ'-קלאב","מרכזי","מוזיקה חיה"],q:"Plage Beau Rivage Nice",img:"riviera/beau-rivage",desc:"מועדון-החוף הפרטי הגדול של ניס על Quai des États-Unis, פעיל מאז 1935 ומול העיר העתיקה. חוף מסודר עם השמשיות הכחול-לבן האייקוניות, בר ומסעדה, ולעיתים מוזיקה חיה.",near:"על הטיילת, צמוד לעיר העתיקה.",note:"חוף פרטי בתשלום — שריינו מיטה מראש בעונה.",info:"https://en.plageprivee.com/france/06-alpes-maritimes/nice/plage-beau-rivage"},
+ {name:"לה גאלה",fr:"Le Galet",cat:"beach",tags:["ביץ'-קלאב","מסעדה","מרכזי"],q:"Le Galet Plage Nice",img:"riviera/le-galet",desc:"מסעדת-חוף ומועדון-חוף על הפרומנד דז-אנגלה, מול כיכר מסֶנה, עם מטבח ים-תיכוני מול הים. משלבים ארוחה עם מיטות שיזוף על החוף.",near:"על הפרומנד, מול כיכר מסֶנה.",note:"מיקום מרכזי מאוד — נוח לשלב עם יום בעיר.",info:"https://www.galet-plage.com/en/index"},
+ ];
+
+const DRONE=[
+ {name:"השטחים הפתוחים של הלוברון",fr:"Luberon countryside",cat:"nature",status:"ok",tags:["שדות","כרמים","נופים"],q:"Luberon France",img:"provence/roussillon",desc:"השדות, הכרמים והגבעות הפתוחים סביב מרינדול והלוברון הם הבחירה הבטוחה והנוחה ביותר — נופים מרהיבים בלי קהל ובלי מבנים. בוקר מוקדם נותן את האור הכי יפה.",note:"להתרחק מאנשים, מכבישים ומכוורות דבורים, ולוודא שאינך באזור מוגבל."},
+ {name:"מישור הלבנדר · Valensole",must:true,fr:"Plateau de Valensole",cat:"nature",status:"ok",tags:["לבנדר","שדות","אור זהב"],q:"Plateau de Valensole",img:"provence/valensole",desc:"שדות הלבנדר מהאוויר הם תמונה חלומית. בשטחים החקלאיים הפתוחים בד״כ אפשר להטיס — אך הרחק מהדרך, מאנשים ומהכוורות שמפוזרות בשדות.",note:"בעונת הפריחה יש המון מבקרים — להמריא מנקודה מבודדת."},
+ {name:"כפרי הלוברון · Gordes / Roussillon",fr:"Hilltop villages",cat:"village",status:"caution",tags:["כפרים","המון","עירוני"],q:"Gordes France",img:"provence/gordes",desc:"הכפרים עצמם בנויים וצפופים בתיירים — אסור להטיס מעליהם או מעל אנשים. אפשר לצלם אותם מרחוק, מנקודה פתוחה מחוץ לכפר ומוקדם בבוקר לפני שמתמלא.",note:"לבדוק geozone — חלק מהכפרים בתוך אזורים מוגבלים."},
+ {name:"מנזר Sénanque",fr:"Abbaye de Sénanque",cat:"history",status:"caution",tags:["מנזר","פרטי","כבוד"],q:"Abbaye Notre-Dame de Sénanque",img:"provence/senanque",desc:"מנזר פעיל ופרטי — לא להטיס מעליו ולכבד את הפרטיות והשקט. אפשר לשקול צילום מרחוק מעל השדות בעונה שקטה, אם האזור מותר.",note:"אתר דתי פעיל — עדיף להימנע בשעות תפילה ובעומס."},
+ {name:"הקלנקים · Cassis / En-Vau",fr:"Parc national des Calanques",cat:"beach",status:"no",tags:["פארק לאומי","אסור"],q:"Calanques National Park",img:"provence/en-vau",desc:"הקלנקים נמצאים בתוך פארק לאומי — הטסת רחפנים אסורה ללא אישור מיוחד מרשות הפארק. אזור מוגן ואכוף. לא להטיס כאן.",note:"הפרה עלולה לגרור קנס כבד והחרמה."},
+ {name:"ערוצי הוורדון",fr:"Gorges du Verdon",cat:"view",status:"no",tags:["פארק טבע","מוגבל"],q:"Gorges du Verdon",img:"provence/verdon",desc:"הוורדון הוא פארק טבע אזורי מוגן — הטסת רחפנים אסורה או מוגבלת מאוד ברוב השטח, ודורשת היתר. לבדוק היטב לפני, וברירת המחדל היא לא להטיס.",note:"גם רעש הרחפן מפריע לחיות הבר ולמטפסים."},
+ {name:"ניס והמפרץ",fr:"Nice & Baie des Anges",cat:"city",status:"no",tags:["שדה תעופה","עירוני"],q:"Nice France",img:"riviera/nice",desc:"כמעט כל מפרץ ניס נמצא במרחב אווירי מוגבל בשל קרבת שדה התעופה של ניס, בנוסף לאיסור על הטסה מעל אזור עירוני צפוף. למעשה — לא להטיס בעיר ובמפרץ.",note:"קרבה לשדה תעופה = אזור אסור מובהק."},
+ {name:"מונקו",fr:"Monaco",cat:"city",status:"no",tags:["נסיכות","אסור"],q:"Monaco",img:"riviera/monaco",desc:"הנסיכות מונקו אוסרת הטסת רחפנים ללא אישור רשמי מראש — אכיפה קפדנית מאוד. להימנע לחלוטין מהטסה בשטחה ובסביבתה הקרובה.",note:"כולל את כל קו החוף הצמוד למונקו."},
+ {name:"כפרי התצפית · Èze",fr:"Èze & perched villages",cat:"view",status:"caution",tags:["תצפיות","גבול מרחב אווירי"],q:"Èze France",img:"riviera/eze",desc:"התצפיות מרהיבות מהאוויר, אך הכפרים צפופים והאזור קרוב למרחב האווירי של ניס/מונקו. רק אחרי בדיקת geozone, הרחק מאנשים ומבתים, ובשעה שקטה.",note:"במקרה של ספק — לא להמריא."},
+ {name:"חופי הריביירה",fr:"Riviera beaches",cat:"beach",status:"caution",tags:["חופים","עונה","פרטיות"],q:"Villefranche-sur-Mer",img:"riviera/villefranche",desc:"בקיץ החופים מלאים במתרחצים — אסור להטיס מעליהם. אפשר בחופים נסתרים ושקטים, מוקדם בבוקר כשהחוף ריק, הרחק מאנשים ותוך כיבוד פרטיות.",note:"חופים רבים אוסרים רחפנים בעונה — לחפש שילוט."},
+];
+
+const ROUTE=[
+ {name:"קאפ קנאיי · Route des Crêtes",gem:true,fr:"Cap Canaille, Cassis",cat:"view",tags:["תצפית","כביש רכס"],q:"Cap Canaille Route des Crêtes Cassis",img:"route/cap-canaille",desc:"כביש רכס מעל הצוק הימי הגבוה בצרפת (394 מ'), עם נוף למפרץ קאסי.",note:"חופף לאזור קאסי של יום המחרת."},
+ {name:"לה קסטלה",gem:true,fr:"Le Castellet, Var",cat:"village",tags:["כפר ימי-ביניימי","בנדול"],q:"Le Castellet Var",img:"route/le-castellet",desc:"כפר ימי-ביניימי מנקב מעל כרמי בנדול, מהכפרים היפים בצרפת."},
+ {name:"סנארי-סור-מר",gem:true,fr:"Sanary-sur-Mer",cat:"village",tags:["נמל דייגים","שוק","אותנטי"],q:"Sanary-sur-Mer",img:"route/sanary",desc:"נמל דייגים אותנטי ושקט, עם שוק רביעי מפורסם — פחות תיירותי."},
+ {name:"דומיין טמפייה",must:true,fr:"Domaine Tempier · Bandol",cat:"winery",tags:["יקב","בנדול","רוזה"],q:"Domaine Tempier Le Castellet",img:"route/tempier",desc:"היקב האייקוני של בנדול — מוסקדל אדום ורוזה מפורסמים.",info:"https://www.domainetempier.com/en/homepage/"},
+ {name:"שאטו דה פיברנון",fr:"Château de Pibarnon",cat:"winery",tags:["יקב","אורגני","נוף לים"],q:"Château de Pibarnon La Cadière-d'Azur",img:"route/pibarnon",desc:"יקב אורגני על גבעה עם נוף לים.",note:"⚠️ ביקור בתיאום מראש בלבד; סגור בימי א' וחג.",info:"https://www.pibarnon.com/en/"},
+ {name:"שאטו קנאדל",fr:"Château Canadel",cat:"winery",tags:["יקב","אורגני","חנות במקום"],q:"Château Canadel Le Castellet",img:"route/canadel",desc:"יקב אורגני עם נוף כרמים וחנות במקום.",info:"https://www.chateau-canadel.com/"},
+ {name:"בית היין של בנדול",fr:"Maison des Vins de Bandol",cat:"winery",tags:["בית יין","טעימות","65 יקבים"],q:"Maison des Vins de Bandol Le Castellet",img:"route/maison-vins",desc:"בית יין אזורי — טעימה מרוכזת מ-65 יקבים במקום אחד.",info:"https://www.maisondesvins-bandol.com/"},
+ {name:"לה טרייה · אנתאור",gem:true,fr:"Le Trayas / Anthéor",cat:"beach",tags:["מפרצים פראיים","קורניש","מים שקופים"],q:"Le Trayas Saint-Raphaël",img:"route/le-trayas",desc:"הקטע היפה של הקורניש — מפרצים פראיים ומים שקופים.",note:"⚠️ סיכון סגירת שבילים בימי סכנת שריפה (יולי-אוגוסט) — בדקו מפת הפרפקטורה."},
+];
+
+function card(s){
+  const id='c'+(++UID);REG[id]=s;
+  const gallery=GALLERY[s.img]||[s.img];
+  const more=gallery.length>1?`<span class="more">📷 ${gallery.length} תמונות</span>`:'';
+  const time=s.t?`<span class="time">${s.t}</span>`:"";
+  const gem=s.must?'<span class="gem must">⭐ חובה</span>':(s.gem?'<span class="gem">✦ פנינה נסתרת</span>':'');
+  const ST={ok:'🟢 מותר בד״כ',caution:'🟡 בזהירות',no:'🔴 אסור / אישור'};
+  const status=s.status?`<span class="status st-${s.status}">${ST[s.status]}</span>`:'';
+  const meta=(s.rate||s.price)?`<div class="meta">${s.rate?`<span class="rate">${s.rate}</span>`:''}${s.price?`<span class="price">${s.price}</span>`:''}</div>`:"";
+  const tags=(s.tags||[]).map(t=>`<span class="tg">${t}</span>`).join('');
+  const near=s.near?`<div class="near"><b>בסביבה</b> · ${s.near}</div>`:"";
+  const note=s.note?`<div class="note"><b>שווה לדעת:</b> ${s.note}</div>`:"";
+  const info=s.info?`<a class="infolink" href="${s.info}" target="_blank" rel="noopener">🔗 אתר ותמונות</a>`:'';
+  return `<article class="card" data-cat="${s.cat}" data-id="${id}">
+    <div class="ph">
+      <img loading="lazy" src="${pic(s.img)}" alt="${s.name}" onerror="this.style.opacity=0">
+      <span class="cat">${CATICON[s.cat]?CATICON[s.cat][0]+" ":""}${CAT[s.cat]||s.cat}</span> ${gem} ${status} ${time} ${more}
+    </div>
+    <div class="body">
+      <div class="name">${s.name}<span class="fr">${s.fr}</span></div>
+      ${meta}
+      <p class="desc">${s.desc}</p>
+      <div class="tags">${tags}</div>
+      ${near}
+      ${note}
+      <div class="foot">
+        <a class="maplink" href="${map(s.q)}" target="_blank" rel="noopener">📍 פתח במפה</a>
+        ${COORDS[slugOf(s)]?`<button class="mineMap" data-slug="${slugOf(s)}" aria-label="ראה על המפה שלנו">🗺️ אצלנו</button>`:''}
+        ${info}
+        <button class="fav" aria-pressed="false" aria-label="מועדף">♡</button>
+      </div>
+    </div>
+  </article>`;
+}
+
+const COORDS={
+ "g-hotel":[43.7008,7.2725],"g-oysterbar":[43.2148,5.5380],"g-camille":[43.7445,4.7948],"g-cantine":[43.8456,6.2215],"g-trinquette":[43.9112,5.2002],"g-clay":[43.6971,7.2789],"bars-nice":[43.6975,7.2760],"casino-square":[43.7393,7.4286],"f1":[43.7396,7.4274],"tete-de-chien":[43.7270,7.4060],"jardin-exotique":[43.7320,7.4153],villa:[43.7549,5.2017],merindol:[43.7549,5.2017],marseille:[43.4366,5.2150],aix:[43.5297,5.4474],cassis:[43.2148,5.5390],
+ "en-vau":[43.2086,5.4986],outlet:[43.5660,4.9840],lourmarin:[43.7641,5.3626],"st-remy":[43.7887,4.8320],
+ "les-baux":[43.7445,4.7950],carrieres:[43.7460,4.7930],avignon:[43.9509,4.8076],valensole:[43.8370,5.9830],
+ moustiers:[43.8456,6.2215],"lac-sainte-croix":[43.7600,6.1700],verdon:[43.7490,6.3270],"isle-sorgue":[43.9190,5.0510],
+ fontaine:[43.9180,5.1280],gordes:[43.9117,5.2000],senanque:[43.9281,5.1856],roussillon:[43.9025,5.2920],
+ nice:[43.6961,7.2655],"place-massena":[43.6976,7.2710],"place-garibaldi":[43.7009,7.2791],"chateau-nice":[43.6949,7.2799],"port-lympia":[43.6954,7.2856],marinieres:[43.7049,7.3120],"le-plongeoir":[43.6939,7.2922],"billionaires-bay":[43.5518,7.1268],"st-laurent-eze":[43.7226,7.3588],maranna:[43.6968,7.2760],fenocchio:[43.6966,7.2761],"lou-pilha-leva":[43.6972,7.2765],"temps-dun-ete":[43.6935,7.2585],"loulou-pirate":[43.7480,7.4620],"castel-plage":[43.6944,7.2790],"beau-rivage":[43.6952,7.2745],"le-galet":[43.6957,7.2680],promenade:[43.6950,7.2600],eze:[43.7276,7.3617],villefranche:[43.7041,7.3110],
+ "cap-ferrat":[43.6920,7.3380],passable:[43.6890,7.3270],"cap-dail":[43.7240,7.4030],garoupe:[43.5570,7.1290],
+ larvotto:[43.7470,7.4350],beaulieu:[43.7060,7.3320],monaco:[43.7314,7.4256],casino:[43.7396,7.4287],
+ "casino-nice":[43.6952,7.2620],"st-paul":[43.6950,7.1220],antibes:[43.5808,7.1250],menton:[43.7765,7.5000],
+ "la-turbie":[43.7450,7.4010],peillon:[43.7870,7.3960],"sainte-agnes":[43.8000,7.4700],gourdon:[43.7220,6.9780],
+ coaraze:[43.8650,7.2960],cimiez:[43.7180,7.2740],
+ "cap-canaille":[43.196,5.559],"le-castellet":[43.201,5.769],sanary:[43.118,5.802],tempier:[43.1835,5.7728],pibarnon:[43.185,5.735],canadel:[43.180,5.772],"maison-vins":[43.200,5.770],"le-trayas":[43.4747,6.9243]
+};
+
+const CATICON={city:['🏙️','#1E7A93'],village:['🏘️','#C0892C'],nature:['🌿','#2E7D52'],market:['🧺','#B07A2E'],
+ culture:['🎭','#8A5A9E'],beach:['🏖️','#1E9AA8'],sea:['🌊','#1E7A93'],view:['🔭','#3F6CB4'],art:['🎨','#A1546B'],
+ evening:['🍸','#6A4E8C'],kids:['🧒','#2E9D6E'],hidden:['💎','#2BB3A3'],restaurant:['🍽️','#C0392B'],
+ history:['🏛️','#8A6D3B'],shop:['🛍️','#B07A2E'],logistics:['🏨','#C0392B'],winery:['🍷','#7B2D43']};
+document.getElementById('prov-days').innerHTML=PROVENCE.map(d=>`
+  <section class="day">
+    <div class="day-h"><span class="day-dot">${d.day}</span><h3>${d.title}</h3><span class="route">${d.route}</span></div>
+    <div class="grid">${d.stops.map(card).join('')}</div>
+  </section>`).join('');
+
+document.getElementById('nice-grid').innerHTML=NICE.map(card).join('');
+document.getElementById('drone-grid').innerHTML=DRONE.map(card).join('');
+const order=["all","city","beach","view","village","art","hidden","evening","kids"];
+const present=new Set(NICE.map(n=>n.cat));
+const cats=order.filter(c=>c==="all"||present.has(c));
+document.getElementById('nice-filters').innerHTML=cats.map((c,i)=>
+  `<button data-f="${c}" aria-pressed="${i===0}">${c==="all"?"הכול":CAT[c]}</button>`).join('');
+document.querySelectorAll('#nice-filters button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#nice-filters button').forEach(x=>x.setAttribute('aria-pressed','false'));
+  b.setAttribute('aria-pressed','true');
+  const f=b.dataset.f;
+  document.querySelectorAll('#nice-grid .card').forEach(c=>c.style.display=(f==='all'||c.dataset.cat===f)?'':'none');
+});
+
+/* ===== interactive map (Leaflet + OpenStreetMap) ===== */
+
+const GROUPS=[
+ {k:'towns',emo:'🏘️',col:'#C0892C',label:'ערים וכפרים',cats:['city','village','market','shop']},
+ {k:'beach',emo:'🏖️',col:'#1E9AA8',label:'חופים וים',cats:['beach','sea']},
+ {k:'nature',emo:'🌿',col:'#2E7D52',label:'טבע ותצפיות',cats:['nature','view']},
+ {k:'culture',emo:'🎨',col:'#A1546B',label:'תרבות ואמנות',cats:['culture','art','history']},
+ {k:'hidden',emo:'💎',col:'#2BB3A3',label:'פינות נסתרות',cats:['hidden']},
+ {k:'evening',emo:'🍸',col:'#6A4E8C',label:'ערב ומסעדות',cats:['evening','restaurant']},
+ {k:'kids',emo:'🧒',col:'#2E9D6E',label:'ילדים',cats:['kids']},
+ {k:'wine',emo:'🍷',col:'#7B2D43',label:'יקבים',cats:['winery']},
+ {k:'stay',emo:'🏨',col:'#C0392B',label:'לינה',cats:['logistics']},
+];
+const CAT2GROUP={};GROUPS.forEach(g=>g.cats.forEach(c=>CAT2GROUP[c]=g.k));
+let mapInited=false,MAPOBJ,userLL=null,userMarker=null,markersByGroup={},markerBySlug={},isolated=false,activeG=new Set();
+const CORNICHE_HTML='<div style="direction:rtl;text-align:right;font-family:inherit;max-width:240px">'
+ +'<div style="font-weight:800;font-size:14px">🛣️ Corniche d\'Or</div>'
+ +'<div style="font-size:12px;color:#6B6661;margin-bottom:5px">כביש נוף · Saint-Raphaël → Cannes</div>'
+ +'<div style="font-size:13px;color:#544f4a;line-height:1.5">~30 ק״מ סלע פורפיר אדום מול מים טורקיז. נווטו לפי D559.</div>'
+ +'<a href="'+map("Corniche de l Esterel D559")+'" target="_blank" rel="noopener" style="display:inline-block;margin-top:7px;font-size:13px;font-weight:700;color:#3F6CB4;text-decoration:none">📍 גוגל מפות</a>'
+ +'</div>';
+function addCorniche(){
+  if(!MAPOBJ)return;
+  var draw=function(){
+    if(MAPOBJ.getSource('corniche'))return;
+    MAPOBJ.addSource('corniche',{type:'geojson',data:{type:'Feature',properties:{},geometry:{type:'LineString',coordinates:[[6.768,43.425],[6.855,43.437],[6.924,43.475],[6.940,43.505],[6.951,43.530],[7.017,43.552]]}}});
+    MAPOBJ.addLayer({id:'corniche-line',type:'line',source:'corniche',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#C0392B','line-width':4,'line-opacity':0.85}});
+    var pop=new maplibregl.Popup({closeButton:true,maxWidth:'260px'});
+    MAPOBJ.on('click','corniche-line',function(e){pop.setLngLat(e.lngLat).setHTML(CORNICHE_HTML).addTo(MAPOBJ);});
+    MAPOBJ.on('mouseenter','corniche-line',function(){MAPOBJ.getCanvas().style.cursor='pointer';});
+    MAPOBJ.on('mouseleave','corniche-line',function(){MAPOBJ.getCanvas().style.cursor='';});
+  };
+  if(MAPOBJ.isStyleLoaded())draw();else MAPOBJ.once('load',draw);
+}
+function haversine(a,b){const R=6371,r=Math.PI/180;
+  const dLat=(b[0]-a[0])*r,dLng=(b[1]-a[1])*r;
+  const x=Math.sin(dLat/2)**2+Math.cos(a[0]*r)*Math.cos(b[0]*r)*Math.sin(dLng/2)**2;
+  return 2*R*Math.asin(Math.sqrt(x));}
+function driveEst(km){let m=Math.round(km/65*1.35*60);return m<60?m+" דק'":Math.floor(m/60)+":"+String(m%60).padStart(2,'0')+" שעות";}
+function mkEl(emo,col,villa){const s=villa?42:34;
+  const el=document.createElement('div');
+  el.className='mk'+(villa?' mk-villa':'');
+  el.style.cssText=`background:${col};width:${s}px;height:${s}px;font-size:${villa?22:17}px`;
+  el.textContent=emo;
+  return el;}
+function mapPreview(s){
+  var sl=slugOf(s);
+  var fame=s.must?'<span class="mc-badge mc-must">⭐ חובה</span>':(s.gem?'<span class="mc-badge mc-gem">✦ פנינה</span>':'');
+  var cat=CAT[s.cat]?((CATICON[s.cat]?CATICON[s.cat][0]+' ':'')+CAT[s.cat]):'';
+  var dot=s.status?'<i class="mc-dot st-'+s.status+'"></i>':'';
+  var rate=s.rate?'<span class="mc-rate">'+s.rate+'</span>':'';
+  var nm=((sl==='villa'||sl==='merindol')?'🏡 ':'')+s.name;
+  return '<div class="mapcard"><div class="mapcard-img" style="background-image:url(\''+pic(s.img)+'\')">'+fame+'</div>'+
+    '<div class="mapcard-body"><div class="mapcard-name">'+nm+dot+'</div>'+
+    '<div class="mapcard-sub">'+(s.fr?s.fr+' · ':'')+cat+'</div>'+
+    (rate?'<div class="mapcard-meta">'+rate+'</div>':'')+'</div></div>';
+}
+function slugOf(s){return s.img.split('/')[1];}
+/* shared hover preview popup (MapLibre) */
+let hoverPopup=null;
+function showPreview(marker){
+  if(!marker||!marker._previewHTML)return;
+  if(!hoverPopup)hoverPopup=new maplibregl.Popup({closeButton:false,closeOnClick:false,
+    offset:marker._villa?26:22,className:'mapcard-tip',maxWidth:'none'});
+  hoverPopup.setLngLat(marker.getLngLat()).setHTML(marker._previewHTML).addTo(MAPOBJ);
+}
+function hidePreview(){if(hoverPopup)hoverPopup.remove();}
+function initMap(){
+  if(mapInited||typeof maplibregl==='undefined')return;mapInited=true;
+  MAPOBJ=new maplibregl.Map({container:'map',
+    style:'https://tiles.openfreemap.org/styles/liberty',
+    center:[6.3,43.75],zoom:7,attributionControl:{compact:true}});
+  MAPOBJ.addControl(new maplibregl.NavigationControl({showCompass:false}),'top-left');
+  MAPOBJ.dragRotate.disable();MAPOBJ.touchZoomRotate.disableRotation();
+  const pts=[...PROVENCE.flatMap(d=>d.stops),...NICE,...ROUTE];
+  const seen={},bounds=new maplibregl.LngLatBounds();let hasBounds=false;
+  pts.forEach(s=>{
+    const slug=slugOf(s),ll=COORDS[slug];if(!ll)return;
+    /* "פינוי הווילה" יושב בדיוק על מיקום הווילה — לא לערום פין כפול; ממחזרים את פין הווילה */
+    if(slug==='merindol'){if(markerBySlug['villa'])markerBySlug['merindol']=markerBySlug['villa'];return;}
+    seen[slug]=(seen[slug]||0)+1;
+    const lat=ll[0]+(seen[slug]>1?0.0012*(seen[slug]-1):0),lng=ll[1]+(seen[slug]>1?0.0012*(seen[slug]-1):0);
+    const villa=slug==='villa';
+    const[emo,col]=villa?['🏡','#C0392B']:(CATICON[s.cat]||['📍','#6B6661']);
+    const el=mkEl(emo,col,villa);
+    const m=new maplibregl.Marker({element:el}).setLngLat([lng,lat]).addTo(MAPOBJ);
+    m._previewHTML=mapPreview(s);m._villa=villa;m._east=lng>6.6;
+    el.addEventListener('mouseenter',()=>showPreview(m));
+    el.addEventListener('mouseleave',hidePreview);
+    el.addEventListener('click',ev=>{ev.stopPropagation();openDetail(s);});
+    markerBySlug[slug]=m;
+    const gk=CAT2GROUP[s.cat]||'towns';
+    (markersByGroup[gk]=markersByGroup[gk]||[]).push(m);
+    bounds.extend([lng,lat]);hasBounds=true;
+  });
+  if(hasBounds)MAPOBJ.fitBounds(bounds,{padding:50,animate:false,maxZoom:12});
+  const present=GROUPS.filter(g=>(markersByGroup[g.k]||[]).length);
+  document.getElementById('map-legend').innerHTML=
+    `<span class="lg lg-all active">★ הכול</span>`+
+    present.map(g=>`<span class="lg" data-g="${g.k}"><i style="background:${g.col}">${g.emo}</i>${g.label}</span>`).join('');
+  document.querySelector('.lg-all').onclick=()=>{isolated=false;activeG.clear();applyFilter();};
+  document.querySelectorAll('.maplegend .lg[data-g]').forEach(el=>el.onclick=()=>{
+    const g=el.dataset.g;
+    if(!isolated){isolated=true;activeG=new Set([g]);}
+    else{activeG.has(g)?activeG.delete(g):activeG.add(g);if(activeG.size===0)isolated=false;}
+    applyFilter();
+  });
+  document.getElementById('locate-btn').onclick=locateMe;
+  if(niceHidden()){applyFilter();setTimeout(fitVisible,300);}
+  addCorniche();
+  setTimeout(()=>MAPOBJ.resize(),250);
+}
+function applyFilter(){
+  GROUPS.forEach(g=>{
+    const show=!isolated||activeG.has(g.k);
+    (markersByGroup[g.k]||[]).forEach(m=>{
+      const vis=show&&!(niceHidden()&&m._east);
+      m.getElement().style.display=vis?'':'none';
+    });
+  });
+  hidePreview();
+  document.querySelectorAll('.maplegend .lg[data-g]').forEach(el=>
+    el.classList.toggle('off',isolated&&!activeG.has(el.dataset.g)));
+  const all=document.querySelector('.lg-all');if(all)all.classList.toggle('active',!isolated);
+}
+function locateMe(){
+  const st=document.getElementById('loc-status');
+  if(!navigator.geolocation){st.textContent='אין תמיכה במיקום במכשיר';return;}
+  st.textContent='מאתר מיקום…';
+  navigator.geolocation.getCurrentPosition(p=>{
+    userLL=[p.coords.latitude,p.coords.longitude];
+    if(userMarker)userMarker.remove();
+    const uel=mkEl('🧍','#111827',false);uel.title='המיקום שלך';
+    userMarker=new maplibregl.Marker({element:uel}).setLngLat([userLL[1],userLL[0]]).addTo(MAPOBJ);
+    st.textContent='✓ המיקום שלך מסומן — לחיצה על נקודה תציג מרחק וזמן';
+    MAPOBJ.flyTo({center:[userLL[1],userLL[0]],zoom:9,duration:800});
+  },()=>{st.textContent='לא הצלחתי לקבל מיקום (צריך לאשר הרשאה)';},{enableHighAccuracy:true,timeout:10000});
+}
+
+/* ===== פילטר מפה "כולל את ניס" — הצג/הסתר את כל הנקודות ממזרח לוורדון ===== */
+const NICE_KEY='frx-map-show-nice';
+function niceHidden(){return document.body.classList.contains('no-nice');}
+function fitVisible(){
+  if(!MAPOBJ)return;
+  const b=new maplibregl.LngLatBounds();let any=false;
+  Object.values(markersByGroup).forEach(arr=>arr.forEach(m=>{
+    if(m.getElement().style.display!=='none'){b.extend(m.getLngLat());any=true;}
+  }));
+  if(any)MAPOBJ.fitBounds(b,{padding:50,maxZoom:12,duration:600});
+}
+function setShowNice(on,save){
+  document.body.classList.toggle('no-nice',!on);
+  const sw=document.getElementById('niceSwitch');if(sw)sw.checked=on;
+  if(save){try{localStorage.setItem(NICE_KEY,on?'1':'0');}catch(e){}}
+  if(typeof MAPOBJ!=='undefined'&&MAPOBJ){
+    const dayActive=MAPOBJ.getLayer&&MAPOBJ.getLayer('frx-day-line');
+    if(!dayActive){applyFilter();fitVisible();}
+  }
+}
+(function initNiceToggle(){
+  let on=true;
+  try{if(localStorage.getItem(NICE_KEY)==='0')on=false;}catch(e){}
+  setShowNice(on,false);
+  const sw=document.getElementById('niceSwitch');
+  if(sw)sw.addEventListener('change',()=>setShowNice(sw.checked,true));
+})();
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
+  const tab=t.dataset.tab;document.body.dataset.tab=tab;
+  document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected',x.dataset.tab===tab));
+  document.querySelectorAll('.view').forEach(v=>v.classList.toggle('show',v.id==='view-'+tab));
+  if(tab==='map')initMap();
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+
+const store=JSON.parse(localStorage.getItem('fr2')||'{}');
+document.querySelectorAll('.fav').forEach((b,i)=>{
+  if(store[i]){b.setAttribute('aria-pressed','true');b.textContent='♥';}
+  b.onclick=()=>{const v=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',v);
+    b.textContent=v?'♥':'♡';store[i]=v;localStorage.setItem('fr2',JSON.stringify(store));};
+});
+
+const detail=document.getElementById('detail'),dimg=document.getElementById('dimg'),
+      ddots=document.getElementById('ddots'),dbody=document.getElementById('dbody');
+let GAL=[],GIDX=0;
+function showGal(){dimg.src=pic(GAL[GIDX]);
+  ddots.innerHTML=GAL.length>1?GAL.map((_,i)=>`<span class="${i===GIDX?'on':''}"></span>`).join(''):'';
+  document.querySelectorAll('.dnav').forEach(n=>n.style.display=GAL.length>1?'grid':'none');}
+function openDetail(s){
+  GAL=GALLERY[s.img]||[s.img];GIDX=0;
+  const meta=(s.rate||s.price)?`<div class="meta">${s.rate?`<span class="rate">${s.rate}</span>`:''}${s.price?`<span class="price">${s.price}</span>`:''}</div>`:'';
+  const tags=(s.tags||[]).map(t=>`<span class="tg">${t}</span>`).join('');
+  const near=s.near?`<div class="near"><b>בסביבה</b> · ${s.near}</div>`:'';
+  const note=s.note?`<div class="note"><b>שווה לדעת:</b> ${s.note}</div>`:'';
+  const info=s.info?`<a class="infolink" href="${s.info}" target="_blank" rel="noopener">🔗 אתר ותמונות</a>`:'';
+  const ll=COORDS[s.img.split('/')[1]];
+  const dist=(userLL&&ll)?`<div class="dist">📍 כ-${haversine(userLL,ll).toFixed(0)} ק"מ ממך · ~${driveEst(haversine(userLL,ll))} נסיעה (משוער)</div>`:'';
+  const nav=`<a class="infolink" href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(s.q)}" target="_blank" rel="noopener">🧭 ניווט</a>`;
+  dbody.innerHTML=`<h3>${s.name}</h3><div class="fr">${s.fr}</div>${meta}${dist}<p class="ddesc">${s.desc}</p>`+
+    `<div class="tags">${tags}</div>${near}${note}<div class="foot">`+
+    `<a class="maplink" href="${map(s.q)}" target="_blank" rel="noopener">📍 פתח במפה</a>${nav}${info}</div>`;
+  showGal();detail.classList.add('open');
+}
+document.querySelectorAll('.card').forEach(c=>c.addEventListener('click',e=>{
+  if(e.target.closest('.fav,.maplink,.infolink,.mineMap'))return;
+  openDetail(REG[c.dataset.id]);
+}));
+document.querySelector('.dnav.next').onclick=()=>{GIDX=(GIDX+1)%GAL.length;showGal();};
+document.querySelector('.dnav.prev').onclick=()=>{GIDX=(GIDX-1+GAL.length)%GAL.length;showGal();};
+function closeDetail(){
+  if(!detail.classList.contains('open'))return;
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){detail.classList.remove('open');return;}
+  detail.classList.add('closing');
+  setTimeout(()=>detail.classList.remove('open','closing'),200);
+}
+document.querySelector('.dx').onclick=closeDetail;
+detail.onclick=e=>{if(e.target===detail)closeDetail();};
+addEventListener('keydown',e=>{if(e.key==='Escape')closeDetail();});
+
+/* ===== lightweight scroll reveals (position-based, no library, fully reliable) ===== */
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
+  document.body.classList.add('anim');
+  /* reliable trigger (also fires on tab switch, unlike IntersectionObserver);
+     drives enhance.js's staggered card system (.frx-in) + day headers (.in) */
+  function checkReveal(){
+    const vh=innerHeight||document.documentElement.clientHeight;
+    document.querySelectorAll('.view.show .card:not(.frx-in), .view.show .day-h:not(.in)').forEach(el=>{
+      /* reveal once its top has crossed the line — stays revealed even on a fast scroll/jump past it */
+      if(el.getBoundingClientRect().top < vh-30) el.classList.add(el.classList.contains('card')?'frx-in':'in');
+    });
+  }
+  checkReveal();
+  addEventListener('scroll',checkReveal,{passive:true});
+  addEventListener('resize',checkReveal,{passive:true});
+  document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>setTimeout(checkReveal,60)));
+  /* safety net: nothing stays hidden — reveal everything after 4s regardless */
+  setTimeout(()=>{
+    document.querySelectorAll('.day-h:not(.in)').forEach(el=>el.classList.add('in'));
+    document.querySelectorAll('.card:not(.frx-in)').forEach(el=>el.classList.add('frx-in'));
+  },4000);
+}
+/* ===== "אצלנו" — קפיצה למפה שלנו ===== */
+document.addEventListener('click',e=>{
+  const b=e.target.closest('.mineMap');if(!b)return;
+  const slug=b.dataset.slug, ll=COORDS[slug];
+  if(typeof closeDetail==='function')closeDetail();
+  document.querySelector('.tab[data-tab="map"]').click();
+  setTimeout(()=>{
+    if(!MAPOBJ||!ll)return;
+    MAPOBJ.resize();
+    MAPOBJ.flyTo({center:[ll[1],ll[0]],zoom:15,duration:1400});
+    const m=markerBySlug[slug];
+    if(m)setTimeout(()=>showPreview(m),1500);
+  },350);
+});
+</script>
+<script src="enhance.js" defer></script>
+</body>
+</html>

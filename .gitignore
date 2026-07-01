@@ -1,0 +1,21 @@
+# local backups / dev artifacts — do not deploy
+images-ORIGINALS-backup.tar
+*.bak
+*.bak*
+index.html.bak*
+index.pre-maplibre.bak
+*.docx
+.DS_Store
+
+# dev docs / patches / prototypes (not part of the live site)
+PATCH-*.md
+IMAGE-AUDIT.md
+IMAGE-STANDARD.md
+ONBOARDING.md
+research-*.md
+prototype.html
+original-guide.html
+preview-*.html
+
+# orphaned/unused heavy images
+images/_audit_backup/
