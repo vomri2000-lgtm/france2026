@@ -36,7 +36,7 @@ addEventListener('load',()=>window.scrollTo(0,0));</script>
      radial-gradient(120% 140% at 90% -10%, color-mix(in srgb,var(--accent) 16%,transparent), transparent 55%);
      transition:background .5s var(--ease)}
   .brand{font-size:13px;font-weight:600;color:var(--accent);margin-bottom:4px}
-  header.top h1 .occ{color:var(--accent)}
+  header.top h1 .dest{color:var(--accent)}
   header.top h1{font-size:clamp(30px,5.4vw,50px);font-weight:800;letter-spacing:-.03em;line-height:1.02}
   header.top h1 .light{color:var(--muted);font-weight:500}
   .sub{color:var(--muted);font-size:15.5px;margin-top:8px;max-width:62ch}
@@ -239,7 +239,7 @@ addEventListener('load',()=>window.scrollTo(0,0));</script>
 <header class="top">
   <div class="wrap">
     <div class="brand">קיץ 2026 · מדריך הטיול שלנו</div>
-    <h1><span class="occ">יום הולדת 80 לרונה : </span>דרום צרפת <span class="light">— פרובאנס &amp; הריביירה</span></h1>
+    <h1><span class="occ">יום הולדת 80 לרונה : </span><span class="dest">דרום צרפת</span> <span class="light">— פרובאנס &amp; הריביירה</span></h1>
     <p class="sub">שני חלקים, מסע אחד. עברו בין הטאבים: פרובאנס עם כל המשפחה (לו"ז מסודר יום-יום), וניס עם המשפחה המצומצמת (מאגר אופציות לבחירה, כולל חופים נסתרים).</p>
   </div>
 </header>
@@ -362,8 +362,8 @@ const PROVENCE=[
  ]},
  {day:"חמישי",route:"Aix → Cassis → אאוטלט",title:"אקס־אן־פרובאנס וקסיס",stops:[
    {name:"אקס-אן-פרובאנס",fr:"Aix-en-Provence",cat:"city",rate:"★ 4.6",tags:["עיר","שוק","קפה","סזאן"],q:"Cours Mirabeau Aix-en-Provence",img:"provence/aix",t:"10:30",desc:"עיר הסטודנטים האלגנטית של פרובאנס, עיר הולדתו של סזאן. שדרת Cours Mirabeau מוצלת בדולבים ענקיים ומלאה מזרקות ובתי קפה היסטוריים, ובסמטאות שמאחור שווקים יומיים, מגדניות ובוטיקים. אווירה תוססת ומלוטשת.",near:"בסביבה: מחצבת Bibémus וסטודיו סזאן, וכפר Ventabren לשקיעה.",note:"לשמור ביקור ממוקד כדי להספיק ל-Cassis אחרי הצהריים."},
-   {name:"קאסי",fr:"Cassis",cat:"sea",rate:"★ 4.7",tags:["נמל","קלנקים","שייט"],q:"Port de Cassis",img:"provence/cassis",t:"13:30",desc:"עיירת נמל ססגונית כלואה בין כרמים לצוק Cap Canaille האדום — הגבוה באירופה. יושבים על צהריים מול הסירות, ואז יוצאים בשייט אל הקלנקים: שורת מפרצונים צרים בצבע טורקיז בין צוקי גיר לבנים, שאפשר גם לשחות בהם.",near:"בסביבה: כביש התצפיות Route des Crêtes והקלנקים Port-Miou ו-Port-Pin.",note:"השייט תלוי במזג האוויר ובמצב הים."},
-   {name:"קלנק אן-וו",must:true,fr:"Calanque d'En-Vau",cat:"beach",gem:true,rate:"★ 4.8",tags:["חוף נסתר","קלנק","שחייה"],q:"Calanque d'En-Vau",img:"provence/en-vau",desc:"היפהפייה שבקלנקים — מפרצון חוף חלוקים לבן הכלוא בין מצוקים אנכיים מתנשאים, עם מים צלולים כמו בריכה. מגיעים בהליכה (כשעה במורד) או בסירה מקאסי. מעט מאמץ, הרבה תגמול.",near:"בדרך: הקלנקים Port-Pin ו-Port-Miou, קצרים יותר להגעה."},
+   {name:"קאסיס",fr:"Cassis",cat:"sea",rate:"★ 4.7",tags:["נמל","קלנקים","שייט"],q:"Port de Cassis",img:"provence/cassis",t:"13:30",desc:"עיירת נמל ססגונית כלואה בין כרמים לצוק Cap Canaille האדום — הגבוה באירופה. יושבים על צהריים מול הסירות, ואז יוצאים בשייט אל הקלנקים: שורת מפרצונים צרים בצבע טורקיז בין צוקי גיר לבנים, שאפשר גם לשחות בהם.",near:"בסביבה: כביש התצפיות Route des Crêtes והקלנקים Port-Miou ו-Port-Pin.",note:"השייט תלוי במזג האוויר ובמצב הים."},
+   {name:"קלנק אן-וו",must:true,fr:"Calanque d'En-Vau",cat:"beach",gem:true,rate:"★ 4.8",tags:["חוף נסתר","קלנק","שחייה"],q:"Calanque d'En-Vau",img:"provence/en-vau",desc:"היפהפייה שבקלנקים — מפרצון חוף חלוקים לבן הכלוא בין מצוקים אנכיים מתנשאים, עם מים צלולים כמו בריכה. מגיעים בהליכה (כשעה במורד) או בסירה מקאסיס. מעט מאמץ, הרבה תגמול.",near:"בדרך: הקלנקים Port-Pin ו-Port-Miou, קצרים יותר להגעה."},
    {name:"Le petit Oyster Bar",fr:"Cassis · בר צדפות",cat:"restaurant",tags:["צדפות","פירות ים","€€"],rate:"★ 4.8",price:"€€",q:"Le petit OYSTER BAR Cassis",img:"provence/g-oysterbar",desc:"בר צדפות ופירות ים אינטימי ליד הנמל. צדפות Isigny טריות, יין לבן מקומי קר ואווירה נינוחה על המים. פתוח כל יום — מושלם לצהריים אחרי השייט."},
    {name:"McArthurGlen Provence",fr:"Miramas",cat:"shop",rate:"★ 4.3",tags:["אאוטלט","מותגים"],q:"McArthurGlen Provence Miramas",img:"provence/outlet",t:"בדרך",desc:"אאוטלט מותגים גדול וסגור בדרך חזרה לכיוון הבסיס — אופנה, ספורט ומותגי בית במחירים מוזלים, למי שרוצה לעצור לקניות."},
  ]},
@@ -462,7 +462,7 @@ const DRONE=[
 ];
 
 const ROUTE=[
- {name:"קאפ קנאיי · Route des Crêtes",gem:true,fr:"Cap Canaille, Cassis",cat:"view",tags:["תצפית","כביש רכס"],q:"Cap Canaille Route des Crêtes Cassis",img:"route/cap-canaille",desc:"כביש רכס מעל הצוק הימי הגבוה בצרפת (394 מ'), עם נוף למפרץ קאסי.",note:"חופף לאזור קאסי של יום המחרת."},
+ {name:"קאפ קנאיי · Route des Crêtes",gem:true,fr:"Cap Canaille, Cassis",cat:"view",tags:["תצפית","כביש רכס"],q:"Cap Canaille Route des Crêtes Cassis",img:"route/cap-canaille",desc:"כביש רכס מעל הצוק הימי הגבוה בצרפת (394 מ'), עם נוף למפרץ קאסיס.",note:"חופף לאזור קאסיס של יום המחרת."},
  {name:"לה קסטלה",gem:true,fr:"Le Castellet, Var",cat:"village",tags:["כפר ימי-ביניימי","בנדול"],q:"Le Castellet Var",img:"route/le-castellet",desc:"כפר ימי-ביניימי מנקב מעל כרמי בנדול, מהכפרים היפים בצרפת."},
  {name:"סנארי-סור-מר",gem:true,fr:"Sanary-sur-Mer",cat:"village",tags:["נמל דייגים","שוק","אותנטי"],q:"Sanary-sur-Mer",img:"route/sanary",desc:"נמל דייגים אותנטי ושקט, עם שוק רביעי מפורסם — פחות תיירותי."},
  {name:"דומיין טמפייה",must:true,fr:"Domaine Tempier · Bandol",cat:"winery",tags:["יקב","בנדול","רוזה"],q:"Domaine Tempier Le Castellet",img:"route/tempier",desc:"היקב האייקוני של בנדול — מוסקדל אדום ורוזה מפורסמים.",info:"https://www.domainetempier.com/en/homepage/"},
@@ -475,7 +475,7 @@ const ROUTE=[
  {name:"אופד-לה-וייה",gem:true,fr:"Oppède-le-Vieux",cat:"hidden",tags:["לוברון","כפר רפאים","צוק"],q:"Oppède-le-Vieux",img:"route/oppede",desc:"כפר-רפאים ציורי על צוק הלוברון — חורבות טירה, סמטאות אבן וכנסייה, כמעט בלי תיירים."},
  {name:"אנסואי",gem:true,fr:"Ansouis",cat:"village",tags:["לוברון","טירה","שקט"],q:"Ansouis Luberon",img:"route/ansouis",desc:"מהכפרים היפים בדרום הלוברון, עם טירה מהמאה ה-13 וסמטאות פרחוניות שקטות."},
  {name:"בנדול",fr:"Bandol",cat:"village",tags:["חוף","יין בנדול","נמל"],q:"Bandol Var",img:"route/bandol",desc:"עיירת חוף ונופש על חוף הוַאר, בירת יין הבנדול המפורסם — טיילת נמל, חופים ומסעדות."},
- {name:"קאלנק פּור-מיו",gem:true,fr:"Calanque de Port-Miou",cat:"beach",tags:["קאלנק","קאסי","מרינה טבעית"],q:"Calanque de Port-Miou Cassis",img:"route/port-miou",desc:"הקאלנק הראשון והנגיש מקאסי — מפרץ צר וארוך עם מרינה טבעית ומים ירוקים, תחילת שביל הקאלנקים."},
+ {name:"קאלנק פּור-מיו",gem:true,fr:"Calanque de Port-Miou",cat:"beach",tags:["קאלנק","קאסיס","מרינה טבעית"],q:"Calanque de Port-Miou Cassis",img:"route/port-miou",desc:"הקאלנק הראשון והנגיש מקאסיס — מפרץ צר וארוך עם מרינה טבעית ומים ירוקים, תחילת שביל הקאלנקים."},
 ];
 
 function card(s){
@@ -515,7 +515,7 @@ function card(s){
 
 const COORDS={
  porquerolles:[43.0003,6.2033],"st-tropez":[43.2674,6.6408],lavandou:[43.1372,6.3669],giens:[43.0380,6.0980],
- "g-hotel":[43.7008,7.2725],"g-oysterbar":[43.2148,5.5380],"g-camille":[43.7445,4.7948],"g-cantine":[43.8456,6.2215],"g-trinquette":[43.9112,5.2002],"g-clay":[43.6971,7.2789],"bars-nice":[43.6975,7.2760],"casino-square":[43.7393,7.4286],"f1":[43.7396,7.4274],"tete-de-chien":[43.7270,7.4060],"jardin-exotique":[43.7320,7.4153],villa:[43.7549,5.2017],merindol:[43.7549,5.2017],marseille:[43.4366,5.2150],aix:[43.5297,5.4474],cassis:[43.2148,5.5390],
+ "g-hotel":[43.7008,7.2725],"g-oysterbar":[43.2148,5.5380],"g-camille":[43.7445,4.7948],"g-cantine":[43.8456,6.2215],"g-trinquette":[43.9112,5.2002],"g-clay":[43.6971,7.2789],"bars-nice":[43.6975,7.2760],"casino-square":[43.7393,7.4286],"f1":[43.7396,7.4274],"tete-de-chien":[43.7270,7.4060],"jardin-exotique":[43.7320,7.4153],villa:[43.7549,5.2017],merindol:[43.7549,5.2017],marseille:[43.4366,5.2150],aix:[43.5297,5.4474],cassis:[43.2148,5.5650],
  "en-vau":[43.2086,5.4986],outlet:[43.5660,4.9840],lourmarin:[43.7641,5.3626],"st-remy":[43.7887,4.8320],
  "les-baux":[43.7445,4.7950],carrieres:[43.7460,4.7930],avignon:[43.9509,4.8076],valensole:[43.8370,5.9830],
  moustiers:[43.8456,6.2215],"lac-sainte-croix":[43.7600,6.1700],verdon:[43.7490,6.3270],"isle-sorgue":[43.9190,5.0510],
