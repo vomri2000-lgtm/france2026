@@ -171,7 +171,7 @@
       $$("#nice-filters button").forEach((b) => b.addEventListener("click", () => applyNice()));
     }
     // פרובאנס
-    const p = buildBar("view-provence", "prov", "חיפוש מקום, כפר, מסעדה…", () => applyProv());
+    const p = buildBar("view-provence", "prov", "חיפוש מקום ליהנות עם רונה…", () => applyProv());
     if (p) {
       applyProv = function () {
         const term = p.input.value.trim().toLowerCase();
