@@ -20,14 +20,14 @@ addEventListener('load',()=>window.scrollTo(0,0));</script>
     --bg:#F6F5F3; --surface:#FFFFFF; --ink:#1C1A18; --muted:#6B6661;
     --line:#E7E3DD; --line-soft:#EFEBE5;
     --prov:#C0892C; --nice:#1E7A93;
-    --brand:#2E7D52;  /* צבע המותג הקבוע לכותרת+רקע ה-hero (לא מתחלף לפי טאב) */
+    --brand:#8A5A33;  /* צבע המותג הקבוע לכותרת+רקע ה-hero (לא מתחלף לפי טאב) */
     --accent:var(--prov);
     --r:18px; --shadow:0 14px 40px -24px rgba(40,30,18,.5);
     --maxw:1180px; --ease:cubic-bezier(.22,.8,.22,1);
   }
   body[data-tab="nice"]{--accent:var(--nice)}
   body[data-tab="drone"]{--accent:#3F6CB4}
-  body[data-tab="map"]{--accent:#2E7D52}
+  body[data-tab="map"]{--accent:#8A5A33}
   html{overflow-x:hidden;scroll-behavior:smooth}
   body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.6;
     -webkit-font-smoothing:antialiased;overflow-x:hidden;padding-bottom:60px}
@@ -38,12 +38,12 @@ addEventListener('load',()=>window.scrollTo(0,0));</script>
   .brand{font-size:13px;font-weight:600;color:var(--brand);margin-bottom:4px}
   header.top h1 .dest{color:var(--brand)}
   header.top h1{position:relative}
-  header.top h1 .occ{cursor:pointer;-webkit-tap-highlight-color:transparent;color:#BC4E63;display:inline-block;animation:occpulse 2s ease-in-out infinite;transform-origin:right center;transition:filter .25s ease}
+  header.top h1 .occ{cursor:pointer;-webkit-tap-highlight-color:transparent;color:#2D9CDB;display:inline-block;animation:occpulse 2s ease-in-out infinite;transform-origin:right center;transition:filter .25s ease}
   header.top h1 .occ:hover,header.top h1 .occ:active{filter:brightness(1.15)}
   @keyframes occpulse{0%,100%{transform:scale(1)}50%{transform:scale(.97)}}
   .occ-cake{display:inline-block;font-size:.5em;vertical-align:middle;animation:cakepulse 1.6s ease-in-out infinite;transform-origin:50% 60%}
   @keyframes cakepulse{0%,100%{transform:scale(1)}50%{transform:scale(1.25)}}
-  .occ-msg{position:fixed;top:50%;left:50%;max-width:88vw;text-align:center;line-height:1.15;font-size:clamp(25px,7vw,56px);font-weight:800;letter-spacing:-.02em;color:#fff;background:linear-gradient(140deg,#C23A5C,#A63D57);padding:.5em .8em;border-radius:.55em;box-shadow:0 0 0 3px rgba(255,255,255,.28),0 22px 60px -10px rgba(0,0,0,.5);pointer-events:none;z-index:10000;opacity:0;transform:translate(-50%,-50%) scale(.15);transition:opacity .35s ease,transform .55s cubic-bezier(.34,1.56,.64,1)}
+  .occ-msg{position:fixed;top:50%;left:50%;max-width:88vw;text-align:center;line-height:1.15;font-size:clamp(25px,7vw,56px);font-weight:800;letter-spacing:-.02em;color:#fff;background:linear-gradient(140deg,#3FABE0,#2C7FB5);padding:.5em .8em;border-radius:.55em;box-shadow:0 0 0 3px rgba(255,255,255,.28),0 22px 60px -10px rgba(0,0,0,.5);pointer-events:none;z-index:10000;opacity:0;transform:translate(-50%,-50%) scale(.15);transition:opacity .35s ease,transform .55s cubic-bezier(.34,1.56,.64,1)}
   .occ-msg b{display:inline-block;font-weight:800}
   .occ-veil{position:fixed;inset:0;background:rgba(24,19,15,.5);opacity:0;pointer-events:none;z-index:9998;transition:opacity .4s ease}
   .occ-veil.show{opacity:1}
@@ -830,7 +830,7 @@ document.addEventListener('click',e=>{
 (function(){
   var occ=document.getElementById('occ'); if(!occ) return;
   var msg=null, veil=null, msgTimer=null, tl=null, registered=false;
-  var PALETTE=['#C0892C','#BC4E63','#1E7A93','#E2B04A','#F2C6DE','#8ED081'];
+  var PALETTE=['#C0892C','#2D9CDB','#1E7A93','#E2B04A','#A8D8F0','#8ED081'];
   function reduced(){return matchMedia('(prefers-reduced-motion: reduce)').matches}
   function ensureMsg(){
     if(!msg){msg=document.createElement('span');msg.className='occ-msg';msg.textContent='(אבל מרגישה כמו 40 🎉)';document.body.appendChild(msg);}
@@ -912,5 +912,13 @@ document.addEventListener('click',e=>{
   });
 })();
 </script>
+
+<style>
+.wa-fab{position:fixed;bottom:18px;right:18px;width:56px;height:56px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px -4px rgba(0,0,0,.4);z-index:850;transition:transform .18s cubic-bezier(.22,.8,.22,1),box-shadow .18s;-webkit-tap-highlight-color:transparent}
+.wa-fab:hover{transform:scale(1.08);box-shadow:0 10px 24px -6px rgba(0,0,0,.5)}
+.wa-fab:active{transform:scale(.95)}
+@media (prefers-reduced-motion:reduce){.wa-fab{transition:none}}
+</style>
+<a class="wa-fab" href="https://wa.me/972542395140?text=%D7%94%D7%99%D7%99%21%20%D7%A9%D7%90%D7%9C%D7%94%20%D7%A2%D7%9C%20%D7%9E%D7%93%D7%A8%D7%99%D7%9A%20%D7%94%D7%98%D7%99%D7%95%D7%9C%20%D7%9C%D7%A6%D7%A8%D7%A4%D7%AA%20%F0%9F%99%82" target="_blank" rel="noopener" aria-label="שלח הודעה בוואטסאפ"><svg viewBox="0 0 32 32" width="30" height="30" fill="#fff" aria-hidden="true"><path d="M16.04 4C9.9 4 4.9 9 4.9 15.14c0 2.2.65 4.24 1.76 5.96L4.5 28l7.06-2.1a11.1 11.1 0 0 0 4.48.94h.01c6.14 0 11.14-5 11.14-11.14C27.19 9 22.18 4 16.04 4zm0 20.4c-1.4 0-2.77-.38-3.96-1.08l-.28-.17-4.19 1.25 1.27-4.08-.18-.29a9.23 9.23 0 0 1-1.42-4.9c0-5.1 4.15-9.25 9.26-9.25 2.47 0 4.79.96 6.54 2.71a9.2 9.2 0 0 1 2.71 6.55c0 5.1-4.15 9.25-9.25 9.25zm5.08-6.93c-.28-.14-1.65-.81-1.9-.9-.26-.1-.44-.14-.63.14-.18.28-.72.9-.88 1.08-.16.18-.32.2-.6.07-.28-.14-1.18-.44-2.24-1.39-.83-.74-1.39-1.65-1.55-1.93-.16-.28-.02-.43.12-.57.13-.13.28-.32.42-.48.14-.16.18-.28.28-.46.09-.18.05-.35-.02-.49-.07-.14-.63-1.51-.86-2.07-.23-.55-.46-.47-.63-.48l-.54-.01c-.18 0-.48.07-.73.35-.25.28-.96.94-.96 2.3 0 1.35.98 2.66 1.12 2.84.14.18 1.93 2.95 4.68 4.14.65.28 1.16.45 1.56.58.66.21 1.25.18 1.72.11.52-.08 1.65-.67 1.88-1.32.23-.65.23-1.2.16-1.32-.07-.12-.25-.19-.53-.33z"/></svg></a>
 </body>
 </html>
