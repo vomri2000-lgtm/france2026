@@ -17,9 +17,15 @@
   /* ---------- CSS מוזרק ---------- */
   const CSS = `
   .frx-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:14px 0 6px}
-  .frx-search{flex:1;min-width:220px;display:flex;align-items:center;gap:8px;background:var(--surface);
+  .frx-search{flex:1;min-width:220px;display:flex;align-items:center;gap:8px;background:var(--surface);position:relative;
      border:1px solid var(--line);border-radius:13px;padding:0 12px;transition:.18s var(--ease)}
   .frx-search:focus-within{border-color:color-mix(in srgb,var(--accent) 55%,var(--line));box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 12%,transparent)}
+  /* placeholder עשיר (מילה מודגשת) — span שמונח מעל השדה, נעלם כשמקלידים */
+  .frx-richph input::placeholder{color:transparent}
+  .frx-ph{position:absolute;inset-block:0;inset-inline-start:38px;inset-inline-end:14px;display:flex;align-items:center;
+     pointer-events:none;color:var(--muted);font-size:15px;white-space:nowrap;overflow:hidden}
+  .frx-ph b{font-weight:800;color:var(--ink)}
+  .frx-richph input:not(:placeholder-shown) ~ .frx-ph{opacity:0}
   .frx-search span{font-size:15px;opacity:.7}
   .frx-search input{flex:1;border:0;outline:0;background:none;font-family:inherit;font-size:15px;
      color:var(--ink);padding:12px 0;min-width:0}
@@ -127,14 +133,15 @@
     if (n) n.textContent = $$("#nice-grid .fav[aria-pressed='true']").length;
     if (p) p.textContent = $$("#prov-days .fav[aria-pressed='true']").length;
   }
-  function buildBar(viewId, vkey, placeholder, onApply) {
+  function buildBar(viewId, vkey, placeholder, onApply, richHTML) {
     const view = document.getElementById(viewId); if (!view) return null;
     const intro = view.querySelector(".intro"); if (!intro) return null;
     const bar = document.createElement("div");
     bar.className = "frx-bar";
     bar.innerHTML =
-      `<label class="frx-search"><span>🔎</span>` +
-      `<input type="search" placeholder="${placeholder}" aria-label="חיפוש"><button type="button" class="frx-clear" aria-label="ניקוי" hidden>✕</button></label>` +
+      `<label class="frx-search${richHTML ? " frx-richph" : ""}"><span>🔎</span>` +
+      `<input type="search" placeholder="${placeholder}" aria-label="חיפוש"><button type="button" class="frx-clear" aria-label="ניקוי" hidden>✕</button>` +
+      (richHTML ? `<span class="frx-ph" aria-hidden="true">${richHTML}</span>` : "") + `</label>` +
       `<button type="button" class="frx-favtog" aria-pressed="false">♥ המועדפים <span class="frx-favn" data-v="${vkey}">0</span></button>`;
     intro.insertAdjacentElement("afterend", bar);
     const empty = document.createElement("div");
@@ -171,7 +178,7 @@
       $$("#nice-filters button").forEach((b) => b.addEventListener("click", () => applyNice()));
     }
     // פרובאנס
-    const p = buildBar("view-provence", "prov", "חיפוש מקום ליהנות עם רונה…", () => applyProv());
+    const p = buildBar("view-provence", "prov", "חיפוש מקום ליהנות עם רונה…", () => applyProv(), "חיפוש מקום ליהנות עם <b>רונה</b>…");
     if (p) {
       applyProv = function () {
         const term = p.input.value.trim().toLowerCase();
