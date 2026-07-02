@@ -20,6 +20,7 @@ addEventListener('load',()=>window.scrollTo(0,0));</script>
     --bg:#F6F5F3; --surface:#FFFFFF; --ink:#1C1A18; --muted:#6B6661;
     --line:#E7E3DD; --line-soft:#EFEBE5;
     --prov:#C0892C; --nice:#1E7A93;
+    --brand:#2E7D52;  /* צבע המותג הקבוע לכותרת+רקע ה-hero (לא מתחלף לפי טאב) */
     --accent:var(--prov);
     --r:18px; --shadow:0 14px 40px -24px rgba(40,30,18,.5);
     --maxw:1180px; --ease:cubic-bezier(.22,.8,.22,1);
@@ -33,17 +34,16 @@ addEventListener('load',()=>window.scrollTo(0,0));</script>
   .wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(16px,4vw,40px)}
 
   header.top{padding:30px 0 0;background:
-     radial-gradient(120% 140% at 90% -10%, color-mix(in srgb,var(--accent) 16%,transparent), transparent 55%);
-     transition:background .5s var(--ease)}
-  .brand{font-size:13px;font-weight:600;color:var(--accent);margin-bottom:4px}
-  header.top h1 .dest{color:#2E7D52}
+     radial-gradient(120% 140% at 90% -10%, color-mix(in srgb,var(--brand) 16%,transparent), transparent 55%)}
+  .brand{font-size:13px;font-weight:600;color:var(--brand);margin-bottom:4px}
+  header.top h1 .dest{color:var(--brand)}
   header.top h1{position:relative}
   header.top h1 .occ{cursor:pointer;-webkit-tap-highlight-color:transparent;color:#BC4E63;display:inline-block;animation:occpulse 2s ease-in-out infinite;transform-origin:right center;transition:filter .25s ease}
   header.top h1 .occ:hover,header.top h1 .occ:active{filter:brightness(1.15)}
   @keyframes occpulse{0%,100%{transform:scale(1)}50%{transform:scale(.97)}}
   .occ-cake{display:inline-block;font-size:.5em;vertical-align:middle;animation:cakepulse 1.6s ease-in-out infinite;transform-origin:50% 60%}
   @keyframes cakepulse{0%,100%{transform:scale(1)}50%{transform:scale(1.25)}}
-  .occ-msg{position:fixed;top:50%;left:50%;max-width:88vw;text-align:center;line-height:1.15;font-size:clamp(30px,8.5vw,58px);font-weight:800;letter-spacing:-.02em;color:#fff;background:linear-gradient(140deg,#C23A5C,#A63D57);padding:.45em .9em;border-radius:999px;box-shadow:0 0 0 3px rgba(255,255,255,.28),0 22px 60px -10px rgba(0,0,0,.5);pointer-events:none;z-index:10000;opacity:0;transform:translate(-50%,-50%) scale(.15);transition:opacity .35s ease,transform .55s cubic-bezier(.34,1.56,.64,1)}
+  .occ-msg{position:fixed;top:50%;left:50%;max-width:88vw;text-align:center;line-height:1.15;font-size:clamp(25px,7vw,56px);font-weight:800;letter-spacing:-.02em;color:#fff;background:linear-gradient(140deg,#C23A5C,#A63D57);padding:.5em .8em;border-radius:.55em;box-shadow:0 0 0 3px rgba(255,255,255,.28),0 22px 60px -10px rgba(0,0,0,.5);pointer-events:none;z-index:10000;opacity:0;transform:translate(-50%,-50%) scale(.15);transition:opacity .35s ease,transform .55s cubic-bezier(.34,1.56,.64,1)}
   .occ-msg b{display:inline-block;font-weight:800}
   .occ-veil{position:fixed;inset:0;background:rgba(24,19,15,.5);opacity:0;pointer-events:none;z-index:9998;transition:opacity .4s ease}
   .occ-veil.show{opacity:1}
