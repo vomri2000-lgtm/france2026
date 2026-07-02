@@ -880,19 +880,19 @@ document.addEventListener('click',e=>{
       tl.to(m,{opacity:1,duration:.4}).to(m,{opacity:0,duration:.4},'+=1.8');
     }else{
       gsap.set(m,{x:0,y:0,xPercent:-50,yPercent:-50,opacity:0,scale:.3,rotation:-6});
-      tl.to(m,{opacity:1,scale:1,rotation:0,duration:.5,ease:'back.out(2.2)'})
-        .from(words,{y:'0.7em',opacity:0,rotation:8,duration:.45,stagger:.06,ease:'back.out(3)'},'-=0.3')
-        .to(m,{y:-8,duration:.5,ease:'sine.inOut',yoyo:true,repeat:1},'-=0.1')
-        .to(m,{opacity:0,scale:.25,rotation:9,duration:.35,ease:'power2.in'},'+=0.75');
+      tl.to(m,{opacity:1,scale:1,rotation:0,duration:.85,ease:'back.out(1.9)'})
+        .from(words,{y:'0.7em',opacity:0,rotation:8,duration:.7,stagger:.11,ease:'back.out(2.5)'},'-=0.45')
+        .to(m,{y:-9,duration:.8,ease:'sine.inOut',yoyo:true,repeat:1},'-=0.15')
+        .to(m,{opacity:0,scale:.3,rotation:7,duration:.6,ease:'power2.in'},'+=1.1');
     }
     if(reduced()||!registered) return;
     for(var i=0;i<70;i++){
       var el=makePiece(i);
       gsap.set(el,{x:innerWidth/2,y:innerHeight/2,rotation:Math.random()*360});
-      gsap.to(el,{physics2D:{velocity:300+Math.random()*350,angle:Math.random()*360,gravity:800},
-        rotation:'+='+(Math.random()*520-260),duration:1.8,ease:'none',
+      gsap.to(el,{physics2D:{velocity:220+Math.random()*280,angle:Math.random()*360,gravity:480},
+        rotation:'+='+(Math.random()*420-210),duration:3,ease:'none',
         onComplete:function(){this.targets()[0].remove()}});
-      gsap.to(el,{opacity:0,duration:.5,delay:1.3});
+      gsap.to(el,{opacity:0,duration:.8,delay:2.2});
     }
   }
   occ.addEventListener('click',function(){
