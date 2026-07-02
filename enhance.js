@@ -22,7 +22,7 @@
   .frx-search:focus-within{border-color:color-mix(in srgb,var(--accent) 55%,var(--line));box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 12%,transparent)}
   /* placeholder עשיר (מילה מודגשת) — span שמונח מעל השדה, נעלם כשמקלידים */
   .frx-richph input::placeholder{color:transparent}
-  .frx-ph{position:absolute;inset-block:0;inset-inline-start:38px;inset-inline-end:14px;display:flex;align-items:center;
+  .frx-ph{position:absolute;top:50%;transform:translateY(-50%);inset-inline-start:38px;inset-inline-end:14px;
      pointer-events:none;color:var(--muted);font-size:15px;white-space:nowrap;overflow:hidden}
   .frx-ph b{font-weight:800;color:var(--ink)}
   .frx-richph input:not(:placeholder-shown) ~ .frx-ph{opacity:0}
