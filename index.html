@@ -38,13 +38,15 @@ addEventListener('load',()=>window.scrollTo(0,0));</script>
   .brand{font-size:13px;font-weight:600;color:var(--accent);margin-bottom:4px}
   header.top h1 .dest{color:var(--accent)}
   header.top h1{position:relative}
-  header.top h1 .occ{cursor:pointer;-webkit-tap-highlight-color:transparent}
+  header.top h1 .occ{cursor:pointer;-webkit-tap-highlight-color:transparent;color:#BC4E63;display:inline-block;animation:occpulse 2s ease-in-out infinite;transform-origin:right center;transition:filter .25s ease}
+  header.top h1 .occ:hover,header.top h1 .occ:active{filter:brightness(1.15)}
+  @keyframes occpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
   .occ-cake{display:inline-block;font-size:.5em;vertical-align:middle;animation:cakepulse 1.6s ease-in-out infinite;transform-origin:50% 60%}
   @keyframes cakepulse{0%,100%{transform:scale(1)}50%{transform:scale(1.25)}}
   .occ-msg{position:fixed;top:50%;left:50%;max-width:92vw;text-align:center;font-size:clamp(28px,7.5vw,64px);font-weight:800;letter-spacing:-.02em;color:var(--accent);pointer-events:none;z-index:10000;opacity:0;transform:translate(-50%,-50%) scale(.15);transition:opacity .35s ease,transform .55s cubic-bezier(.34,1.56,.64,1);text-shadow:0 4px 26px rgba(0,0,0,.22)}
   .occ-msg.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
   .cfp{position:fixed;left:0;top:0;width:9px;height:14px;border-radius:2px;pointer-events:none;z-index:9999;will-change:transform,opacity}
-  @media (prefers-reduced-motion:reduce){.occ-cake{animation:none}}
+  @media (prefers-reduced-motion:reduce){.occ-cake,header.top h1 .occ{animation:none}}
   header.top h1{font-size:clamp(30px,5.4vw,50px);font-weight:800;letter-spacing:-.03em;line-height:1.02}
   header.top h1 .light{color:var(--muted);font-weight:500}
   .sub{color:var(--muted);font-size:15.5px;margin-top:8px;max-width:62ch}
@@ -817,22 +819,32 @@ document.addEventListener('click',e=>{
 });
 </script>
 <script src="enhance.js" defer></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Physics2DPlugin.min.js"></script>
 <script>
-/* 🎂 ביצת-פסחא: לחיצה על "יום הולדת 80 לרונה" — קונפטי עדין + כיתוב קופץ שנעלם */
+/* 🎂 ביצת-פסחא: לחיצה על "יום הולדת 80 לרונה" — קונפטי פיזיקלי + כיתוב קופץ ממרכז המסך.
+   מנוע GSAP כשה-CDN זמין; נפילה חיננית ל-vanilla כשהוא לא (אופליין בדרכים). */
 (function(){
   var occ=document.getElementById('occ'); if(!occ) return;
-  var h1=occ.closest('h1'), msgTimer=null, msg=null;
-  var COLORS=['#D4A24C','#E2B04A','#E96666','#6BC5E8','#8ED081','#F2C6DE'];
+  var msg=null, msgTimer=null, tl=null, registered=false;
+  var PALETTE=['#C0892C','#BC4E63','#1E7A93','#E2B04A','#F2C6DE','#8ED081'];
   function reduced(){return matchMedia('(prefers-reduced-motion: reduce)').matches}
-  function burst(x,y){
+  function ensureMsg(){
+    if(!msg){msg=document.createElement('span');msg.className='occ-msg';msg.textContent='(אבל מרגישה כמו 40 🎉)';document.body.appendChild(msg);}
+    return msg;
+  }
+  function makePiece(i){
+    var el=document.createElement('i'); el.className='cfp';
+    el.style.background=PALETTE[i%PALETTE.length];
+    if(i%3===0){el.style.borderRadius='50%';el.style.width='10px';el.style.height='10px';}
+    document.body.appendChild(el); return el;
+  }
+  /* --- vanilla fallback (rAF physics + CSS-class message) --- */
+  function vBurst(x,y){
     if(reduced()) return;
-    var parts=[],i,el;
-    for(i=0;i<52;i++){
-      el=document.createElement('i'); el.className='cfp';
-      el.style.background=COLORS[i%COLORS.length];
-      document.body.appendChild(el);
-      parts.push({el:el,px:x,py:y,vx:(Math.random()-.5)*11,vy:-(3+Math.random()*8),r:Math.random()*360,vr:(Math.random()-.5)*24});
-    }
+    var parts=[],i;
+    for(i=0;i<52;i++){var el=makePiece(i);
+      parts.push({el:el,px:x,py:y,vx:(Math.random()-.5)*11,vy:-(3+Math.random()*8),r:Math.random()*360,vr:(Math.random()-.5)*24});}
     var t0=null;
     function step(ts){
       if(t0===null)t0=ts; var age=ts-t0, live=false;
@@ -846,12 +858,36 @@ document.addEventListener('click',e=>{
     }
     requestAnimationFrame(step);
   }
-  occ.addEventListener('click',function(){
-    burst(innerWidth/2, innerHeight/2);
-    if(!msg){msg=document.createElement('span');msg.className='occ-msg';msg.textContent='(אבל מרגישה כמו 40 🎉)';document.body.appendChild(msg);}
+  function vCelebrate(){
+    vBurst(innerWidth/2, innerHeight/2);
+    var m=ensureMsg(); m.style.transition='';
     clearTimeout(msgTimer);
-    requestAnimationFrame(function(){msg.classList.add('show')});
-    msgTimer=setTimeout(function(){msg.classList.remove('show')},2500);
+    requestAnimationFrame(function(){m.classList.add('show')});
+    msgTimer=setTimeout(function(){m.classList.remove('show')},2500);
+  }
+  /* --- GSAP engine: springy pop + Physics2D confetti --- */
+  function gCelebrate(){
+    if(!registered && window.Physics2DPlugin){gsap.registerPlugin(Physics2DPlugin);registered=true}
+    var m=ensureMsg(); m.classList.remove('show'); m.style.transition='none';
+    if(tl)tl.kill();
+    gsap.set(m,{xPercent:-50,yPercent:-50,opacity:0,scale:.2,rotation:-4});
+    tl=gsap.timeline();
+    tl.to(m,{opacity:1,scale:1,rotation:0,duration:.55,ease:'back.out(2)'})
+      .to(m,{opacity:0,scale:1.15,duration:.4,ease:'power2.in'},'+=1.55');
+    if(reduced()||!registered) return;
+    for(var i=0;i<70;i++){
+      var el=makePiece(i);
+      gsap.set(el,{x:innerWidth/2,y:innerHeight/2,rotation:Math.random()*360});
+      gsap.to(el,{physics2D:{velocity:300+Math.random()*350,angle:Math.random()*360,gravity:800},
+        rotation:'+='+(Math.random()*520-260),duration:1.8,ease:'none',
+        onComplete:function(){this.targets()[0].remove()}});
+      gsap.to(el,{opacity:0,duration:.5,delay:1.3});
+    }
+  }
+  occ.addEventListener('click',function(){
+    if(window.gsap && !reduced()) gCelebrate();
+    else if(window.gsap) gCelebrate();      /* reduced: GSAP עדין בלי קונפטי */
+    else vCelebrate();                       /* אין CDN — vanilla */
   });
 })();
 </script>
