@@ -914,11 +914,25 @@ document.addEventListener('click',e=>{
 </script>
 
 <style>
-.wa-fab{position:fixed;bottom:18px;right:18px;width:56px;height:56px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px -4px rgba(0,0,0,.4);z-index:850;transition:transform .18s cubic-bezier(.22,.8,.22,1),box-shadow .18s;-webkit-tap-highlight-color:transparent}
-.wa-fab:hover{transform:scale(1.08);box-shadow:0 10px 24px -6px rgba(0,0,0,.5)}
+.wa-fab{position:fixed;bottom:18px;left:18px;width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:29px;line-height:1;text-decoration:none;background:#0FA958;box-shadow:0 6px 18px -4px rgba(0,0,0,.4);z-index:850;transition:transform .18s cubic-bezier(.22,.8,.22,1),box-shadow .18s;-webkit-tap-highlight-color:transparent}
+.wa-fab:hover{transform:scale(1.08) rotate(-6deg);box-shadow:0 10px 24px -6px rgba(0,0,0,.5)}
 .wa-fab:active{transform:scale(.95)}
+.wa-fab .wa-badge{position:absolute;top:-3px;right:-3px;background:#fff;font-size:9px;font-weight:800;padding:2px 5px;border-radius:999px;box-shadow:0 2px 6px rgba(0,0,0,.25);font-family:var(--font,sans-serif)}
 @media (prefers-reduced-motion:reduce){.wa-fab{transition:none}}
 </style>
-<a class="wa-fab" href="https://wa.me/972542395140?text=%D7%94%D7%99%D7%99%21%20%D7%A9%D7%90%D7%9C%D7%94%20%D7%A2%D7%9C%20%D7%9E%D7%93%D7%A8%D7%99%D7%9A%20%D7%94%D7%98%D7%99%D7%95%D7%9C%20%D7%9C%D7%A6%D7%A8%D7%A4%D7%AA%20%F0%9F%99%82" target="_blank" rel="noopener" aria-label="שלח הודעה בוואטסאפ"><svg viewBox="0 0 32 32" width="30" height="30" fill="#fff" aria-hidden="true"><path d="M16.04 4C9.9 4 4.9 9 4.9 15.14c0 2.2.65 4.24 1.76 5.96L4.5 28l7.06-2.1a11.1 11.1 0 0 0 4.48.94h.01c6.14 0 11.14-5 11.14-11.14C27.19 9 22.18 4 16.04 4zm0 20.4c-1.4 0-2.77-.38-3.96-1.08l-.28-.17-4.19 1.25 1.27-4.08-.18-.29a9.23 9.23 0 0 1-1.42-4.9c0-5.1 4.15-9.25 9.26-9.25 2.47 0 4.79.96 6.54 2.71a9.2 9.2 0 0 1 2.71 6.55c0 5.1-4.15 9.25-9.25 9.25zm5.08-6.93c-.28-.14-1.65-.81-1.9-.9-.26-.1-.44-.14-.63.14-.18.28-.72.9-.88 1.08-.16.18-.32.2-.6.07-.28-.14-1.18-.44-2.24-1.39-.83-.74-1.39-1.65-1.55-1.93-.16-.28-.02-.43.12-.57.13-.13.28-.32.42-.48.14-.16.18-.28.28-.46.09-.18.05-.35-.02-.49-.07-.14-.63-1.51-.86-2.07-.23-.55-.46-.47-.63-.48l-.54-.01c-.18 0-.48.07-.73.35-.25.28-.96.94-.96 2.3 0 1.35.98 2.66 1.12 2.84.14.18 1.93 2.95 4.68 4.14.65.28 1.16.45 1.56.58.66.21 1.25.18 1.72.11.52-.08 1.65-.67 1.88-1.32.23-.65.23-1.2.16-1.32-.07-.12-.25-.19-.53-.33z"/></svg></a>
+<a class="wa-fab" href="https://wa.me/972542395140?text=%D7%94%D7%A8%D7%90%D7%9C%20%D7%AA%D7%9B%D7%95%D7%95%D7%9F%20%D7%90%D7%95%D7%AA%D7%A0%D7%95%20%D7%91%D7%A4%D7%A8%D7%95%D7%91%D7%90%D7%A0%D7%A1%20%F0%9F%A7%AD" target="_blank" rel="noopener" aria-label="תמיכת הטיול" title="תמיכת הטיול">🎧</a>
+<script>
+(function(){
+  var V=[
+    {emo:"🎧",bg:"#0FA958",label:"תמיכת טיול 24/7",badge:"24/7"},
+    {emo:"🤖",bg:"#6C4EE3",label:"בוט התמיכה של הטיול",badge:""},
+    {emo:"🆘",bg:"#E5484D",label:"חירום טיול",badge:""}
+  ];
+  var p=V[Math.floor(Math.random()*V.length)];
+  var el=document.querySelector(".wa-fab");
+  if(el){el.style.background=p.bg;el.title=p.label;el.setAttribute("aria-label",p.label);el.textContent=p.emo;
+    if(p.badge){var b=document.createElement("span");b.className="wa-badge";b.textContent=p.badge;b.style.color=p.bg;el.appendChild(b);}}
+})();
+</script>
 </body>
 </html>
