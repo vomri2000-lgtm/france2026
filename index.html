@@ -41,9 +41,9 @@ addEventListener('load',()=>window.scrollTo(0,0));</script>
   header.top h1 .occ{cursor:pointer;-webkit-tap-highlight-color:transparent}
   .occ-cake{display:inline-block;font-size:.5em;vertical-align:middle;animation:cakepulse 1.6s ease-in-out infinite;transform-origin:50% 60%}
   @keyframes cakepulse{0%,100%{transform:scale(1)}50%{transform:scale(1.25)}}
-  .occ-msg{position:absolute;top:100%;right:0;margin-top:2px;font-size:clamp(15px,2.6vw,20px);font-weight:700;color:var(--accent);white-space:nowrap;pointer-events:none;opacity:0;transform:scale(.5) translateY(-4px);transition:opacity .3s ease,transform .35s cubic-bezier(.34,1.56,.64,1)}
-  .occ-msg.show{opacity:1;transform:scale(1) translateY(0)}
-  .cfp{position:fixed;width:8px;height:12px;border-radius:2px;pointer-events:none;z-index:9999;will-change:transform,opacity}
+  .occ-msg{position:fixed;top:50%;left:50%;max-width:92vw;text-align:center;font-size:clamp(28px,7.5vw,64px);font-weight:800;letter-spacing:-.02em;color:var(--accent);pointer-events:none;z-index:10000;opacity:0;transform:translate(-50%,-50%) scale(.15);transition:opacity .35s ease,transform .55s cubic-bezier(.34,1.56,.64,1);text-shadow:0 4px 26px rgba(0,0,0,.22)}
+  .occ-msg.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  .cfp{position:fixed;left:0;top:0;width:9px;height:14px;border-radius:2px;pointer-events:none;z-index:9999;will-change:transform,opacity}
   @media (prefers-reduced-motion:reduce){.occ-cake{animation:none}}
   header.top h1{font-size:clamp(30px,5.4vw,50px);font-weight:800;letter-spacing:-.03em;line-height:1.02}
   header.top h1 .light{color:var(--muted);font-weight:500}
@@ -827,11 +827,11 @@ document.addEventListener('click',e=>{
   function burst(x,y){
     if(reduced()) return;
     var parts=[],i,el;
-    for(i=0;i<34;i++){
+    for(i=0;i<52;i++){
       el=document.createElement('i'); el.className='cfp';
       el.style.background=COLORS[i%COLORS.length];
       document.body.appendChild(el);
-      parts.push({el:el,px:x,py:y,vx:(Math.random()-.5)*7,vy:-(2.5+Math.random()*5.5),r:Math.random()*360,vr:(Math.random()-.5)*22});
+      parts.push({el:el,px:x,py:y,vx:(Math.random()-.5)*11,vy:-(3+Math.random()*8),r:Math.random()*360,vr:(Math.random()-.5)*24});
     }
     var t0=null;
     function step(ts){
@@ -847,9 +847,8 @@ document.addEventListener('click',e=>{
     requestAnimationFrame(step);
   }
   occ.addEventListener('click',function(){
-    var r=occ.getBoundingClientRect();
-    burst(r.left+r.width/2, r.top+r.height/2);
-    if(!msg){msg=document.createElement('span');msg.className='occ-msg';msg.textContent='(אבל מרגישה כמו 40 🎉)';h1.appendChild(msg);}
+    burst(innerWidth/2, innerHeight/2);
+    if(!msg){msg=document.createElement('span');msg.className='occ-msg';msg.textContent='(אבל מרגישה כמו 40 🎉)';document.body.appendChild(msg);}
     clearTimeout(msgTimer);
     requestAnimationFrame(function(){msg.classList.add('show')});
     msgTimer=setTimeout(function(){msg.classList.remove('show')},2500);
