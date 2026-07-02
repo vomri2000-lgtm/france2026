@@ -386,8 +386,12 @@
           background:color-mix(in srgb,var(--accent) 13%,transparent)}
         .tabs .tab[aria-selected="true"]::after{display:none}
         .frx-tabdiv{width:1px;height:20px;background:var(--line);margin:0 5px;flex:0 0 auto}
-        @media(max-width:560px){.tabs .tab{padding:10px 11px;font-size:14px}.tabs .tab span{display:none}
-          .tabs .tab svg{width:21px;height:21px}.frx-tabdiv{margin:0 2px}}
+        @media(max-width:560px){
+          .tabs .wrap{gap:2px}
+          .tabs .tab{flex:1;flex-direction:column;gap:3px;padding:7px 3px;justify-content:center;text-align:center}
+          .tabs .tab span{display:block;font-size:10.5px;font-weight:700;line-height:1.05;white-space:nowrap}
+          .tabs .tab svg{width:20px;height:20px}
+          .frx-tabdiv{display:none}}
       </style>`);
     }
     $$(".tabs .tab").forEach((t) => {
