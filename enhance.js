@@ -540,11 +540,11 @@
       '<p>במקום A8 הפנימי והמשעמם — לרדת לחוף לקטע הכי יפה בריביירה: ה-Corniche d\'Or של מסיב האסטרל. מצוקי פורפיר אדומים, מפרצונים טורקיז ועצירות שחייה. הנסיעה הופכת מ"להעביר" לחלק מהטיול.</p></div>' +
       '<div class="grid" id="road-grid"></div>';
     main.appendChild(view);
-    const prov = $('.tabs .tab[data-tab="provence"]');
+    const afterTab = $('.tabs .tab[data-tab="nice"]') || $('.tabs .tab[data-tab="provence"]');
     const btn = document.createElement("button");
     btn.className = "tab"; btn.setAttribute("role", "tab"); btn.setAttribute("aria-selected", "false");
     btn.dataset.tab = "road"; btn.textContent = "בדרך";
-    if (prov) prov.insertAdjacentElement("afterend", btn); else tabsWrap.appendChild(btn);
+    if (afterTab) afterTab.insertAdjacentElement("afterend", btn); else tabsWrap.appendChild(btn);
     const grid = view.querySelector("#road-grid");
     ROAD.forEach((s) => { if (typeof NICE !== "undefined") NICE.push(s); grid.insertAdjacentHTML("beforeend", card(s)); });
     const store = JSON.parse(localStorage.getItem("fr2") || "{}"), allFavs = $$(".fav");
