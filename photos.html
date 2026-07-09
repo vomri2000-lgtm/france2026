@@ -5,194 +5,252 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="האלבום המשפחתי של הטיול לדרום צרפת — כולם מעלים, כולם רואים">
-<title>האלבום המשפחתי · דרום צרפת</title>
+<title>האלבום שלנו · דרום צרפת</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📸</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700;800&family=Frank+Ruhl+Libre:wght@500;700;900&family=Fraunces:ital,opsz,wght@1,9..144,400;1,9..144,500&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://upload-widget.cloudinary.com/latest/global/all.js" defer></script>
 <style>
 :root{
-  --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Assistant",system-ui,sans-serif;
-  --bg:#F6F5F3; --surface:#FFFFFF; --ink:#1C1A18; --muted:#6B6661;
-  --line:#E7E3DD; --line-soft:#EFEBE5;
-  --brand:#8A5A33;
-  --accent:#7E6BAA; /* Provence lavender — this page's own accent */
-  --r:18px; --shadow:0 14px 40px -24px rgba(40,30,18,.5);
-  --maxw:1180px; --ease:cubic-bezier(.22,.8,.22,1);
+  --bg:#F4F1EC; --surface:#FFFDF9; --ink:#211E1A; --muted:#6B6155;
+  --line:#E4DDD1; --line-soft:#EFE9DF;
+  --gold:#BE7B22; --brown:#8A5A33; --sea:#1E7A93;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Assistant",system-ui,sans-serif;
+  --serif:"Frank Ruhl Libre",serif; --lat:"Fraunces",serif; --hand:"Caveat",cursive;
+  --r:14px; --shadow:0 10px 30px -18px rgba(50,35,18,.55);
+  --maxw:1240px; --ease:cubic-bezier(.22,.8,.22,1);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{overflow-x:hidden;scroll-behavior:smooth}
+html{overflow-x:hidden}
 body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.6;overflow-x:hidden}
-.wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(16px,4vw,40px)}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(20px,5vw,64px)}
 
-/* ---------- header ---------- */
-header.top{padding:30px 0 0;background:
-  radial-gradient(120% 140% at 90% -10%, color-mix(in srgb,var(--accent) 16%,transparent), transparent 55%)}
-.brand{font-size:13px;font-weight:600;color:var(--accent);letter-spacing:.02em}
-h1{font-size:clamp(30px,5.4vw,50px);font-weight:800;letter-spacing:-.03em;line-height:1.02;margin-top:6px}
-h1 .dest{color:var(--accent)}
-h1 .light{color:var(--muted);font-weight:600;font-size:.55em}
-.sub{color:var(--muted);font-size:15.5px;margin-top:10px;max-width:640px}
-.newbadge{display:none;vertical-align:middle;margin-inline-start:10px;background:var(--accent);color:#fff;
-  font-size:14px;font-weight:700;border-radius:999px;padding:4px 13px;letter-spacing:0;animation:pop .45s var(--ease)}
-.newbadge.show{display:inline-block}
+/* ---------- masthead ---------- */
+header.top{padding:clamp(38px,6vw,80px) 0 26px;
+  background:radial-gradient(115% 130% at 88% -10%, color-mix(in srgb,var(--gold) 13%,transparent), transparent 55%)}
+.eyebrow{font-size:13px;font-weight:600;letter-spacing:.13em;color:var(--gold)}
+.mast{display:flex;align-items:flex-end;justify-content:space-between;gap:28px;flex-wrap:wrap;margin-top:16px}
+h1{font-family:var(--serif);font-weight:900;font-size:clamp(38px,6.6vw,74px);line-height:.98;letter-spacing:-.01em}
+h1 .fr{display:block;font-family:var(--lat);font-style:italic;font-weight:400;font-size:.32em;color:var(--muted);margin-top:13px}
+.newbadge{display:none;font-family:var(--font);font-size:13px;font-weight:700;color:#fff;background:var(--sea);
+  border-radius:999px;padding:5px 14px;margin-top:14px;width:fit-content}
+.newbadge.show{display:inline-block;animation:pop .45s var(--ease)}
+.contrib{display:flex;align-items:center;padding-bottom:6px}
+.contrib .av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:15px;color:#fff;border:2.5px solid var(--bg);margin-inline-start:-12px;box-shadow:0 2px 8px rgba(60,40,20,.15)}
+.contrib .av:first-child{margin-inline-start:0}
+.contrib .lbl{margin-inline-start:14px;font-size:13px;color:var(--muted);line-height:1.35}
+.contrib .lbl b{color:var(--ink);font-weight:700}
 
-/* ---------- sticky bar ---------- */
-nav.tabs{position:sticky;top:0;z-index:30;margin-top:22px;
-  background:color-mix(in srgb,var(--bg) 85%,transparent);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
-.tabs .wrap{display:flex;gap:28px;align-items:center}
-.tab{background:none;border:0;cursor:pointer;font-family:inherit;font-size:16px;font-weight:700;
-  color:var(--muted);padding:16px 2px;position:relative;transition:color .2s;text-decoration:none;display:inline-block}
-.tab[aria-selected="true"]{color:var(--ink)}
-.tab[aria-selected="true"]::after{content:"";position:absolute;inset:auto 0 -1px 0;height:3px;
-  border-radius:3px 3px 0 0;background:var(--accent)}
-.tab .cnt{font-size:12.5px;font-weight:600;color:var(--muted);margin-inline-start:6px}
-.backlink{margin-inline-start:auto;font-size:14.5px;font-weight:700;color:var(--brand);text-decoration:none;
-  padding:16px 2px;transition:opacity .18s var(--ease)}
-.backlink:hover{opacity:.7}
-
-/* identity chip */
-.idchip{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);
-  border-radius:999px;padding:5px 12px 5px 6px;cursor:pointer;font-family:inherit;font-size:13.5px;font-weight:700;
-  color:var(--ink);transition:.18s var(--ease)}
-.idchip:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--line));transform:translateY(-1px)}
+/* ---------- toolbar (sticky) ---------- */
+nav.bar{position:sticky;top:0;z-index:30;margin-top:26px;
+  background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;gap:22px;padding:13px 0;flex-wrap:wrap}
+.seg{display:flex;gap:24px}
+.seg button{background:none;border:0;font-family:inherit;font-size:15.5px;font-weight:700;color:var(--muted);
+  cursor:pointer;padding:4px 0;position:relative;transition:color .18s}
+.seg button[aria-selected="true"]{color:var(--ink)}
+.seg button[aria-selected="true"]::after{content:"";position:absolute;inset:auto 0 -14px 0;height:2.5px;background:var(--gold);border-radius:2px}
+.seg .cnt{font-size:12px;font-weight:600;color:var(--muted);margin-inline-start:5px}
+.spacer{margin-inline-start:auto}
+/* display-style switch */
+.styleswitch{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:3px}
+.styleswitch button{border:0;background:none;font-family:inherit;font-size:13px;font-weight:700;color:var(--muted);
+  cursor:pointer;padding:6px 12px;border-radius:7px;display:inline-flex;align-items:center;gap:6px;transition:.18s var(--ease)}
+.styleswitch button[aria-pressed="true"]{background:color-mix(in srgb,var(--gold) 14%,var(--surface));color:var(--brown)}
+.styleswitch svg{width:15px;height:15px}
+.tbtn{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 15px;font-family:inherit;
+  font-size:14px;font-weight:700;color:var(--ink);cursor:pointer;display:inline-flex;gap:7px;align-items:center;transition:.18s var(--ease)}
+.tbtn:hover{transform:translateY(-1px);border-color:color-mix(in srgb,var(--gold) 40%,var(--line))}
+.tbtn.pri{background:var(--brown);color:#fff;border-color:var(--brown)}
+.tbtn.pri:hover{filter:brightness(1.05)}
+.idchip{display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);
+  border-radius:999px;padding:5px 13px 5px 6px;cursor:pointer;font-family:inherit;font-size:13.5px;font-weight:700;color:var(--ink);transition:.18s var(--ease)}
+.idchip:hover{border-color:color-mix(in srgb,var(--gold) 40%,var(--line))}
 .idchip img,.idchip .avfall{width:26px;height:26px;border-radius:50%;object-fit:cover;flex:none}
-.avfall{display:inline-flex;align-items:center;justify-content:center;background:var(--accent);color:#fff;
-  font-size:13px;font-weight:800}
+.backlink{font-size:14px;font-weight:700;color:var(--brown);text-decoration:none;transition:opacity .18s}
+.backlink:hover{opacity:.65}
+.avfall{display:inline-flex;align-items:center;justify-content:center;background:var(--gold);color:#fff;font-weight:800}
 
 /* ---------- gallery ---------- */
-main{padding:26px 0 90px}
-.toolbar{display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap}
-.toolbar .spacer{margin-inline-start:auto}
-.chipbtn{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:9px 16px;
-  font-family:inherit;font-size:13.5px;font-weight:600;color:var(--muted);cursor:pointer;transition:.18s var(--ease)}
-.chipbtn[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
-.chipbtn:hover{transform:translateY(-1px)}
+main{padding:34px 0 110px}
+.person{margin:0 0 40px}
+.person-h{display:flex;align-items:center;gap:12px;padding-bottom:12px;margin-bottom:20px;border-bottom:1px solid var(--line)}
+.person-h img,.person-h .avfall{width:40px;height:40px;border-radius:50%;object-fit:cover;font-size:17px}
+.person-h h3{font-family:var(--serif);font-size:24px;font-weight:700;letter-spacing:-.01em}
+.person-h .pc{font-size:12.5px;font-weight:600;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:3px 12px}
 
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
-@media(min-width:700px){.grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}}
-.tile{position:relative;border-radius:14px;overflow:hidden;background:#E4DFD7;aspect-ratio:1;cursor:pointer;
-  border:1px solid var(--line);transition:.18s var(--ease)}
-.tile:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
-.tile img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s var(--ease)}
-.tile:hover img{transform:scale(1.04)}
-.tile .who{position:absolute;bottom:8px;inset-inline-start:8px;display:flex;align-items:center;gap:6px;
-  background:rgba(20,16,12,.45);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
-  color:#fff;font-size:11.5px;font-weight:700;border-radius:999px;padding:3px 10px 3px 4px;max-width:calc(100% - 16px)}
-.tile .who span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.tile .who img,.tile .who .avfall{width:18px;height:18px;border-radius:50%;font-size:10px}
-.tile.isnew::before{content:"";position:absolute;top:8px;inset-inline-end:8px;width:10px;height:10px;z-index:2;
-  border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px rgba(255,255,255,.85)}
+/* masonry — real aspect ratios */
+.cols{column-count:3;column-gap:22px}
+@media(max-width:900px){.cols{column-count:2;column-gap:16px}}
+@media(max-width:520px){.cols{column-count:1}}
+.cols figure{break-inside:avoid;position:relative;cursor:pointer;-webkit-user-select:none;user-select:none}
+.cols img{width:100%;display:block}
+
+/* frame + hover attribution (name shows on hover, not always) */
+.frame{position:relative;overflow:hidden}
+.frame img{display:block;width:100%}
+.hovname{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:center;gap:8px;padding:22px 12px 10px;
+  background:linear-gradient(to top,rgba(20,14,8,.74),transparent);color:#fff;font-size:13px;font-weight:700;
+  opacity:0;transform:translateY(4px);transition:.2s var(--ease);pointer-events:none}
+figure:hover .hovname{opacity:1;transform:none}
+.hovname .av-img,.hovname .avfall{width:22px;height:22px;border-radius:50%;font-size:11px;flex:none}
+.hovname>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(hover:none){.hovname{display:none}} /* touch: attribution via lightbox / person view */
+
+/* -- journal style -- */
+.style-journal figure{margin:0 0 22px}
+.style-journal .frame{border-radius:8px;box-shadow:var(--shadow);transition:transform .4s var(--ease)}
+.style-journal figure:hover .frame{transform:translateY(-3px)}
+
+/* -- wall style -- (polaroid: white frame, larger bottom lip, slight rotation) */
+.style-wall figure{margin:0 0 26px;background:var(--surface);padding:12px 12px 30px;border-radius:4px;box-shadow:0 12px 28px -14px rgba(50,35,18,.45);transition:transform .3s var(--ease)}
+.style-wall figure:nth-child(3n){transform:rotate(-1.1deg)}
+.style-wall figure:nth-child(3n+1){transform:rotate(.9deg)}
+.style-wall figure:nth-child(4n){transform:rotate(-.5deg)}
+.style-wall figure:hover{transform:rotate(0) translateY(-3px)}
+.style-wall .frame{border-radius:2px}
+.style-wall .tape{position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(-3deg);width:76px;height:22px;
+  background:color-mix(in srgb,var(--gold) 26%,transparent);border:1px dashed color-mix(in srgb,var(--brown) 32%,transparent);border-radius:2px}
+.style-journal .tape{display:none}
 
 /* unread divider */
-.unread-divider{display:flex;align-items:center;gap:14px;margin:26px 0 22px}
-.unread-divider::before,.unread-divider::after{content:"";flex:1;height:1px;
-  background:color-mix(in srgb,var(--accent) 45%,var(--line))}
-.unread-divider b{flex:none;font-size:13px;font-weight:700;color:var(--accent);
-  background:color-mix(in srgb,var(--accent) 10%,var(--surface));border:1px solid color-mix(in srgb,var(--accent) 30%,var(--line));
-  border-radius:999px;padding:5px 15px}
+.unread-divider{display:flex;align-items:center;gap:14px;margin:14px 0 24px}
+.unread-divider::before,.unread-divider::after{content:"";flex:1;height:1px;background:color-mix(in srgb,var(--sea) 40%,var(--line))}
+.unread-divider b{flex:none;font-size:13px;font-weight:700;color:var(--sea);
+  background:color-mix(in srgb,var(--sea) 9%,var(--surface));border:1px solid color-mix(in srgb,var(--sea) 28%,var(--line));border-radius:999px;padding:5px 15px}
 
-/* people view */
-.person{margin:0 0 34px}
-.person-h{display:flex;align-items:center;gap:11px;padding-bottom:11px;margin-bottom:14px;border-bottom:1px solid var(--line)}
-.person-h img,.person-h .avfall{width:38px;height:38px;border-radius:50%;object-fit:cover;font-size:17px}
-.person-h h3{font-size:19px;font-weight:800;letter-spacing:-.01em}
-.person-h .cnt{font-size:12.5px;font-weight:600;color:var(--muted);background:var(--surface);
-  border:1px solid var(--line);border-radius:999px;padding:3px 11px}
+/* new marker + selection (both styles) */
+.newdot{position:absolute;top:12px;inset-inline-start:12px;width:12px;height:12px;border-radius:50%;background:var(--sea);box-shadow:0 0 0 4px var(--surface);z-index:3}
+.style-journal .newdot{box-shadow:0 0 0 3px var(--bg)}
+.pick{position:absolute;top:10px;inset-inline-end:10px;width:26px;height:26px;border-radius:50%;z-index:4;
+  background:rgba(255,255,255,.55);border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.25);display:none;
+  align-items:center;justify-content:center;transition:.15s var(--ease)}
+.selecting .pick{display:flex}
+figure.sel .pick{background:var(--gold);border-color:#fff}
+figure.sel .pick::after{content:"✓";color:#fff;font-size:15px;font-weight:800}
+.selecting figure.sel img{outline:3px solid var(--gold);outline-offset:-1px}
+.selecting figure{cursor:pointer}
 
-/* states */
-.state{text-align:center;padding:70px 20px;color:var(--muted)}
-.state .big{font-size:44px;margin-bottom:10px}
-.state h3{font-size:20px;font-weight:800;color:var(--ink);margin-bottom:6px}
+/* ---------- states ---------- */
+.state{text-align:center;padding:76px 20px;color:var(--muted)}
+.state .big{font-size:46px;margin-bottom:12px}
+.state h3{font-family:var(--serif);font-size:24px;font-weight:700;color:var(--ink);margin-bottom:8px}
 .state p{font-size:14.5px;max-width:420px;margin:0 auto 20px}
-.skeleton .grid .tile{animation:pulse 1.4s ease-in-out infinite;cursor:default}
-@keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}
+.sk{column-count:3;column-gap:22px}
+@media(max-width:900px){.sk{column-count:2}}
+.sk i{display:block;break-inside:avoid;margin:0 0 22px;border-radius:8px;background:var(--line-soft);animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
 
-/* ---------- buttons ---------- */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;cursor:pointer;
-  font-family:inherit;font-weight:700;font-size:15px;color:#fff;background:var(--accent);
-  border-radius:11px;padding:12px 22px;transition:.18s var(--ease);text-decoration:none}
-.btn:hover{filter:brightness(.95);transform:translateY(-1px)}
-.btn.sec{color:var(--accent);background:var(--surface);border:1px solid color-mix(in srgb,var(--accent) 45%,var(--line))}
-.btn.sec:hover{background:color-mix(in srgb,var(--accent) 8%,var(--surface));filter:none}
-.fab{position:fixed;bottom:22px;inset-inline-end:22px;z-index:40;border-radius:999px;padding:15px 24px;
-  font-size:16px;box-shadow:0 18px 45px -14px color-mix(in srgb,var(--accent) 65%,transparent)}
+/* ---------- buttons / FAB ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;cursor:pointer;font-family:inherit;
+  font-weight:700;font-size:15px;color:#fff;background:var(--brown);border-radius:11px;padding:12px 22px;transition:.18s var(--ease);text-decoration:none}
+.btn:hover{filter:brightness(1.05);transform:translateY(-1px)}
+.btn.sec{color:var(--brown);background:var(--surface);border:1px solid color-mix(in srgb,var(--brown) 40%,var(--line))}
+.btn.sec:hover{background:color-mix(in srgb,var(--brown) 7%,var(--surface));filter:none}
+.fab{position:fixed;bottom:22px;inset-inline-end:22px;z-index:40;border-radius:999px;padding:15px 24px;font-size:16px;
+  background:var(--gold);box-shadow:0 16px 40px -12px color-mix(in srgb,var(--gold) 70%,transparent)}
 
-/* ---------- modal ---------- */
-.overlay{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;
-  background:rgba(28,22,16,.45);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:20px}
+/* ---------- selection action bar ---------- */
+.selbar{position:fixed;bottom:0;left:0;right:0;z-index:45;background:var(--ink);color:#fff;
+  transform:translateY(110%);transition:transform .3s var(--ease)}
+.selbar.show{transform:none}
+.selbar .wrap{display:flex;align-items:center;gap:14px;padding:14px 0}
+.selbar .n{font-size:15px;font-weight:700}
+.selbar .n b{color:var(--gold)}
+.selbar .lnk{background:none;border:0;color:#fff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;opacity:.8}
+.selbar .lnk:hover{opacity:1}
+.selbar .dl{margin-inline-start:auto;background:var(--gold);border:0;color:#fff;font-family:inherit;font-size:15px;
+  font-weight:700;border-radius:10px;padding:11px 22px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.selbar .dl:disabled{opacity:.4;cursor:default}
+
+/* ---------- lightbox ---------- */
+.lb{position:fixed;inset:0;z-index:70;display:none;background:rgba(20,15,10,.94);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+.lb.open{display:block}
+.lb img#lbImg{position:absolute;inset:0;margin:auto;max-width:calc(100% - 24px);max-height:calc(100% - 120px);object-fit:contain;border-radius:5px;animation:fade .25s ease}
+.lb .lbbottom{position:absolute;bottom:22px;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:16px}
+.lb .lbwho{display:flex;align-items:center;gap:9px;color:#fff;font-size:15px;font-weight:700}
+.lb .lbwho img,.lb .lbwho .avfall{width:30px;height:30px;border-radius:50%;font-size:14px}
+.lb .lbdl{background:rgba(255,255,255,.15);color:#fff;border:0;border-radius:999px;padding:9px 18px;font-family:inherit;
+  font-size:14px;font-weight:700;cursor:pointer;display:inline-flex;gap:7px;align-items:center;transition:.15s var(--ease)}
+.lb .lbdl:hover{background:rgba(255,255,255,.28)}
+.lb .navbtn{position:absolute;z-index:2;border:0;cursor:pointer;background:rgba(255,255,255,.12);color:#fff;border-radius:50%;
+  width:46px;height:46px;font-size:20px;line-height:1;backdrop-filter:blur(4px);transition:.15s var(--ease)}
+.lb .navbtn:hover{background:rgba(255,255,255,.26)}
+.lb .x{top:18px;inset-inline-end:18px}
+.lb .nnext{top:50%;left:14px;transform:translateY(-50%)}
+.lb .nprev{top:50%;right:14px;transform:translateY(-50%)}
+@media(max-width:600px){.lb .nnext,.lb .nprev{display:none}}
+
+/* ---------- identity modal ---------- */
+.overlay{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;background:rgba(28,22,16,.5);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:20px}
 .overlay.open{display:flex}
-.modal{background:var(--surface);border-radius:20px;max-width:400px;width:100%;padding:28px 26px;
-  box-shadow:0 30px 90px -20px rgba(0,0,0,.6);animation:pop .35s var(--ease);text-align:center}
-.modal h3{font-size:21px;font-weight:800;letter-spacing:-.01em;margin-bottom:6px}
+.modal{position:relative;background:var(--surface);border-radius:20px;max-width:400px;width:100%;padding:30px 26px;
+  box-shadow:0 30px 90px -20px rgba(0,0,0,.5);animation:pop .35s var(--ease);text-align:center}
+.modal h3{font-family:var(--serif);font-size:24px;font-weight:700;margin-bottom:6px}
 .modal p{font-size:14px;color:var(--muted);margin-bottom:20px}
 .modal .gwrap{display:flex;justify-content:center;margin-bottom:6px;min-height:44px}
 .modal .or{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:12.5px;font-weight:600;margin:16px 0}
 .modal .or::before,.modal .or::after{content:"";flex:1;height:1px;background:var(--line)}
-.modal input[type=text]{width:100%;border:1px solid var(--line);border-radius:11px;padding:12px 14px;
-  font-family:inherit;font-size:15px;color:var(--ink);background:var(--bg);outline:none;transition:border .18s}
-.modal input[type=text]:focus{border-color:var(--accent)}
+.modal input[type=text]{width:100%;border:1px solid var(--line);border-radius:11px;padding:12px 14px;font-family:inherit;
+  font-size:15px;color:var(--ink);background:var(--bg);outline:none;transition:border .18s}
+.modal input[type=text]:focus{border-color:var(--gold)}
 .modal .row{display:flex;gap:10px;margin-top:16px}
 .modal .row .btn{flex:1}
-.modal .mavatar{width:56px;height:56px;border-radius:50%;object-fit:cover;margin:0 auto 12px;display:block;
-  box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 30%,transparent)}
-.modal .close{position:absolute;top:14px;inset-inline-end:14px;width:32px;height:32px;border-radius:50%;
-  border:1px solid var(--line);background:var(--surface);cursor:pointer;font-size:15px;color:var(--muted);line-height:1}
-.modal{position:relative}
+.modal .mavatar{width:56px;height:56px;border-radius:50%;object-fit:cover;margin:0 auto 12px;display:block;box-shadow:0 0 0 3px color-mix(in srgb,var(--gold) 30%,transparent)}
+.modal .close{position:absolute;top:14px;inset-inline-end:14px;width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-size:15px;color:var(--muted);line-height:1}
 
-/* ---------- lightbox ---------- */
-.lb{position:fixed;inset:0;z-index:70;display:none;background:rgba(15,12,9,.92);
-  backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
-.lb.open{display:block}
-.lb img{position:absolute;inset:0;margin:auto;max-width:calc(100% - 24px);max-height:calc(100% - 110px);
-  object-fit:contain;border-radius:6px;animation:fade .25s ease}
-.lb .lbwho{position:absolute;bottom:26px;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:9px;
-  color:#fff;font-size:15px;font-weight:700}
-.lb .lbwho img{position:static;width:30px;height:30px;border-radius:50%;max-width:none;max-height:none;margin:0}
-.lb .lbwho .avfall{width:30px;height:30px;font-size:14px}
-.lb button{position:absolute;z-index:2;border:0;cursor:pointer;background:rgba(255,255,255,.12);color:#fff;
-  border-radius:50%;width:44px;height:44px;font-size:19px;line-height:1;backdrop-filter:blur(4px);transition:.18s var(--ease)}
-.lb button:hover{background:rgba(255,255,255,.25)}
-.lb .x{top:18px;inset-inline-end:18px}
-.lb .nav-next{top:50%;left:14px;transform:translateY(-50%)}
-.lb .nav-prev{top:50%;right:14px;transform:translateY(-50%)}
-@media(max-width:600px){.lb .nav-next,.lb .nav-prev{display:none}}
-
-/* toast */
-.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);z-index:80;
-  background:var(--ink);color:#fff;font-size:14px;font-weight:600;border-radius:999px;padding:11px 22px;
-  opacity:0;pointer-events:none;transition:.3s var(--ease);max-width:90vw;text-align:center}
+/* ---------- toast / progress ---------- */
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);z-index:80;background:var(--ink);color:#fff;
+  font-size:14px;font-weight:600;border-radius:999px;padding:11px 22px;opacity:0;pointer-events:none;transition:.3s var(--ease);max-width:90vw;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.prog{position:fixed;bottom:0;left:0;right:0;z-index:90;background:var(--ink);color:#fff;transform:translateY(110%);transition:transform .3s var(--ease)}
+.prog.show{transform:none}
+.prog .wrap{padding:16px 0 18px}
+.prog .row{display:flex;justify-content:space-between;font-size:14px;font-weight:700;margin-bottom:10px}
+.prog .track{height:6px;border-radius:6px;background:rgba(255,255,255,.18);overflow:hidden}
+.prog .fill{height:100%;background:var(--gold);width:0;transition:width .2s linear}
 
-footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--muted);font-size:13px;text-align:center}
+footer{border-top:1px solid var(--line);padding:30px 0 44px;color:var(--muted);font-family:var(--lat);font-style:italic;font-size:14px;text-align:center}
 
 @keyframes fade{from{opacity:0}to{opacity:1}}
 @keyframes pop{from{opacity:0;transform:scale(.92) translateY(8px)}to{opacity:1;transform:none}}
-.tile{opacity:0;transform:translateY(10px)}
-.tile.in{opacity:1;transform:none;transition:opacity .5s var(--ease),transform .5s var(--ease)}
-.tile.in:hover{transform:translateY(-3px)}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}
-  .tile{opacity:1;transform:none}}
+.reveal{opacity:0;transform:translateY(10px)}
+.reveal.in{opacity:1;transform:none;transition:opacity .5s var(--ease),transform .5s var(--ease)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
 </style>
 </head>
 <body>
 
 <header class="top">
   <div class="wrap">
-    <div class="brand">קיץ 2026 · האלבום המשותף שלנו</div>
-    <h1><span class="dest">התמונות שלנו</span> <span class="light">— דרום צרפת</span><span class="newbadge" id="newBadge"></span></h1>
-    <p class="sub">כל אחד מעלה את התמונות הכי טובות שצילם — וכולם נהנים. לחצו על הכפתור, בחרו תמונות מהגלריה, וזהו.</p>
+    <div class="eyebrow">קיץ 2026 · פרובאנס והריביירה</div>
+    <div class="mast">
+      <h1>האלבום שלנו<span class="fr">Notre album · un été en France</span>
+        <span class="newbadge" id="newBadge"></span></h1>
+      <div class="contrib" id="contrib"></div>
+    </div>
   </div>
 </header>
 
-<nav class="tabs">
+<nav class="bar">
   <div class="wrap">
-    <button class="tab" aria-selected="true" data-view="all">כל התמונות<span class="cnt" id="cntAll"></span></button>
-    <button class="tab" aria-selected="false" data-view="people">לפי אנשים<span class="cnt" id="cntPeople"></span></button>
-    <span style="margin-inline-start:auto"></span>
+    <div class="seg">
+      <button data-view="people" aria-selected="true">לפי אנשים<span class="cnt" id="cntPeople"></span></button>
+      <button data-view="all" aria-selected="false">הכל ביחד<span class="cnt" id="cntAll"></span></button>
+    </div>
+    <span class="spacer"></span>
+    <div class="styleswitch" role="group" aria-label="סגנון תצוגה">
+      <button data-style="journal" aria-pressed="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="14" x2="21" y2="14"/></svg>יומן</button>
+      <button data-style="wall" aria-pressed="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>קיר</button>
+    </div>
+    <button class="tbtn" id="selectBtn">בחירה</button>
     <button class="idchip" id="idChip" style="display:none"></button>
     <a class="backlink" href="index.html">‹ למדריך</a>
   </div>
@@ -204,12 +262,22 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--muted);f
 
 <button class="btn fab" id="fabUpload">📸 הוסיפו תמונות</button>
 
+<!-- selection action bar -->
+<div class="selbar" id="selBar">
+  <div class="wrap">
+    <span class="n"><b id="selCount">0</b> נבחרו</span>
+    <button class="lnk" id="selAll">בחר הכל</button>
+    <button class="lnk" id="selCancel">ביטול</button>
+    <button class="dl" id="selDownload" disabled>⬇ הורדה</button>
+  </div>
+</div>
+
 <!-- identity modal -->
 <div class="overlay" id="idOverlay">
   <div class="modal">
     <button class="close" id="idClose" aria-label="סגירה">✕</button>
     <div id="idStep1">
-      <h3>רגע, מי מצלם? 📷</h3>
+      <h3>רגע, מי מצלם?</h3>
       <p>כדי שכולם ידעו מי העלה כל תמונה — הזדהו פעם אחת בלבד.</p>
       <div class="gwrap" id="gBtn"></div>
       <div class="or">או בלי גוגל</div>
@@ -228,330 +296,417 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--muted);f
 
 <!-- lightbox -->
 <div class="lb" id="lb">
-  <button class="x" id="lbClose" aria-label="סגירה">✕</button>
-  <button class="nav-prev" id="lbPrev" aria-label="הקודם">‹</button>
-  <button class="nav-next" id="lbNext" aria-label="הבא">›</button>
+  <button class="navbtn x" id="lbClose" aria-label="סגירה">✕</button>
+  <button class="navbtn nprev" id="lbPrev" aria-label="הקודם">‹</button>
+  <button class="navbtn nnext" id="lbNext" aria-label="הבא">›</button>
   <img id="lbImg" alt="">
-  <div class="lbwho" id="lbWho"></div>
+  <div class="lbbottom">
+    <div class="lbwho" id="lbWho"></div>
+    <button class="lbdl" id="lbDownload">⬇ הורדה</button>
+  </div>
+</div>
+
+<!-- batch progress -->
+<div class="prog" id="prog">
+  <div class="wrap">
+    <div class="row"><span id="progLabel">מכין את ההורדה…</span><span id="progPct">0%</span></div>
+    <div class="track"><div class="fill" id="progFill"></div></div>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
-<footer><div class="wrap">האלבום המשפחתי · דרום צרפת 2026 🌻 · התמונות פרטיות למשפחה בלבד</div></footer>
+<footer><div class="wrap">Fin de l'album · דרום צרפת 2026 🌻</div></footer>
 
 <script>
 'use strict';
 /* ================= config ================= */
-const CLOUD = 'zeiwhzn0';
-const PRESET = 'france-family';
-const TAG = 'france2026-family';
-const GOOGLE_CLIENT_ID = '462911274506-3vi920k6h0hshhmd2otl5q8v47llf4b7.apps.googleusercontent.com';
-const LS_ID = 'f26_identity';
-const LS_SEEN = 'f26_lastSeen';
+const CLOUD='zeiwhzn0', PRESET='france-family', TAG='france2026-family';
+const GOOGLE_CLIENT_ID='462911274506-3vi920k6h0hshhmd2otl5q8v47llf4b7.apps.googleusercontent.com';
+const LS_ID='f26_identity', LS_SEEN='f26_lastSeen', LS_STYLE='f26_style';
+const AVATAR_COLORS=['#BE7B22','#8A5A33','#1E7A93','#A6572E','#5E7A3C'];
 
 /* ================= state ================= */
-let photos = [];            // sorted newest-first
-let view = 'all';
-let lastSeen = localStorage.getItem(LS_SEEN);   // ISO string or null
-let firstVisit = !lastSeen;
-let lbIndex = -1;
-let pendingUpload = false;  // open widget right after identity is set
+let photos=[], view='people';
+let style=localStorage.getItem(LS_STYLE)||'journal';
+let lastSeen=localStorage.getItem(LS_SEEN), firstVisit=!lastSeen;
+let lbIndex=-1, selectMode=false;
+const selected=new Set();
+let pendingUpload=false;
 
-const $ = id => document.getElementById(id);
-const rootEl = $('galleryRoot');
+const $=id=>document.getElementById(id);
+const rootEl=$('galleryRoot');
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const colorFor=name=>{let h=0;for(const ch of String(name))h=(h*31+ch.charCodeAt(0))>>>0;return AVATAR_COLORS[h%AVATAR_COLORS.length]};
+
+/* broken avatar images -> initial-letter circle */
+document.addEventListener('error',e=>{
+  const t=e.target;
+  if(t&&t.tagName==='IMG'&&t.classList.contains('av-img')){
+    const s=document.createElement('span');s.className='avfall';s.style.background=t.dataset.color||'var(--gold)';
+    s.textContent=t.dataset.ch||'?';t.replaceWith(s);
+  }
+},true);
+function avatarEl(av,name){
+  const ch=esc(String(name||'?').trim().charAt(0)||'?'), col=colorFor(name);
+  if(av)return `<img class="av-img" src="${esc(av)}" data-ch="${ch}" data-color="${col}" alt="" referrerpolicy="no-referrer">`;
+  return `<span class="avfall" style="background:${col}">${ch}</span>`;
+}
 
 /* ================= identity ================= */
-function getIdentity(){
-  try{ return JSON.parse(localStorage.getItem(LS_ID)) || null }catch(e){ return null }
-}
-function setIdentity(name, avatar){
-  localStorage.setItem(LS_ID, JSON.stringify({name:name.trim(), avatar:avatar||''}));
-  renderChip();
-}
-/* all user-supplied strings (names, avatar urls) pass through esc() before hitting innerHTML */
-function esc(s){ return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])) }
-function avatarEl(av, name, cls){
-  const ch = esc(String(name||'?').trim().charAt(0)||'?');
-  if(av) return `<img class="av" src="${esc(av)}" data-ch="${ch}" alt="" referrerpolicy="no-referrer">`;
-  return `<span class="avfall ${cls||''}">${ch}</span>`;
-}
-/* broken avatar images fall back to an initial-letter circle (delegated, capture phase) */
-document.addEventListener('error', e=>{
-  const t = e.target;
-  if(t && t.tagName==='IMG' && t.classList.contains('av')){
-    const s = document.createElement('span');
-    s.className = 'avfall';
-    s.textContent = t.dataset.ch || '?';
-    t.replaceWith(s);
-  }
-}, true);
+function getIdentity(){try{return JSON.parse(localStorage.getItem(LS_ID))||null}catch(e){return null}}
+function setIdentity(name,avatar){localStorage.setItem(LS_ID,JSON.stringify({name:name.trim(),avatar:avatar||''}));renderChip()}
 function renderChip(){
-  const id = getIdentity(), chip = $('idChip');
-  if(!id){ chip.style.display='none'; return }
-  chip.style.display='flex';
-  chip.innerHTML = avatarEl(id.avatar, id.name) + `<span>${esc(id.name)}</span>`;
+  const id=getIdentity(),chip=$('idChip');
+  if(!id){chip.style.display='none';return}
+  chip.style.display='inline-flex';
+  chip.innerHTML=avatarEl(id.avatar,id.name)+`<span>${esc(id.name)}</span>`;
 }
-$('idChip').addEventListener('click', ()=> openIdentityModal(false));
+$('idChip').addEventListener('click',()=>openIdentityModal(false));
 
-/* --- modal flow --- */
 function openIdentityModal(forUpload){
-  pendingUpload = !!forUpload;
-  $('idStep1').style.display=''; $('idStep2').style.display='none';
-  const cur = getIdentity();
-  $('manualName').value = cur ? cur.name : '';
-  $('idOverlay').classList.add('open');
-  initGoogleBtn();
+  pendingUpload=!!forUpload;
+  $('idStep1').style.display='';$('idStep2').style.display='none';
+  const cur=getIdentity();$('manualName').value=cur?cur.name:'';
+  $('idOverlay').classList.add('open');initGoogleBtn();
 }
-function closeIdentityModal(){ $('idOverlay').classList.remove('open') }
-$('idClose').addEventListener('click', closeIdentityModal);
-$('idOverlay').addEventListener('click', e=>{ if(e.target===$('idOverlay')) closeIdentityModal() });
+function closeIdentityModal(){$('idOverlay').classList.remove('open')}
+$('idClose').addEventListener('click',closeIdentityModal);
+$('idOverlay').addEventListener('click',e=>{if(e.target===$('idOverlay'))closeIdentityModal()});
 
-let gisReady = false;
+let gisReady=false;
 function initGoogleBtn(){
-  if(gisReady) return;
-  if(!(window.google && google.accounts && google.accounts.id)){
-    setTimeout(initGoogleBtn, 300); return;   // script still loading; manual path works meanwhile
-  }
+  if(gisReady)return;
+  if(!(window.google&&google.accounts&&google.accounts.id)){setTimeout(initGoogleBtn,300);return}
   try{
-    google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: onGoogleCred, auto_select:false });
-    google.accounts.id.renderButton($('gBtn'), { theme:'outline', size:'large', shape:'pill', text:'continue_with', locale:'he', width:280 });
-    gisReady = true;
-  }catch(e){ /* Google unavailable — manual path remains */ }
+    google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:onGoogleCred,auto_select:false});
+    google.accounts.id.renderButton($('gBtn'),{theme:'outline',size:'large',shape:'pill',text:'continue_with',locale:'he',width:280});
+    gisReady=true;
+  }catch(e){}
 }
 function onGoogleCred(resp){
   try{
-    const p = JSON.parse(decodeURIComponent(escape(atob(resp.credential.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')))));
-    $('idStep1').style.display='none'; $('idStep2').style.display='';
-    const av = $('confAvatar');
-    if(p.picture){ av.src = p.picture; av.style.display='block' } else av.style.display='none';
-    av.dataset.url = p.picture || '';
-    $('confName').value = p.given_name || p.name || '';
-    $('confName').focus();
-  }catch(e){ showToast('משהו השתבש בהתחברות — נסו שוב או הזינו שם') }
+    const p=JSON.parse(decodeURIComponent(escape(atob(resp.credential.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')))));
+    $('idStep1').style.display='none';$('idStep2').style.display='';
+    const av=$('confAvatar');
+    if(p.picture){av.src=p.picture;av.style.display='block'}else av.style.display='none';
+    av.dataset.url=p.picture||'';
+    $('confName').value=p.given_name||p.name||'';$('confName').focus();
+  }catch(e){showToast('משהו השתבש בהתחברות — נסו שוב או הזינו שם')}
 }
-$('confGo').addEventListener('click', ()=>{
-  const n = $('confName').value.trim();
-  if(!n){ $('confName').focus(); return }
-  setIdentity(n, $('confAvatar').dataset.url);
-  closeIdentityModal();
-  if(pendingUpload) openWidget();
+$('confGo').addEventListener('click',()=>{
+  const n=$('confName').value.trim();if(!n){$('confName').focus();return}
+  setIdentity(n,$('confAvatar').dataset.url);closeIdentityModal();if(pendingUpload)openWidget();
 });
-$('manualGo').addEventListener('click', ()=>{
-  const n = $('manualName').value.trim();
-  if(!n){ $('manualName').focus(); return }
-  setIdentity(n, '');
-  closeIdentityModal();
-  if(pendingUpload) openWidget();
+$('manualGo').addEventListener('click',()=>{
+  const n=$('manualName').value.trim();if(!n){$('manualName').focus();return}
+  setIdentity(n,'');closeIdentityModal();if(pendingUpload)openWidget();
 });
-$('manualName').addEventListener('keydown', e=>{ if(e.key==='Enter') $('manualGo').click() });
-$('confName').addEventListener('keydown', e=>{ if(e.key==='Enter') $('confGo').click() });
+$('manualName').addEventListener('keydown',e=>{if(e.key==='Enter')$('manualGo').click()});
+$('confName').addEventListener('keydown',e=>{if(e.key==='Enter')$('confGo').click()});
 
 /* ================= upload ================= */
-$('fabUpload').addEventListener('click', ()=>{
-  if(getIdentity()) openWidget(); else openIdentityModal(true);
-});
-function ctxEscape(v){ return String(v).replace(/([=|])/g,'\\$1') }
+$('fabUpload').addEventListener('click',()=>{if(getIdentity())openWidget();else openIdentityModal(true)});
 function openWidget(){
-  if(!window.cloudinary){ showToast('רכיב ההעלאה עוד נטען — נסו שוב עוד רגע'); return }
-  const id = getIdentity();
-  const ctx = { uploader: id.name };
-  if(id.avatar) ctx.avatar = id.avatar;
+  if(!window.cloudinary){showToast('רכיב ההעלאה עוד נטען — נסו שוב עוד רגע');return}
+  const id=getIdentity(),ctx={uploader:id.name};if(id.avatar)ctx.avatar=id.avatar;
   cloudinary.openUploadWidget({
-    cloudName: CLOUD, uploadPreset: PRESET,
-    sources: ['local','camera'], multiple: true, maxFiles: 40,
-    clientAllowedFormats: ['image'], maxImageFileSize: 25000000,
-    context: ctx, tags: [TAG],
-    styles:{ palette:{ link:'#7E6BAA', action:'#7E6BAA', complete:'#2E7D52' } },
-    language: 'he',
-    text: { he: {
-      or: 'או', back: 'חזרה', close: 'סגירה', menu: { files: 'הקבצים שלי', camera: 'מצלמה' },
-      local: {
-        browse: 'בחירת קבצים',
-        dd_title_single: 'גררו תמונה לכאן',
-        dd_title_multi: 'גררו תמונות לכאן',
-        drop_title_single: 'שחררו כדי להעלות',
-        drop_title_multiple: 'שחררו כדי להעלות'
-      },
-      camera: { capture: 'צילום', cancel: 'ביטול', take_pic: 'צלמו תמונה', explanation: 'ודאו שהמצלמה מחוברת ואשרו גישה לדפדפן' },
-      queue: {
-        title: 'תמונות להעלאה', done: 'סיום', mini_title: 'הועלו', mini_title_uploading: 'מעלה...',
-        statuses: { uploading: 'מעלה...', error: 'שגיאה', uploaded: 'הועלה ✓', aborted: 'בוטל' }
-      }
-    }}
-  }, (err, res)=>{
-    if(err){ showToast('ההעלאה נכשלה — בדקו חיבור ונסו שוב'); return }
-    if(res.event==='success'){
-      const i = res.info;
-      photos.unshift({ id:i.public_id, ver:i.version, created:i.created_at,
-        uploader:id.name, avatar:id.avatar||'', isNew:false, mine:true });
-      render();
-    }
-    if(res.event==='queues-end'){ showToast('התמונות עלו לאלבום! 🎉') }
+    cloudName:CLOUD,uploadPreset:PRESET,sources:['local','camera'],multiple:true,maxFiles:60,
+    clientAllowedFormats:['image'],maxImageFileSize:25000000,context:ctx,tags:[TAG],
+    styles:{palette:{link:'#BE7B22',action:'#BE7B22',complete:'#2E7D52'}},
+    language:'he',text:{he:{or:'או',back:'חזרה',close:'סגירה',menu:{files:'הקבצים שלי',camera:'מצלמה'},
+      local:{browse:'בחירת קבצים',dd_title_single:'גררו תמונה לכאן',dd_title_multi:'גררו תמונות לכאן',drop_title_single:'שחררו כדי להעלות',drop_title_multiple:'שחררו כדי להעלות'},
+      camera:{capture:'צילום',cancel:'ביטול',take_pic:'צלמו תמונה',explanation:'ודאו שהמצלמה מחוברת ואשרו גישה'},
+      queue:{title:'תמונות להעלאה',done:'סיום',mini_title:'הועלו',mini_title_uploading:'מעלה...',statuses:{uploading:'מעלה...',error:'שגיאה',uploaded:'הועלה ✓',aborted:'בוטל'}}}}
+  },(err,res)=>{
+    if(err){showToast('ההעלאה נכשלה — בדקו חיבור ונסו שוב');return}
+    if(res.event==='success'){const i=res.info;
+      photos.unshift({id:i.public_id,ver:i.version,created:i.created_at,uploader:id.name,avatar:id.avatar||'',isNew:false});render()}
+    if(res.event==='queues-end')showToast('התמונות עלו לאלבום! 🎉');
   });
 }
 
 /* ================= data ================= */
-function thumbUrl(p){ return `https://res.cloudinary.com/${CLOUD}/image/upload/f_auto,q_auto,c_fill,w_440,h_440/v${p.ver}/${encodeURIComponent(p.id)}` }
-function fullUrl(p){ return `https://res.cloudinary.com/${CLOUD}/image/upload/f_auto,q_auto,w_1600/v${p.ver}/${encodeURIComponent(p.id)}` }
+const thumbUrl=p=>`https://res.cloudinary.com/${CLOUD}/image/upload/f_auto,q_auto,w_640/v${p.ver}/${encodeURIComponent(p.id)}`;
+const fullUrl=p=>`https://res.cloudinary.com/${CLOUD}/image/upload/f_auto,q_auto,w_1800/v${p.ver}/${encodeURIComponent(p.id)}`;
+const origUrl=p=>`https://res.cloudinary.com/${CLOUD}/image/upload/fl_attachment/v${p.ver}/${encodeURIComponent(p.id)}`;
 
 async function fetchGallery(){
   renderSkeleton();
   let res;
-  try{
-    res = await fetch(`https://res.cloudinary.com/${CLOUD}/image/list/${TAG}.json?t=${Date.now()}`, {cache:'no-store'});
-  }catch(e){ renderError(); return }
-  if(res.status===404){ photos=[]; render(); return }   // empty tag => 404, not []
-  if(!res.ok){ renderError(); return }
-  let data;
-  try{ data = await res.json() }catch(e){ renderError(); return }
-  photos = (data.resources||[]).map(r=>({
-    id: r.public_id, ver: r.version, created: r.created_at,
-    uploader: (r.context&&r.context.custom&&r.context.custom.uploader)||'אורח/ת',
-    avatar: (r.context&&r.context.custom&&r.context.custom.avatar)||'',
-    isNew: !firstVisit && lastSeen && r.created_at > lastSeen,
-    mine:false
-  })).sort((a,b)=> b.created<a.created?-1:b.created>a.created?1:0);
-  render();
-  scheduleMarkSeen();
+  try{res=await fetch(`https://res.cloudinary.com/${CLOUD}/image/list/${TAG}.json?t=${Date.now()}`,{cache:'no-store'})}
+  catch(e){return renderError()}
+  if(res.status===404){photos=[];return render()}
+  if(!res.ok)return renderError();
+  let data;try{data=await res.json()}catch(e){return renderError()}
+  photos=(data.resources||[]).map(r=>({
+    id:r.public_id,ver:r.version,created:r.created_at,
+    uploader:(r.context&&r.context.custom&&r.context.custom.uploader)||'אורח/ת',
+    avatar:(r.context&&r.context.custom&&r.context.custom.avatar)||'',
+    isNew:!firstVisit&&lastSeen&&r.created_at>lastSeen
+  })).sort((a,b)=>b.created<a.created?-1:b.created>a.created?1:0);
+  render();scheduleMarkSeen();
 }
-
 let seenTimer=null;
 function scheduleMarkSeen(){
   clearTimeout(seenTimer);
-  seenTimer = setTimeout(()=>{
-    if(photos.length) localStorage.setItem(LS_SEEN, photos[0].created);
-    else if(firstVisit) localStorage.setItem(LS_SEEN, new Date(0).toISOString());
-  }, 4000);
+  seenTimer=setTimeout(()=>{
+    if(photos.length)localStorage.setItem(LS_SEEN,photos[0].created);
+    else if(firstVisit)localStorage.setItem(LS_SEEN,new Date(0).toISOString());
+  },4000);
 }
 
 /* ================= rendering ================= */
-function tileHtml(p, gi){
-  const u = esc(p.uploader);
-  return `<div class="tile${p.isNew?' isnew':''}" data-gi="${gi}" role="button" tabindex="0" aria-label="תמונה של ${u}">
-    <img loading="lazy" src="${thumbUrl(p)}" alt="תמונה מהטיול של ${u}">
-    <div class="who">${avatarEl(p.avatar,p.uploader)}<span>${u}</span></div>
-  </div>`;
+function figHtml(p,gi){
+  const u=esc(p.uploader), selCls=selected.has(p.id)?' sel':'';
+  return `<figure class="reveal${selCls}" data-gi="${gi}">
+    <span class="tape"></span>${p.isNew?'<span class="newdot"></span>':''}<span class="pick"></span>
+    <div class="frame">
+      <img loading="lazy" src="${thumbUrl(p)}" alt="תמונה מהטיול של ${u}">
+      <span class="hovname">${avatarEl(p.avatar,p.uploader)}<span>${u}</span></span>
+    </div>
+  </figure>`;
 }
 function renderSkeleton(){
-  rootEl.className='skeleton';
-  rootEl.innerHTML = `<div class="grid">${'<div class="tile in" style="opacity:.5"></div>'.repeat(8)}</div>`;
+  rootEl.className='';
+  const hs=[260,190,320,220,300,240];
+  rootEl.innerHTML=`<div class="sk">${hs.map(h=>`<i style="height:${h}px"></i>`).join('')}</div>`;
 }
 function renderError(){
   rootEl.className='';
-  rootEl.innerHTML = `<div class="state"><div class="big">📡</div><h3>לא הצלחנו לטעון את האלבום</h3>
+  rootEl.innerHTML=`<div class="state"><div class="big">📡</div><h3>לא הצלחנו לטעון את האלבום</h3>
     <p>בדקו את החיבור לאינטרנט ונסו שוב.</p><button class="btn sec" onclick="fetchGallery()">נסו שוב</button></div>`;
 }
 function renderEmpty(){
-  rootEl.innerHTML = `<div class="state"><div class="big">🌻</div><h3>האלבום עוד ריק</h3>
+  rootEl.className='';
+  rootEl.innerHTML=`<div class="state"><div class="big">🌻</div><h3>האלבום עוד ריק</h3>
     <p>היו הראשונים! לחצו על "הוסיפו תמונות" והעלו את הרגעים היפים שצילמתם בטיול.</p>
     <button class="btn" onclick="document.getElementById('fabUpload').click()">📸 הוסיפו את התמונה הראשונה</button></div>`;
 }
+function nPhotos(n){return n===1?'תמונה אחת':`${n} תמונות`}
 function render(){
-  rootEl.className='';
-  $('cntAll').textContent = photos.length ? photos.length : '';
-  const ppl = new Set(photos.map(p=>p.uploader));
-  $('cntPeople').textContent = ppl.size ? ppl.size : '';
-  const nNew = photos.filter(p=>p.isNew).length;
-  const badge = $('newBadge');
-  if(nNew>0){ badge.textContent = `${nNew} חדשות מאז הביקור האחרון ✨`; badge.classList.add('show') }
+  $('cntAll').textContent=photos.length||'';
+  const ppl=new Set(photos.map(p=>p.uploader));
+  $('cntPeople').textContent=ppl.size||'';
+  const nNew=photos.filter(p=>p.isNew).length;
+  const badge=$('newBadge');
+  if(nNew>0){badge.textContent=`✨ ${nNew===1?'תמונה חדשה אחת':nNew+' תמונות חדשות'} מאז הביקור האחרון`;badge.classList.add('show')}
   else badge.classList.remove('show');
-
-  if(!photos.length){ renderEmpty(); return }
-  if(view==='all') renderAll(nNew); else renderPeople();
-  observeTiles();
+  renderContrib();
+  if(!photos.length){renderEmpty();updateSelUI();return}
+  const cls=`cols style-${style}${selectMode?' selecting':''}`;
+  if(view==='all'){
+    if(nNew>0&&nNew<photos.length){
+      rootEl.innerHTML=
+        `<div class="${cls}">${photos.slice(0,nNew).map((p,i)=>figHtml(p,i)).join('')}</div>`+
+        `<div class="unread-divider"><b>✨ עד כאן חדש מאז הביקור האחרון</b></div>`+
+        `<div class="${cls}">${photos.slice(nNew).map((p,i)=>figHtml(p,nNew+i)).join('')}</div>`;
+    }else rootEl.innerHTML=`<div class="${cls}">${photos.map((p,i)=>figHtml(p,i)).join('')}</div>`;
+    rootEl.className='';
+  }else renderPeople(cls);
+  observeTiles();updateSelUI();
 }
-function renderAll(nNew){
-  let html = '';
-  if(nNew>0 && nNew<photos.length){
-    html += `<div class="grid">${photos.slice(0,nNew).map((p,i)=>tileHtml(p,i)).join('')}</div>`;
-    html += `<div class="unread-divider"><b>✨ עד כאן חדש מאז הביקור האחרון</b></div>`;
-    html += `<div class="grid">${photos.slice(nNew).map((p,i)=>tileHtml(p,nNew+i)).join('')}</div>`;
-  }else{
-    html = `<div class="grid">${photos.map((p,i)=>tileHtml(p,i)).join('')}</div>`;
-  }
-  rootEl.innerHTML = html;
+function renderContrib(){
+  const el=$('contrib');
+  if(!photos.length){el.innerHTML='';return}
+  const seen=[];for(const p of photos)if(!seen.find(s=>s.name===p.uploader))seen.push({name:p.uploader,avatar:p.avatar});
+  const shown=seen.slice(0,5);
+  el.innerHTML=shown.map(s=>s.avatar
+      ?`<img class="av av-img" style="background:${colorFor(s.name)}" src="${esc(s.avatar)}" data-ch="${esc(s.name[0])}" data-color="${colorFor(s.name)}" alt="" referrerpolicy="no-referrer">`
+      :`<span class="av" style="background:${colorFor(s.name)}">${esc(s.name[0])}</span>`).join('')+
+    `<span class="lbl">צילמו יחד<br><b>${shown.map(s=>esc(s.name)).join(' · ')}${seen.length>5?' ועוד':''}</b></span>`;
 }
-function renderPeople(){
-  const groups = new Map();
+function renderPeople(cls){
+  const groups=new Map();
   photos.forEach((p,gi)=>{
-    if(!groups.has(p.uploader)) groups.set(p.uploader, {avatar:p.avatar, items:[]});
-    const g = groups.get(p.uploader);
-    if(!g.avatar && p.avatar) g.avatar = p.avatar;
-    g.items.push(gi);
+    if(!groups.has(p.uploader))groups.set(p.uploader,{avatar:p.avatar,items:[]});
+    const g=groups.get(p.uploader);if(!g.avatar&&p.avatar)g.avatar=p.avatar;g.items.push(gi);
   });
-  const sorted = [...groups.entries()].sort((a,b)=> b[1].items.length - a[1].items.length);
-  rootEl.innerHTML = sorted.map(([name,g])=>`
-    <section class="person">
-      <div class="person-h">${avatarEl(g.avatar,name)}<h3>${esc(name)}</h3><span class="cnt">${g.items.length} תמונות</span></div>
-      <div class="grid">${g.items.map(gi=>tileHtml(photos[gi],gi)).join('')}</div>
-    </section>`).join('');
+  const sorted=[...groups.entries()].sort((a,b)=>b[1].items.length-a[1].items.length);
+  rootEl.className='';
+  rootEl.innerHTML=sorted.map(([name,g])=>`<section class="person">
+    <div class="person-h">${avatarEl(g.avatar,name)}<h3>${esc(name)}</h3><span class="pc">${nPhotos(g.items.length)}</span></div>
+    <div class="${cls}">${g.items.map(gi=>figHtml(photos[gi],gi)).join('')}</div>
+  </section>`).join('');
 }
 function observeTiles(){
-  const tiles = rootEl.querySelectorAll('.tile');
-  if(!('IntersectionObserver' in window)){ tiles.forEach(t=>t.classList.add('in')); return }
-  const io = new IntersectionObserver(es=>{
-    es.forEach((e,i)=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target) } });
-  },{rootMargin:'80px'});
-  tiles.forEach((t,i)=>{ t.style.transitionDelay = `${Math.min(i%12,8)*35}ms`; io.observe(t) });
+  const tiles=rootEl.querySelectorAll('.reveal');
+  if(!('IntersectionObserver'in window)){tiles.forEach(t=>t.classList.add('in'));return}
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'90px'});
+  tiles.forEach((t,i)=>{t.style.transitionDelay=`${Math.min(i%12,8)*32}ms`;io.observe(t)});
 }
 
-/* view toggle */
-document.querySelectorAll('.tab[data-view]').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    view = btn.dataset.view;
-    document.querySelectorAll('.tab[data-view]').forEach(b=>b.setAttribute('aria-selected', b===btn ? 'true':'false'));
-    render();
-  });
+/* view + style toggles */
+document.querySelectorAll('.seg button').forEach(b=>b.addEventListener('click',()=>{
+  view=b.dataset.view;
+  document.querySelectorAll('.seg button').forEach(x=>x.setAttribute('aria-selected',x===b?'true':'false'));
+  render();
+}));
+document.querySelectorAll('.styleswitch button').forEach(b=>b.addEventListener('click',()=>{
+  style=b.dataset.style;localStorage.setItem(LS_STYLE,style);
+  document.querySelectorAll('.styleswitch button').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));
+  render();
+}));
+
+/* ================= selection ================= */
+$('selectBtn').addEventListener('click',toggleSelectMode);
+function toggleSelectMode(){
+  selectMode=!selectMode;
+  if(!selectMode)selected.clear();
+  $('selectBtn').textContent=selectMode?'סיום':'בחירה';
+  $('selectBtn').classList.toggle('pri',selectMode);
+  render();
+}
+$('selCancel').addEventListener('click',toggleSelectMode);
+$('selAll').addEventListener('click',()=>{
+  const all=selected.size>=photos.length;
+  selected.clear();if(!all)photos.forEach(p=>selected.add(p.id));
+  document.querySelectorAll('figure[data-gi]').forEach(f=>f.classList.toggle('sel',selected.has(photos[+f.dataset.gi].id)));
+  updateSelUI();
 });
+$('selDownload').addEventListener('click',saveSelected);
+function updateSelUI(){
+  $('selBar').classList.toggle('show',selectMode);
+  $('selCount').textContent=selected.size;
+  $('selDownload').disabled=selected.size===0;
+  $('selAll').textContent=(selected.size>=photos.length&&photos.length)?'נקה בחירה':'בחר הכל';
+}
+
+/* ================= tile click (select or open) ================= */
+rootEl.addEventListener('click',e=>{
+  const f=e.target.closest('figure[data-gi]');if(!f)return;
+  const gi=+f.dataset.gi;
+  if(selectMode){
+    const pid=photos[gi].id;
+    if(selected.has(pid))selected.delete(pid);else selected.add(pid);
+    f.classList.toggle('sel',selected.has(pid));updateSelUI();
+  }else openLb(gi);
+});
+rootEl.addEventListener('keydown',e=>{if(e.key==='Enter'){const f=e.target.closest('figure[data-gi]');if(f){e.preventDefault();f.click()}}});
 
 /* ================= lightbox ================= */
-rootEl.addEventListener('click', e=>{
-  const t = e.target.closest('.tile[data-gi]');
-  if(t) openLb(+t.dataset.gi);
-});
-rootEl.addEventListener('keydown', e=>{
-  if(e.key==='Enter'){ const t = e.target.closest('.tile[data-gi]'); if(t) openLb(+t.dataset.gi) }
-});
 function openLb(i){
-  if(i<0||i>=photos.length) return;
-  lbIndex = i;
-  const p = photos[i];
-  $('lbImg').src = fullUrl(p);
-  $('lbImg').alt = `תמונה מהטיול של ${p.uploader}`;
-  $('lbWho').innerHTML = avatarEl(p.avatar,p.uploader) + `<span>${esc(p.uploader)}</span>`;
-  $('lb').classList.add('open');
-  document.body.style.overflow='hidden';
-  $('lbClose').focus();
+  if(i<0||i>=photos.length)return;
+  lbIndex=i;const p=photos[i];
+  $('lbImg').src=fullUrl(p);$('lbImg').alt=`תמונה מהטיול של ${p.uploader}`;
+  $('lbWho').innerHTML=avatarEl(p.avatar,p.uploader)+`<span>${esc(p.uploader)}</span>`;
+  $('lb').classList.add('open');document.body.style.overflow='hidden';$('lbClose').focus();
 }
-function closeLb(){ $('lb').classList.remove('open'); document.body.style.overflow=''; lbIndex=-1 }
-function lbStep(d){ if(lbIndex<0) return; const n = lbIndex+d; if(n>=0&&n<photos.length) openLb(n) }
-$('lbClose').addEventListener('click', closeLb);
-$('lbNext').addEventListener('click', ()=>lbStep(1));
-$('lbPrev').addEventListener('click', ()=>lbStep(-1));
-$('lb').addEventListener('click', e=>{ if(e.target===$('lb')) closeLb() });
-document.addEventListener('keydown', e=>{
-  if(!$('lb').classList.contains('open')) return;
-  if(e.key==='Escape') closeLb();
-  if(e.key==='ArrowLeft') lbStep(1);   // RTL: next is to the left
-  if(e.key==='ArrowRight') lbStep(-1);
+function closeLb(){$('lb').classList.remove('open');document.body.style.overflow='';lbIndex=-1}
+function lbStep(d){if(lbIndex<0)return;const n=lbIndex+d;if(n>=0&&n<photos.length)openLb(n)}
+$('lbClose').addEventListener('click',closeLb);
+$('lbNext').addEventListener('click',()=>lbStep(1));
+$('lbPrev').addEventListener('click',()=>lbStep(-1));
+$('lbDownload').addEventListener('click',()=>{if(lbIndex>=0)saveOne(photos[lbIndex])});
+$('lb').addEventListener('click',e=>{if(e.target===$('lb'))closeLb()});
+document.addEventListener('keydown',e=>{
+  if(!$('lb').classList.contains('open'))return;
+  if(e.key==='Escape')closeLb();
+  if(e.key==='ArrowLeft')lbStep(1);
+  if(e.key==='ArrowRight')lbStep(-1);
 });
 let touchX=null;
-$('lb').addEventListener('touchstart', e=>{ touchX = e.touches[0].clientX }, {passive:true});
-$('lb').addEventListener('touchend', e=>{
-  if(touchX===null) return;
-  const dx = e.changedTouches[0].clientX - touchX;
-  if(Math.abs(dx)>50) lbStep(dx<0 ? 1 : -1);
-  touchX=null;
-}, {passive:true});
+$('lb').addEventListener('touchstart',e=>{touchX=e.touches[0].clientX},{passive:true});
+$('lb').addEventListener('touchend',e=>{
+  if(touchX===null)return;const dx=e.changedTouches[0].clientX-touchX;
+  if(Math.abs(dx)>50)lbStep(dx<0?1:-1);touchX=null;
+},{passive:true});
+
+/* ================= download / save ================= */
+/* On phones (iOS/Android) we hand the actual image FILES to the native share
+   sheet, so "שמירת תמונה" / "Save N Images" drops them straight into Apple
+   Photos / the gallery. On desktop we fall back to a direct download / ZIP. */
+const SUPPORTS_FILE_SHARE=(()=>{
+  try{return !!(navigator.canShare&&navigator.share&&
+    navigator.canShare({files:[new File([new Blob([''])],'a.jpg',{type:'image/jpeg'})]}))}
+  catch(e){return false}
+})();
+async function fetchFile(p,idx){
+  const r=await fetch(fullUrl(p));if(!r.ok)throw new Error('fetch');
+  const blob=await r.blob();
+  const ext=(blob.type.split('/')[1]||'jpg').replace('jpeg','jpg');
+  const base=(p.uploader||'photo').replace(/[\\/:*?"<>|\s]/g,'');
+  return new File([blob],`france-${String(idx+1).padStart(2,'0')}-${base}.${ext}`,{type:blob.type||'image/jpeg'});
+}
+function downloadOne(p){
+  const a=document.createElement('a');a.href=origUrl(p);a.download='';a.rel='noopener';
+  document.body.appendChild(a);a.click();a.remove();
+  showToast('התמונה יורדת…');
+}
+/* single photo: share sheet on mobile, download on desktop */
+async function saveOne(p){
+  if(SUPPORTS_FILE_SHARE){
+    try{
+      showToast('מכינה תמונה…');
+      const f=await fetchFile(p,0);
+      if(navigator.canShare({files:[f]})){await navigator.share({files:[f],title:'תמונה מהטיול'});return}
+    }catch(e){if(e&&e.name==='AbortError')return}
+  }
+  downloadOne(p);
+}
+let jszipPromise=null;
+function ensureJsZip(){
+  if(window.JSZip)return Promise.resolve();
+  if(jszipPromise)return jszipPromise;
+  jszipPromise=new Promise((res,rej)=>{
+    const s=document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+    s.onload=res;s.onerror=rej;document.head.appendChild(s);
+  });
+  return jszipPromise;
+}
+function showProg(label){$('progLabel').textContent=label;$('progPct').textContent='0%';$('progFill').style.width='0%';$('prog').classList.add('show')}
+function setProg(pct,label){$('progFill').style.width=pct+'%';$('progPct').textContent=Math.round(pct)+'%';if(label)$('progLabel').textContent=label}
+function hideProg(){$('prog').classList.remove('show')}
+/* multi: native share sheet on mobile (→ Save N Images to Photos), ZIP on desktop */
+async function saveSelected(){
+  const items=photos.filter(p=>selected.has(p.id));
+  if(!items.length)return;
+  if(items.length===1){await saveOne(items[0]);return}
+  if(SUPPORTS_FILE_SHARE){
+    try{
+      showProg(`מכין ${items.length} תמונות…`);
+      const files=[];
+      for(let i=0;i<items.length;i++){setProg(i/items.length*100,`מכין ${i+1} מתוך ${items.length}…`);files.push(await fetchFile(items[i],i))}
+      hideProg();
+      if(navigator.canShare({files})){await navigator.share({files,title:'תמונות מהטיול'});return}
+    }catch(e){hideProg();if(e&&e.name==='AbortError')return}
+  }
+  await zipDownload(items);
+}
+async function zipDownload(items){
+  try{
+    showProg(`אורז ${items.length} תמונות…`);
+    await ensureJsZip();
+    const zip=new JSZip(),used={};
+    for(let i=0;i<items.length;i++){
+      setProg((i/items.length)*70,`מוריד ${i+1} מתוך ${items.length}…`);
+      const r=await fetch(fullUrl(items[i]));if(!r.ok)continue;
+      const blob=await r.blob();
+      let base=(items[i].uploader||'photo').replace(/[\\/:*?"<>|]/g,'');
+      const ext=(blob.type.split('/')[1]||'jpg').replace('jpeg','jpg');
+      let name=`${String(i+1).padStart(2,'0')}-${base}.${ext}`;
+      if(used[name])name=`${String(i+1).padStart(2,'0')}-${base}-${i}.${ext}`;used[name]=1;
+      zip.file(name,blob);
+    }
+    const content=await zip.generateAsync({type:'blob'},m=>setProg(70+m.percent*0.3,'יוצר קובץ ZIP…'));
+    const url=URL.createObjectURL(content);
+    const a=document.createElement('a');a.href=url;a.download='france2026-photos.zip';document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),4000);
+    hideProg();showToast('ה-ZIP ירד! 🎉');
+  }catch(e){hideProg();showToast('ההורדה נכשלה — נסו שוב או הורידו תמונות בודדות')}
+}
 
 /* ================= toast ================= */
 let toastTimer=null;
-function showToast(msg){
-  const t = $('toast'); t.textContent = msg; t.classList.add('show');
-  clearTimeout(toastTimer); toastTimer = setTimeout(()=>t.classList.remove('show'), 3500);
-}
+function showToast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),3500)}
 
 /* ================= init ================= */
+document.querySelectorAll('.styleswitch button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.style===style?'true':'false'));
+if(SUPPORTS_FILE_SHARE){ /* phones: frame it as saving to the gallery, not downloading */
+  $('selDownload').innerHTML='⬇ שמירה לגלריה';
+  $('lbDownload').innerHTML='⬇ שמירה';
+}
 renderChip();
 fetchGallery();
 </script>
