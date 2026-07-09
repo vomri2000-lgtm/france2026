@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="האלבום המשפחתי של הטיול לדרום צרפת — כולם מעלים, כולם רואים">
+<title>האלבום המשפחתי · דרום צרפת</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📸</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://upload-widget.cloudinary.com/latest/global/all.js" defer></script>
+<style>
+:root{
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Assistant",system-ui,sans-serif;
+  --bg:#F6F5F3; --surface:#FFFFFF; --ink:#1C1A18; --muted:#6B6661;
+  --line:#E7E3DD; --line-soft:#EFEBE5;
+  --brand:#8A5A33;
+  --accent:#7E6BAA; /* Provence lavender — this page's own accent */
+  --r:18px; --shadow:0 14px 40px -24px rgba(40,30,18,.5);
+  --maxw:1180px; --ease:cubic-bezier(.22,.8,.22,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{overflow-x:hidden;scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.6;overflow-x:hidden}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(16px,4vw,40px)}
+
+/* ---------- header ---------- */
+header.top{padding:30px 0 0;background:
+  radial-gradient(120% 140% at 90% -10%, color-mix(in srgb,var(--accent) 16%,transparent), transparent 55%)}
+.brand{font-size:13px;font-weight:600;color:var(--accent);letter-spacing:.02em}
+h1{font-size:clamp(30px,5.4vw,50px);font-weight:800;letter-spacing:-.03em;line-height:1.02;margin-top:6px}
+h1 .dest{color:var(--accent)}
+h1 .light{color:var(--muted);font-weight:600;font-size:.55em}
+.sub{color:var(--muted);font-size:15.5px;margin-top:10px;max-width:640px}
+.newbadge{display:none;vertical-align:middle;margin-inline-start:10px;background:var(--accent);color:#fff;
+  font-size:14px;font-weight:700;border-radius:999px;padding:4px 13px;letter-spacing:0;animation:pop .45s var(--ease)}
+.newbadge.show{display:inline-block}
+
+/* ---------- sticky bar ---------- */
+nav.tabs{position:sticky;top:0;z-index:30;margin-top:22px;
+  background:color-mix(in srgb,var(--bg) 85%,transparent);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.tabs .wrap{display:flex;gap:28px;align-items:center}
+.tab{background:none;border:0;cursor:pointer;font-family:inherit;font-size:16px;font-weight:700;
+  color:var(--muted);padding:16px 2px;position:relative;transition:color .2s;text-decoration:none;display:inline-block}
+.tab[aria-selected="true"]{color:var(--ink)}
+.tab[aria-selected="true"]::after{content:"";position:absolute;inset:auto 0 -1px 0;height:3px;
+  border-radius:3px 3px 0 0;background:var(--accent)}
+.tab .cnt{font-size:12.5px;font-weight:600;color:var(--muted);margin-inline-start:6px}
+.backlink{margin-inline-start:auto;font-size:14.5px;font-weight:700;color:var(--brand);text-decoration:none;
+  padding:16px 2px;transition:opacity .18s var(--ease)}
+.backlink:hover{opacity:.7}
+
+/* identity chip */
+.idchip{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);
+  border-radius:999px;padding:5px 12px 5px 6px;cursor:pointer;font-family:inherit;font-size:13.5px;font-weight:700;
+  color:var(--ink);transition:.18s var(--ease)}
+.idchip:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--line));transform:translateY(-1px)}
+.idchip img,.idchip .avfall{width:26px;height:26px;border-radius:50%;object-fit:cover;flex:none}
+.avfall{display:inline-flex;align-items:center;justify-content:center;background:var(--accent);color:#fff;
+  font-size:13px;font-weight:800}
+
+/* ---------- gallery ---------- */
+main{padding:26px 0 90px}
+.toolbar{display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.toolbar .spacer{margin-inline-start:auto}
+.chipbtn{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:9px 16px;
+  font-family:inherit;font-size:13.5px;font-weight:600;color:var(--muted);cursor:pointer;transition:.18s var(--ease)}
+.chipbtn[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.chipbtn:hover{transform:translateY(-1px)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+@media(min-width:700px){.grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}}
+.tile{position:relative;border-radius:14px;overflow:hidden;background:#E4DFD7;aspect-ratio:1;cursor:pointer;
+  border:1px solid var(--line);transition:.18s var(--ease)}
+.tile:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.tile img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s var(--ease)}
+.tile:hover img{transform:scale(1.04)}
+.tile .who{position:absolute;bottom:8px;inset-inline-start:8px;display:flex;align-items:center;gap:6px;
+  background:rgba(20,16,12,.45);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+  color:#fff;font-size:11.5px;font-weight:700;border-radius:999px;padding:3px 10px 3px 4px;max-width:calc(100% - 16px)}
+.tile .who span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tile .who img,.tile .who .avfall{width:18px;height:18px;border-radius:50%;font-size:10px}
+.tile.isnew::before{content:"";position:absolute;top:8px;inset-inline-end:8px;width:10px;height:10px;z-index:2;
+  border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px rgba(255,255,255,.85)}
+
+/* unread divider */
+.unread-divider{display:flex;align-items:center;gap:14px;margin:26px 0 22px}
+.unread-divider::before,.unread-divider::after{content:"";flex:1;height:1px;
+  background:color-mix(in srgb,var(--accent) 45%,var(--line))}
+.unread-divider b{flex:none;font-size:13px;font-weight:700;color:var(--accent);
+  background:color-mix(in srgb,var(--accent) 10%,var(--surface));border:1px solid color-mix(in srgb,var(--accent) 30%,var(--line));
+  border-radius:999px;padding:5px 15px}
+
+/* people view */
+.person{margin:0 0 34px}
+.person-h{display:flex;align-items:center;gap:11px;padding-bottom:11px;margin-bottom:14px;border-bottom:1px solid var(--line)}
+.person-h img,.person-h .avfall{width:38px;height:38px;border-radius:50%;object-fit:cover;font-size:17px}
+.person-h h3{font-size:19px;font-weight:800;letter-spacing:-.01em}
+.person-h .cnt{font-size:12.5px;font-weight:600;color:var(--muted);background:var(--surface);
+  border:1px solid var(--line);border-radius:999px;padding:3px 11px}
+
+/* states */
+.state{text-align:center;padding:70px 20px;color:var(--muted)}
+.state .big{font-size:44px;margin-bottom:10px}
+.state h3{font-size:20px;font-weight:800;color:var(--ink);margin-bottom:6px}
+.state p{font-size:14.5px;max-width:420px;margin:0 auto 20px}
+.skeleton .grid .tile{animation:pulse 1.4s ease-in-out infinite;cursor:default}
+@keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;cursor:pointer;
+  font-family:inherit;font-weight:700;font-size:15px;color:#fff;background:var(--accent);
+  border-radius:11px;padding:12px 22px;transition:.18s var(--ease);text-decoration:none}
+.btn:hover{filter:brightness(.95);transform:translateY(-1px)}
+.btn.sec{color:var(--accent);background:var(--surface);border:1px solid color-mix(in srgb,var(--accent) 45%,var(--line))}
+.btn.sec:hover{background:color-mix(in srgb,var(--accent) 8%,var(--surface));filter:none}
+.fab{position:fixed;bottom:22px;inset-inline-end:22px;z-index:40;border-radius:999px;padding:15px 24px;
+  font-size:16px;box-shadow:0 18px 45px -14px color-mix(in srgb,var(--accent) 65%,transparent)}
+
+/* ---------- modal ---------- */
+.overlay{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;
+  background:rgba(28,22,16,.45);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:20px}
+.overlay.open{display:flex}
+.modal{background:var(--surface);border-radius:20px;max-width:400px;width:100%;padding:28px 26px;
+  box-shadow:0 30px 90px -20px rgba(0,0,0,.6);animation:pop .35s var(--ease);text-align:center}
+.modal h3{font-size:21px;font-weight:800;letter-spacing:-.01em;margin-bottom:6px}
+.modal p{font-size:14px;color:var(--muted);margin-bottom:20px}
+.modal .gwrap{display:flex;justify-content:center;margin-bottom:6px;min-height:44px}
+.modal .or{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:12.5px;font-weight:600;margin:16px 0}
+.modal .or::before,.modal .or::after{content:"";flex:1;height:1px;background:var(--line)}
+.modal input[type=text]{width:100%;border:1px solid var(--line);border-radius:11px;padding:12px 14px;
+  font-family:inherit;font-size:15px;color:var(--ink);background:var(--bg);outline:none;transition:border .18s}
+.modal input[type=text]:focus{border-color:var(--accent)}
+.modal .row{display:flex;gap:10px;margin-top:16px}
+.modal .row .btn{flex:1}
+.modal .mavatar{width:56px;height:56px;border-radius:50%;object-fit:cover;margin:0 auto 12px;display:block;
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 30%,transparent)}
+.modal .close{position:absolute;top:14px;inset-inline-end:14px;width:32px;height:32px;border-radius:50%;
+  border:1px solid var(--line);background:var(--surface);cursor:pointer;font-size:15px;color:var(--muted);line-height:1}
+.modal{position:relative}
+
+/* ---------- lightbox ---------- */
+.lb{position:fixed;inset:0;z-index:70;display:none;background:rgba(15,12,9,.92);
+  backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+.lb.open{display:block}
+.lb img{position:absolute;inset:0;margin:auto;max-width:calc(100% - 24px);max-height:calc(100% - 110px);
+  object-fit:contain;border-radius:6px;animation:fade .25s ease}
+.lb .lbwho{position:absolute;bottom:26px;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:9px;
+  color:#fff;font-size:15px;font-weight:700}
+.lb .lbwho img{position:static;width:30px;height:30px;border-radius:50%;max-width:none;max-height:none;margin:0}
+.lb .lbwho .avfall{width:30px;height:30px;font-size:14px}
+.lb button{position:absolute;z-index:2;border:0;cursor:pointer;background:rgba(255,255,255,.12);color:#fff;
+  border-radius:50%;width:44px;height:44px;font-size:19px;line-height:1;backdrop-filter:blur(4px);transition:.18s var(--ease)}
+.lb button:hover{background:rgba(255,255,255,.25)}
+.lb .x{top:18px;inset-inline-end:18px}
+.lb .nav-next{top:50%;left:14px;transform:translateY(-50%)}
+.lb .nav-prev{top:50%;right:14px;transform:translateY(-50%)}
+@media(max-width:600px){.lb .nav-next,.lb .nav-prev{display:none}}
+
+/* toast */
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);z-index:80;
+  background:var(--ink);color:#fff;font-size:14px;font-weight:600;border-radius:999px;padding:11px 22px;
+  opacity:0;pointer-events:none;transition:.3s var(--ease);max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--muted);font-size:13px;text-align:center}
+
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes pop{from{opacity:0;transform:scale(.92) translateY(8px)}to{opacity:1;transform:none}}
+.tile{opacity:0;transform:translateY(10px)}
+.tile.in{opacity:1;transform:none;transition:opacity .5s var(--ease),transform .5s var(--ease)}
+.tile.in:hover{transform:translateY(-3px)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}
+  .tile{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand">קיץ 2026 · האלבום המשותף שלנו</div>
+    <h1><span class="dest">התמונות שלנו</span> <span class="light">— דרום צרפת</span><span class="newbadge" id="newBadge"></span></h1>
+    <p class="sub">כל אחד מעלה את התמונות הכי טובות שצילם — וכולם נהנים. לחצו על הכפתור, בחרו תמונות מהגלריה, וזהו.</p>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="wrap">
+    <button class="tab" aria-selected="true" data-view="all">כל התמונות<span class="cnt" id="cntAll"></span></button>
+    <button class="tab" aria-selected="false" data-view="people">לפי אנשים<span class="cnt" id="cntPeople"></span></button>
+    <span style="margin-inline-start:auto"></span>
+    <button class="idchip" id="idChip" style="display:none"></button>
+    <a class="backlink" href="index.html">‹ למדריך</a>
+  </div>
+</nav>
+
+<main class="wrap">
+  <div id="galleryRoot"></div>
+</main>
+
+<button class="btn fab" id="fabUpload">📸 הוסיפו תמונות</button>
+
+<!-- identity modal -->
+<div class="overlay" id="idOverlay">
+  <div class="modal">
+    <button class="close" id="idClose" aria-label="סגירה">✕</button>
+    <div id="idStep1">
+      <h3>רגע, מי מצלם? 📷</h3>
+      <p>כדי שכולם ידעו מי העלה כל תמונה — הזדהו פעם אחת בלבד.</p>
+      <div class="gwrap" id="gBtn"></div>
+      <div class="or">או בלי גוגל</div>
+      <input type="text" id="manualName" placeholder="השם שלכם (למשל: סבתא רונה)" maxlength="30">
+      <div class="row"><button class="btn" id="manualGo">המשך</button></div>
+    </div>
+    <div id="idStep2" style="display:none">
+      <img class="mavatar" id="confAvatar" alt="" referrerpolicy="no-referrer">
+      <h3>איך לקרוא לך באלבום?</h3>
+      <p>זה השם שיופיע על התמונות שלך. אפשר לשנות.</p>
+      <input type="text" id="confName" maxlength="30">
+      <div class="row"><button class="btn" id="confGo">זה אני ✓</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- lightbox -->
+<div class="lb" id="lb">
+  <button class="x" id="lbClose" aria-label="סגירה">✕</button>
+  <button class="nav-prev" id="lbPrev" aria-label="הקודם">‹</button>
+  <button class="nav-next" id="lbNext" aria-label="הבא">›</button>
+  <img id="lbImg" alt="">
+  <div class="lbwho" id="lbWho"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<footer><div class="wrap">האלבום המשפחתי · דרום צרפת 2026 🌻 · התמונות פרטיות למשפחה בלבד</div></footer>
+
+<script>
+'use strict';
+/* ================= config ================= */
+const CLOUD = 'zeiwhzn0';
+const PRESET = 'france-family';
+const TAG = 'france2026-family';
+const GOOGLE_CLIENT_ID = '462911274506-3vi920k6h0hshhmd2otl5q8v47llf4b7.apps.googleusercontent.com';
+const LS_ID = 'f26_identity';
+const LS_SEEN = 'f26_lastSeen';
+
+/* ================= state ================= */
+let photos = [];            // sorted newest-first
+let view = 'all';
+let lastSeen = localStorage.getItem(LS_SEEN);   // ISO string or null
+let firstVisit = !lastSeen;
+let lbIndex = -1;
+let pendingUpload = false;  // open widget right after identity is set
+
+const $ = id => document.getElementById(id);
+const rootEl = $('galleryRoot');
+
+/* ================= identity ================= */
+function getIdentity(){
+  try{ return JSON.parse(localStorage.getItem(LS_ID)) || null }catch(e){ return null }
+}
+function setIdentity(name, avatar){
+  localStorage.setItem(LS_ID, JSON.stringify({name:name.trim(), avatar:avatar||''}));
+  renderChip();
+}
+/* all user-supplied strings (names, avatar urls) pass through esc() before hitting innerHTML */
+function esc(s){ return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])) }
+function avatarEl(av, name, cls){
+  const ch = esc(String(name||'?').trim().charAt(0)||'?');
+  if(av) return `<img class="av" src="${esc(av)}" data-ch="${ch}" alt="" referrerpolicy="no-referrer">`;
+  return `<span class="avfall ${cls||''}">${ch}</span>`;
+}
+/* broken avatar images fall back to an initial-letter circle (delegated, capture phase) */
+document.addEventListener('error', e=>{
+  const t = e.target;
+  if(t && t.tagName==='IMG' && t.classList.contains('av')){
+    const s = document.createElement('span');
+    s.className = 'avfall';
+    s.textContent = t.dataset.ch || '?';
+    t.replaceWith(s);
+  }
+}, true);
+function renderChip(){
+  const id = getIdentity(), chip = $('idChip');
+  if(!id){ chip.style.display='none'; return }
+  chip.style.display='flex';
+  chip.innerHTML = avatarEl(id.avatar, id.name) + `<span>${esc(id.name)}</span>`;
+}
+$('idChip').addEventListener('click', ()=> openIdentityModal(false));
+
+/* --- modal flow --- */
+function openIdentityModal(forUpload){
+  pendingUpload = !!forUpload;
+  $('idStep1').style.display=''; $('idStep2').style.display='none';
+  const cur = getIdentity();
+  $('manualName').value = cur ? cur.name : '';
+  $('idOverlay').classList.add('open');
+  initGoogleBtn();
+}
+function closeIdentityModal(){ $('idOverlay').classList.remove('open') }
+$('idClose').addEventListener('click', closeIdentityModal);
+$('idOverlay').addEventListener('click', e=>{ if(e.target===$('idOverlay')) closeIdentityModal() });
+
+let gisReady = false;
+function initGoogleBtn(){
+  if(gisReady) return;
+  if(!(window.google && google.accounts && google.accounts.id)){
+    setTimeout(initGoogleBtn, 300); return;   // script still loading; manual path works meanwhile
+  }
+  try{
+    google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: onGoogleCred, auto_select:false });
+    google.accounts.id.renderButton($('gBtn'), { theme:'outline', size:'large', shape:'pill', text:'continue_with', locale:'he', width:280 });
+    gisReady = true;
+  }catch(e){ /* Google unavailable — manual path remains */ }
+}
+function onGoogleCred(resp){
+  try{
+    const p = JSON.parse(decodeURIComponent(escape(atob(resp.credential.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')))));
+    $('idStep1').style.display='none'; $('idStep2').style.display='';
+    const av = $('confAvatar');
+    if(p.picture){ av.src = p.picture; av.style.display='block' } else av.style.display='none';
+    av.dataset.url = p.picture || '';
+    $('confName').value = p.given_name || p.name || '';
+    $('confName').focus();
+  }catch(e){ showToast('משהו השתבש בהתחברות — נסו שוב או הזינו שם') }
+}
+$('confGo').addEventListener('click', ()=>{
+  const n = $('confName').value.trim();
+  if(!n){ $('confName').focus(); return }
+  setIdentity(n, $('confAvatar').dataset.url);
+  closeIdentityModal();
+  if(pendingUpload) openWidget();
+});
+$('manualGo').addEventListener('click', ()=>{
+  const n = $('manualName').value.trim();
+  if(!n){ $('manualName').focus(); return }
+  setIdentity(n, '');
+  closeIdentityModal();
+  if(pendingUpload) openWidget();
+});
+$('manualName').addEventListener('keydown', e=>{ if(e.key==='Enter') $('manualGo').click() });
+$('confName').addEventListener('keydown', e=>{ if(e.key==='Enter') $('confGo').click() });
+
+/* ================= upload ================= */
+$('fabUpload').addEventListener('click', ()=>{
+  if(getIdentity()) openWidget(); else openIdentityModal(true);
+});
+function ctxEscape(v){ return String(v).replace(/([=|])/g,'\\$1') }
+function openWidget(){
+  if(!window.cloudinary){ showToast('רכיב ההעלאה עוד נטען — נסו שוב עוד רגע'); return }
+  const id = getIdentity();
+  const ctx = { uploader: id.name };
+  if(id.avatar) ctx.avatar = id.avatar;
+  cloudinary.openUploadWidget({
+    cloudName: CLOUD, uploadPreset: PRESET,
+    sources: ['local','camera'], multiple: true, maxFiles: 40,
+    clientAllowedFormats: ['image'], maxImageFileSize: 25000000,
+    context: ctx, tags: [TAG],
+    styles:{ palette:{ link:'#7E6BAA', action:'#7E6BAA', complete:'#2E7D52' } },
+    language: 'he',
+    text: { he: {
+      or: 'או', back: 'חזרה', close: 'סגירה', menu: { files: 'הקבצים שלי', camera: 'מצלמה' },
+      local: {
+        browse: 'בחירת קבצים',
+        dd_title_single: 'גררו תמונה לכאן',
+        dd_title_multi: 'גררו תמונות לכאן',
+        drop_title_single: 'שחררו כדי להעלות',
+        drop_title_multiple: 'שחררו כדי להעלות'
+      },
+      camera: { capture: 'צילום', cancel: 'ביטול', take_pic: 'צלמו תמונה', explanation: 'ודאו שהמצלמה מחוברת ואשרו גישה לדפדפן' },
+      queue: {
+        title: 'תמונות להעלאה', done: 'סיום', mini_title: 'הועלו', mini_title_uploading: 'מעלה...',
+        statuses: { uploading: 'מעלה...', error: 'שגיאה', uploaded: 'הועלה ✓', aborted: 'בוטל' }
+      }
+    }}
+  }, (err, res)=>{
+    if(err){ showToast('ההעלאה נכשלה — בדקו חיבור ונסו שוב'); return }
+    if(res.event==='success'){
+      const i = res.info;
+      photos.unshift({ id:i.public_id, ver:i.version, created:i.created_at,
+        uploader:id.name, avatar:id.avatar||'', isNew:false, mine:true });
+      render();
+    }
+    if(res.event==='queues-end'){ showToast('התמונות עלו לאלבום! 🎉') }
+  });
+}
+
+/* ================= data ================= */
+function thumbUrl(p){ return `https://res.cloudinary.com/${CLOUD}/image/upload/f_auto,q_auto,c_fill,w_440,h_440/v${p.ver}/${encodeURIComponent(p.id)}` }
+function fullUrl(p){ return `https://res.cloudinary.com/${CLOUD}/image/upload/f_auto,q_auto,w_1600/v${p.ver}/${encodeURIComponent(p.id)}` }
+
+async function fetchGallery(){
+  renderSkeleton();
+  let res;
+  try{
+    res = await fetch(`https://res.cloudinary.com/${CLOUD}/image/list/${TAG}.json?t=${Date.now()}`, {cache:'no-store'});
+  }catch(e){ renderError(); return }
+  if(res.status===404){ photos=[]; render(); return }   // empty tag => 404, not []
+  if(!res.ok){ renderError(); return }
+  let data;
+  try{ data = await res.json() }catch(e){ renderError(); return }
+  photos = (data.resources||[]).map(r=>({
+    id: r.public_id, ver: r.version, created: r.created_at,
+    uploader: (r.context&&r.context.custom&&r.context.custom.uploader)||'אורח/ת',
+    avatar: (r.context&&r.context.custom&&r.context.custom.avatar)||'',
+    isNew: !firstVisit && lastSeen && r.created_at > lastSeen,
+    mine:false
+  })).sort((a,b)=> b.created<a.created?-1:b.created>a.created?1:0);
+  render();
+  scheduleMarkSeen();
+}
+
+let seenTimer=null;
+function scheduleMarkSeen(){
+  clearTimeout(seenTimer);
+  seenTimer = setTimeout(()=>{
+    if(photos.length) localStorage.setItem(LS_SEEN, photos[0].created);
+    else if(firstVisit) localStorage.setItem(LS_SEEN, new Date(0).toISOString());
+  }, 4000);
+}
+
+/* ================= rendering ================= */
+function tileHtml(p, gi){
+  const u = esc(p.uploader);
+  return `<div class="tile${p.isNew?' isnew':''}" data-gi="${gi}" role="button" tabindex="0" aria-label="תמונה של ${u}">
+    <img loading="lazy" src="${thumbUrl(p)}" alt="תמונה מהטיול של ${u}">
+    <div class="who">${avatarEl(p.avatar,p.uploader)}<span>${u}</span></div>
+  </div>`;
+}
+function renderSkeleton(){
+  rootEl.className='skeleton';
+  rootEl.innerHTML = `<div class="grid">${'<div class="tile in" style="opacity:.5"></div>'.repeat(8)}</div>`;
+}
+function renderError(){
+  rootEl.className='';
+  rootEl.innerHTML = `<div class="state"><div class="big">📡</div><h3>לא הצלחנו לטעון את האלבום</h3>
+    <p>בדקו את החיבור לאינטרנט ונסו שוב.</p><button class="btn sec" onclick="fetchGallery()">נסו שוב</button></div>`;
+}
+function renderEmpty(){
+  rootEl.innerHTML = `<div class="state"><div class="big">🌻</div><h3>האלבום עוד ריק</h3>
+    <p>היו הראשונים! לחצו על "הוסיפו תמונות" והעלו את הרגעים היפים שצילמתם בטיול.</p>
+    <button class="btn" onclick="document.getElementById('fabUpload').click()">📸 הוסיפו את התמונה הראשונה</button></div>`;
+}
+function render(){
+  rootEl.className='';
+  $('cntAll').textContent = photos.length ? photos.length : '';
+  const ppl = new Set(photos.map(p=>p.uploader));
+  $('cntPeople').textContent = ppl.size ? ppl.size : '';
+  const nNew = photos.filter(p=>p.isNew).length;
+  const badge = $('newBadge');
+  if(nNew>0){ badge.textContent = `${nNew} חדשות מאז הביקור האחרון ✨`; badge.classList.add('show') }
+  else badge.classList.remove('show');
+
+  if(!photos.length){ renderEmpty(); return }
+  if(view==='all') renderAll(nNew); else renderPeople();
+  observeTiles();
+}
+function renderAll(nNew){
+  let html = '';
+  if(nNew>0 && nNew<photos.length){
+    html += `<div class="grid">${photos.slice(0,nNew).map((p,i)=>tileHtml(p,i)).join('')}</div>`;
+    html += `<div class="unread-divider"><b>✨ עד כאן חדש מאז הביקור האחרון</b></div>`;
+    html += `<div class="grid">${photos.slice(nNew).map((p,i)=>tileHtml(p,nNew+i)).join('')}</div>`;
+  }else{
+    html = `<div class="grid">${photos.map((p,i)=>tileHtml(p,i)).join('')}</div>`;
+  }
+  rootEl.innerHTML = html;
+}
+function renderPeople(){
+  const groups = new Map();
+  photos.forEach((p,gi)=>{
+    if(!groups.has(p.uploader)) groups.set(p.uploader, {avatar:p.avatar, items:[]});
+    const g = groups.get(p.uploader);
+    if(!g.avatar && p.avatar) g.avatar = p.avatar;
+    g.items.push(gi);
+  });
+  const sorted = [...groups.entries()].sort((a,b)=> b[1].items.length - a[1].items.length);
+  rootEl.innerHTML = sorted.map(([name,g])=>`
+    <section class="person">
+      <div class="person-h">${avatarEl(g.avatar,name)}<h3>${esc(name)}</h3><span class="cnt">${g.items.length} תמונות</span></div>
+      <div class="grid">${g.items.map(gi=>tileHtml(photos[gi],gi)).join('')}</div>
+    </section>`).join('');
+}
+function observeTiles(){
+  const tiles = rootEl.querySelectorAll('.tile');
+  if(!('IntersectionObserver' in window)){ tiles.forEach(t=>t.classList.add('in')); return }
+  const io = new IntersectionObserver(es=>{
+    es.forEach((e,i)=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target) } });
+  },{rootMargin:'80px'});
+  tiles.forEach((t,i)=>{ t.style.transitionDelay = `${Math.min(i%12,8)*35}ms`; io.observe(t) });
+}
+
+/* view toggle */
+document.querySelectorAll('.tab[data-view]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    view = btn.dataset.view;
+    document.querySelectorAll('.tab[data-view]').forEach(b=>b.setAttribute('aria-selected', b===btn ? 'true':'false'));
+    render();
+  });
+});
+
+/* ================= lightbox ================= */
+rootEl.addEventListener('click', e=>{
+  const t = e.target.closest('.tile[data-gi]');
+  if(t) openLb(+t.dataset.gi);
+});
+rootEl.addEventListener('keydown', e=>{
+  if(e.key==='Enter'){ const t = e.target.closest('.tile[data-gi]'); if(t) openLb(+t.dataset.gi) }
+});
+function openLb(i){
+  if(i<0||i>=photos.length) return;
+  lbIndex = i;
+  const p = photos[i];
+  $('lbImg').src = fullUrl(p);
+  $('lbImg').alt = `תמונה מהטיול של ${p.uploader}`;
+  $('lbWho').innerHTML = avatarEl(p.avatar,p.uploader) + `<span>${esc(p.uploader)}</span>`;
+  $('lb').classList.add('open');
+  document.body.style.overflow='hidden';
+  $('lbClose').focus();
+}
+function closeLb(){ $('lb').classList.remove('open'); document.body.style.overflow=''; lbIndex=-1 }
+function lbStep(d){ if(lbIndex<0) return; const n = lbIndex+d; if(n>=0&&n<photos.length) openLb(n) }
+$('lbClose').addEventListener('click', closeLb);
+$('lbNext').addEventListener('click', ()=>lbStep(1));
+$('lbPrev').addEventListener('click', ()=>lbStep(-1));
+$('lb').addEventListener('click', e=>{ if(e.target===$('lb')) closeLb() });
+document.addEventListener('keydown', e=>{
+  if(!$('lb').classList.contains('open')) return;
+  if(e.key==='Escape') closeLb();
+  if(e.key==='ArrowLeft') lbStep(1);   // RTL: next is to the left
+  if(e.key==='ArrowRight') lbStep(-1);
+});
+let touchX=null;
+$('lb').addEventListener('touchstart', e=>{ touchX = e.touches[0].clientX }, {passive:true});
+$('lb').addEventListener('touchend', e=>{
+  if(touchX===null) return;
+  const dx = e.changedTouches[0].clientX - touchX;
+  if(Math.abs(dx)>50) lbStep(dx<0 ? 1 : -1);
+  touchX=null;
+}, {passive:true});
+
+/* ================= toast ================= */
+let toastTimer=null;
+function showToast(msg){
+  const t = $('toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(()=>t.classList.remove('show'), 3500);
+}
+
+/* ================= init ================= */
+renderChip();
+fetchGallery();
+</script>
+</body>
+</html>
