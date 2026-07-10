@@ -261,8 +261,8 @@ footer{border-top:1px solid var(--line);padding:30px 0 44px;color:var(--muted);f
 <nav class="bar">
   <div class="wrap">
     <div class="seg">
-      <button data-view="people" aria-selected="true">לפי אנשים<span class="cnt" id="cntPeople"></span></button>
-      <button data-view="all" aria-selected="false">הכל ביחד<span class="cnt" id="cntAll"></span></button>
+      <button data-view="all" aria-selected="true">הכל ביחד<span class="cnt" id="cntAll"></span></button>
+      <button data-view="people" aria-selected="false">לפי אנשים<span class="cnt" id="cntPeople"></span></button>
     </div>
     <span class="spacer"></span>
     <div class="styleswitch" role="group" aria-label="סגנון תצוגה">
@@ -352,7 +352,7 @@ const LS_ID='f26_identity', LS_SEEN='f26_lastSeen', LS_STYLE='f26_style';
 const AVATAR_COLORS=['#BE7B22','#8A5A33','#1E7A93','#A6572E','#5E7A3C'];
 
 /* ================= state ================= */
-let photos=[], view='people';
+let photos=[], view='all';
 let style=localStorage.getItem(LS_STYLE)||'grid';
 let lastSeen=localStorage.getItem(LS_SEEN), firstVisit=!lastSeen;
 let lbIndex=-1, selectMode=false;
