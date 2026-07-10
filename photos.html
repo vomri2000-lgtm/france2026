@@ -83,11 +83,12 @@ main{padding:34px 0 110px}
 .person-h .pc{font-size:12.5px;font-weight:600;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:3px 12px}
 
 /* masonry — real aspect ratios */
-.cols{column-count:3;column-gap:22px}
-@media(max-width:900px){.cols{column-count:2;column-gap:14px}}
-@media(max-width:520px){.cols{column-count:2;column-gap:10px}}
-.cols figure{break-inside:avoid;position:relative;cursor:pointer;-webkit-user-select:none;user-select:none}
-.cols img{width:100%;display:block}
+.masonry{display:flex;align-items:flex-start;gap:22px}
+.mcol{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:22px}
+@media(max-width:900px){.masonry,.mcol{gap:14px}}
+@media(max-width:520px){.masonry,.mcol{gap:10px}}
+.masonry figure{position:relative;cursor:pointer;-webkit-user-select:none;user-select:none;margin:0}
+.masonry img{width:100%;display:block}
 
 /* frame + hover attribution (name shows on hover, not always) */
 .frame{position:relative;overflow:hidden}
@@ -104,12 +105,11 @@ figure:hover .hovname{opacity:1;transform:none}
 @media(hover:none){.hovname{display:none}} /* touch: attribution via lightbox / person view */
 
 /* -- journal style -- */
-.style-journal figure{margin:0 0 22px}
 .style-journal .frame{border-radius:8px;box-shadow:var(--shadow);transition:box-shadow .3s var(--ease)}
 .style-journal figure:hover .frame{box-shadow:0 18px 44px -20px rgba(50,35,18,.6)}
 
 /* -- wall style -- (polaroid: white frame, larger bottom lip, slight rotation) */
-.style-wall figure{margin:0 0 26px;background:var(--surface);padding:12px 12px 30px;border-radius:4px;box-shadow:0 12px 28px -14px rgba(50,35,18,.45);transition:box-shadow .3s var(--ease)}
+.style-wall figure{background:var(--surface);padding:12px 12px 30px;border-radius:4px;box-shadow:0 12px 28px -14px rgba(50,35,18,.45);transition:box-shadow .3s var(--ease)}
 .style-wall figure:nth-child(3n){transform:rotate(-1.1deg)}
 .style-wall figure:nth-child(3n+1){transform:rotate(.9deg)}
 .style-wall figure:nth-child(4n){transform:rotate(-.5deg)}
@@ -262,7 +262,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 44px;color:var(--muted);f
     </div>
     <button class="tbtn" id="selectBtn">בחירה</button>
     <button class="idchip" id="idChip" style="display:none"></button>
-    <a class="backlink" href="index.html">‹ למדריך</a>
+    <a class="backlink" href="index.html">למדריך ›</a>
   </div>
 </nav>
 
@@ -448,7 +448,7 @@ async function uploadFiles(fileList){
   for(let i=0;i<files.length;i++){
     try{
       const info=await cldUpload(files[i],id,pct=>setProg(((i+pct/100)/files.length)*100,`מעלה ${i+1} מתוך ${files.length}…`));
-      fresh.push({id:info.public_id,ver:info.version,created:info.created_at,uploader:id.name,avatar:id.avatar||'',isNew:false});
+      fresh.push({id:info.public_id,ver:info.version,created:info.created_at,w:info.width||3,h:info.height||2,uploader:id.name,avatar:id.avatar||'',isNew:false});
       ok++;
     }catch(e){fail++}
   }
@@ -475,6 +475,7 @@ async function fetchList(){
   let data;try{data=await res.json()}catch(e){return null}
   return (data.resources||[]).map(r=>({
     id:r.public_id,ver:r.version,created:r.created_at,
+    w:r.width||3,h:r.height||2,
     uploader:(r.context&&r.context.custom&&r.context.custom.uploader)||'אורח/ת',
     avatar:(r.context&&r.context.custom&&r.context.custom.avatar)||'',
     isNew:!firstVisit&&lastSeen&&r.created_at>lastSeen
@@ -527,7 +528,7 @@ function figHtml(p,gi){
   return `<figure class="reveal${selCls}" data-gi="${gi}">
     <span class="tape"></span>${p.isNew?'<span class="newdot"></span>':''}<span class="pick"></span>
     <div class="frame">
-      <img loading="lazy" src="${thumbUrl(p)}" alt="תמונה מהטיול של ${u}">
+      <img loading="lazy" style="aspect-ratio:${p.w}/${p.h}" src="${thumbUrl(p)}" alt="תמונה מהטיול של ${u}">
       <span class="hovname">${avatarEl(p.avatar,p.uploader)}<span>${u}</span></span>
     </div>
   </figure>`;
@@ -549,6 +550,23 @@ function renderEmpty(){
     <button class="btn" onclick="document.getElementById('fabUpload').click()">📸 הוסיפו את התמונה הראשונה</button></div>`;
 }
 function nPhotos(n){return n===1?'תמונה אחת':`${n} תמונות`}
+/* flex-column masonry (replaces CSS multi-column, which flickers/vanishes on
+   iOS Safari during scroll). Photos are packed into the currently-shortest
+   column using their known aspect ratio, so columns stay balanced. */
+let curCols=0;
+function colCount(){return window.innerWidth>=900?3:2}
+function masonryHtml(indices){
+  const n=colCount();curCols=n;
+  const cols=Array.from({length:n},()=>({h:0,html:''}));
+  for(const gi of indices){
+    const p=photos[gi];
+    let m=0;for(let c=1;c<n;c++)if(cols[c].h<cols[m].h)m=c;
+    cols[m].html+=figHtml(p,gi);
+    cols[m].h+=(p.h/p.w)+0.12; /* image height (unit width) + caption/gap allowance */
+  }
+  const cls=`masonry style-${style}${selectMode?' selecting':''}`;
+  return `<div class="${cls}">${cols.map(c=>`<div class="mcol">${c.html}</div>`).join('')}</div>`;
+}
 function render(){
   $('cntAll').textContent=photos.length||'';
   const ppl=new Set(photos.map(p=>p.uploader));
@@ -557,18 +575,16 @@ function render(){
   const badge=$('newBadge');
   if(nNew>0){badge.textContent=`✨ ${nNew===1?'תמונה חדשה אחת':nNew+' תמונות חדשות'} מאז הביקור האחרון`;badge.classList.add('show')}
   else badge.classList.remove('show');
-  renderContrib();
+  renderContrib();rootEl.className='';
   if(!photos.length){renderEmpty();updateSelUI();return}
-  const cls=`cols style-${style}${selectMode?' selecting':''}`;
   if(view==='all'){
+    const idx=photos.map((p,i)=>i);
     if(nNew>0&&nNew<photos.length){
-      rootEl.innerHTML=
-        `<div class="${cls}">${photos.slice(0,nNew).map((p,i)=>figHtml(p,i)).join('')}</div>`+
+      rootEl.innerHTML=masonryHtml(idx.slice(0,nNew))+
         `<div class="unread-divider"><b>✨ עד כאן חדש מאז הביקור האחרון</b></div>`+
-        `<div class="${cls}">${photos.slice(nNew).map((p,i)=>figHtml(p,nNew+i)).join('')}</div>`;
-    }else rootEl.innerHTML=`<div class="${cls}">${photos.map((p,i)=>figHtml(p,i)).join('')}</div>`;
-    rootEl.className='';
-  }else renderPeople(cls);
+        masonryHtml(idx.slice(nNew));
+    }else rootEl.innerHTML=masonryHtml(idx);
+  }else renderPeople();
   observeTiles();updateSelUI();
 }
 function renderContrib(){
@@ -581,17 +597,16 @@ function renderContrib(){
       :`<span class="av" style="background:${colorFor(s.name)}">${esc(s.name[0])}</span>`).join('')+
     `<span class="lbl">צילמו יחד<br><b>${shown.map(s=>esc(s.name)).join(' · ')}${seen.length>5?' ועוד':''}</b></span>`;
 }
-function renderPeople(cls){
+function renderPeople(){
   const groups=new Map();
   photos.forEach((p,gi)=>{
     if(!groups.has(p.uploader))groups.set(p.uploader,{avatar:p.avatar,items:[]});
     const g=groups.get(p.uploader);if(!g.avatar&&p.avatar)g.avatar=p.avatar;g.items.push(gi);
   });
   const sorted=[...groups.entries()].sort((a,b)=>b[1].items.length-a[1].items.length);
-  rootEl.className='';
   rootEl.innerHTML=sorted.map(([name,g])=>`<section class="person">
     <div class="person-h">${avatarEl(g.avatar,name)}<h3>${esc(name)}</h3><span class="pc">${nPhotos(g.items.length)}</span></div>
-    <div class="${cls}">${g.items.map(gi=>figHtml(photos[gi],gi)).join('')}</div>
+    ${masonryHtml(g.items)}
   </section>`).join('');
 }
 function observeTiles(){
@@ -780,6 +795,12 @@ if(SUPPORTS_FILE_SHARE){ /* phones: frame it as saving to the gallery, not downl
   $('selDownload').innerHTML='⬇ שמירה לגלריה';
   $('lbDownload').innerHTML='⬇ שמירה';
 }
+/* re-balance columns only when the count actually changes (rotation/resize) */
+let resizeTimer=null;
+window.addEventListener('resize',()=>{
+  clearTimeout(resizeTimer);
+  resizeTimer=setTimeout(()=>{if(photos.length&&colCount()!==curCols)render()},200);
+});
 renderChip();
 fetchGallery();
 </script>
