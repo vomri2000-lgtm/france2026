@@ -36,7 +36,8 @@ h1 .fr{display:block;font-family:var(--lat);font-style:italic;font-weight:400;fo
 .newbadge{display:none;font-family:var(--font);font-size:13px;font-weight:700;color:#fff;background:var(--sea);
   border-radius:999px;padding:5px 14px;margin-top:14px;width:fit-content}
 .newbadge.show{display:inline-block;animation:pop .45s var(--ease)}
-.contrib{display:flex;align-items:center;padding-bottom:6px}
+.contrib{display:flex;align-items:center;padding-bottom:6px;cursor:pointer}
+.contrib .av.me{box-shadow:0 0 0 2.5px var(--bg),0 0 0 4.5px var(--gold)}
 .contrib .av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;
   font-weight:700;font-size:15px;color:#fff;border:2.5px solid var(--bg);margin-inline-start:-12px;box-shadow:0 2px 8px rgba(60,40,20,.15)}
 .contrib .av:first-child{margin-inline-start:0}
@@ -273,7 +274,6 @@ footer{border-top:1px solid var(--line);padding:30px 0 44px;color:var(--muted);f
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>קיר</button>
     </div>
     <button class="tbtn" id="selectBtn">בחירה</button>
-    <button class="idchip" id="idChip" style="display:none"></button>
     <a class="backlink" href="index.html">למדריך ›</a>
   </div>
 </nav>
@@ -379,15 +379,9 @@ function avatarEl(av,name){
 
 /* ================= identity ================= */
 function getIdentity(){try{return JSON.parse(localStorage.getItem(LS_ID))||null}catch(e){return null}}
-function setIdentity(name,avatar){localStorage.setItem(LS_ID,JSON.stringify({name:name.trim(),avatar:avatar||''}));renderChip()}
-function renderChip(){
-  const id=getIdentity(),chip=$('idChip');
-  if(!id){chip.style.display='none';return}
-  chip.style.display='inline-flex';
-  chip.title='שינוי השם שלך';
-  chip.innerHTML=avatarEl(id.avatar,id.name); /* avatar only — tap to change name */
-}
-$('idChip').addEventListener('click',()=>openIdentityModal(false));
+function setIdentity(name,avatar){localStorage.setItem(LS_ID,JSON.stringify({name:name.trim(),avatar:avatar||''}));if(photos.length)renderContrib()}
+/* tapping the contributors strip lets you fix your own display name */
+$('contrib').addEventListener('click',()=>openIdentityModal(false));
 
 function openIdentityModal(forUpload){
   pendingUpload=!!forUpload;
@@ -608,11 +602,12 @@ function render(){
 function renderContrib(){
   const el=$('contrib');
   if(!photos.length){el.innerHTML='';return}
+  const me=(getIdentity()||{}).name;
   const seen=[];for(const p of photos)if(!seen.find(s=>s.name===p.uploader))seen.push({name:p.uploader,avatar:p.avatar});
   const cap=6,shown=seen.slice(0,cap),extra=seen.length-cap;
-  el.innerHTML=shown.map(s=>s.avatar
-      ?`<img class="av av-img" style="background:${colorFor(s.name)}" src="${esc(s.avatar)}" data-ch="${esc(s.name[0])}" data-color="${colorFor(s.name)}" alt="${esc(s.name)}" title="${esc(s.name)}" referrerpolicy="no-referrer">`
-      :`<span class="av" style="background:${colorFor(s.name)}" title="${esc(s.name)}">${esc(s.name[0])}</span>`).join('')+
+  el.innerHTML=shown.map(s=>{const mine=s.name===me?' me':'';return s.avatar
+      ?`<img class="av av-img${mine}" style="background:${colorFor(s.name)}" src="${esc(s.avatar)}" data-ch="${esc(s.name[0])}" data-color="${colorFor(s.name)}" alt="${esc(s.name)}" title="${esc(s.name)}" referrerpolicy="no-referrer">`
+      :`<span class="av${mine}" style="background:${colorFor(s.name)}" title="${esc(s.name)}">${esc(s.name[0])}</span>`}).join('')+
     (extra>0?`<span class="av more">+${extra}</span>`:'')+
     `<span class="lbl">צילמו יחד</span>`;
 }
@@ -820,7 +815,6 @@ window.addEventListener('resize',()=>{
   clearTimeout(resizeTimer);
   resizeTimer=setTimeout(()=>{if(photos.length&&style!=='grid'&&colCount()!==curCols)render()},200);
 });
-renderChip();
 fetchGallery();
 </script>
 </body>
