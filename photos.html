@@ -91,7 +91,8 @@ main{padding:34px 0 110px}
 .frame>img{aspect-ratio:var(--ar,3/2);width:100%;height:auto;display:block}
 
 /* -- compact grid (dense square thumbnails, scan many at a glance) -- */
-.gridwrap{display:grid;gap:3px;grid-template-columns:repeat(auto-fill,minmax(clamp(100px,30vw,138px),1fr))}
+.gridwrap{display:grid;gap:4px;grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
+@media(max-width:640px){.gridwrap{grid-template-columns:repeat(3,1fr);gap:3px}}
 .gridwrap figure{position:relative;cursor:pointer;-webkit-user-select:none;user-select:none;margin:0}
 .style-grid .frame{aspect-ratio:1;border-radius:3px;overflow:hidden;box-shadow:none}
 .style-grid .frame>img{aspect-ratio:1;width:100%;height:100%;object-fit:cover}
