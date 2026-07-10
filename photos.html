@@ -207,6 +207,12 @@ figure.sel .pick::after{content:"✓";color:#fff;font-size:15px;font-weight:800}
 .modal .close{position:absolute;top:14px;inset-inline-end:14px;width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-size:15px;color:var(--muted);line-height:1}
 
 /* ---------- toast / progress ---------- */
+.newbanner{position:fixed;top:72px;left:50%;transform:translateX(-50%) translateY(-12px);z-index:44;
+  background:var(--sea);color:#fff;font-family:var(--font);font-size:14px;font-weight:700;border:0;cursor:pointer;
+  border-radius:999px;padding:9px 20px;box-shadow:0 8px 24px -8px rgba(0,0,0,.4);opacity:0;pointer-events:none;
+  transition:.3s var(--ease);white-space:nowrap}
+.newbanner.show{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0)}
+.newbanner:hover{filter:brightness(1.07)}
 .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);z-index:80;background:var(--ink);color:#fff;
   font-size:14px;font-weight:600;border-radius:999px;padding:11px 22px;opacity:0;pointer-events:none;transition:.3s var(--ease);max-width:90vw;text-align:center}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -319,6 +325,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 44px;color:var(--muted);f
   </div>
 </div>
 
+<button class="newbanner" id="newBanner"></button>
 <div class="toast" id="toast"></div>
 
 <footer><div class="wrap">Fin de l'album · דרום צרפת 2026 🌻</div></footer>
@@ -457,22 +464,54 @@ const thumbUrl=p=>`https://res.cloudinary.com/${CLOUD}/image/upload/f_auto,q_aut
 const fullUrl=p=>`https://res.cloudinary.com/${CLOUD}/image/upload/f_auto,q_auto,w_1800/v${p.ver}/${encodeURIComponent(p.id)}`;
 const origUrl=p=>`https://res.cloudinary.com/${CLOUD}/image/upload/fl_attachment/v${p.ver}/${encodeURIComponent(p.id)}`;
 
-async function fetchGallery(){
-  renderSkeleton();
+const cmpNewestFirst=(a,b)=>b.created<a.created?-1:b.created>a.created?1:0;
+/* returns the mapped photo list, [] for an empty album, or null on error */
+async function fetchList(){
   let res;
   try{res=await fetch(`https://res.cloudinary.com/${CLOUD}/image/list/${TAG}.json?t=${Date.now()}`,{cache:'no-store'})}
-  catch(e){return renderError()}
-  if(res.status===404){photos=[];return render()}
-  if(!res.ok)return renderError();
-  let data;try{data=await res.json()}catch(e){return renderError()}
-  photos=(data.resources||[]).map(r=>({
+  catch(e){return null}
+  if(res.status===404)return [];
+  if(!res.ok)return null;
+  let data;try{data=await res.json()}catch(e){return null}
+  return (data.resources||[]).map(r=>({
     id:r.public_id,ver:r.version,created:r.created_at,
     uploader:(r.context&&r.context.custom&&r.context.custom.uploader)||'אורח/ת',
     avatar:(r.context&&r.context.custom&&r.context.custom.avatar)||'',
     isNew:!firstVisit&&lastSeen&&r.created_at>lastSeen
-  })).sort((a,b)=>b.created<a.created?-1:b.created>a.created?1:0);
-  render();scheduleMarkSeen();
+  })).sort(cmpNewestFirst);
 }
+async function fetchGallery(){
+  renderSkeleton();
+  const list=await fetchList();
+  if(list===null)return renderError();
+  photos=list;render();scheduleMarkSeen();startPolling();
+}
+/* ---- live updates: poll quietly, surface a "new photos" banner (no scroll jump) ---- */
+let pollTimer=null,pollBound=false,pendingNew=[];
+function startPolling(){
+  if(pollTimer)return;
+  pollTimer=setInterval(()=>{if(document.visibilityState==='visible')pollGallery()},40000);
+  if(!pollBound){pollBound=true;document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')pollGallery()})}
+}
+async function pollGallery(){
+  const list=await fetchList();
+  if(!list)return; /* silent on background errors */
+  const known=new Set([...photos.map(p=>p.id),...pendingNew.map(p=>p.id)]);
+  const fresh=list.filter(p=>!known.has(p.id));
+  if(fresh.length){pendingNew.push(...fresh);showNewBanner()}
+}
+function showNewBanner(){
+  const n=pendingNew.length,b=$('newBanner');
+  b.textContent=`✨ ${n===1?'תמונה חדשה':n+' תמונות חדשות'} · הצג`;
+  b.classList.add('show');
+}
+$('newBanner').addEventListener('click',()=>{
+  if(!pendingNew.length)return;
+  photos=[...pendingNew,...photos].sort(cmpNewestFirst);pendingNew=[];
+  $('newBanner').classList.remove('show');
+  render();scheduleMarkSeen();
+  window.scrollTo({top:0,behavior:'smooth'});
+});
 let seenTimer=null;
 function scheduleMarkSeen(){
   clearTimeout(seenTimer);
