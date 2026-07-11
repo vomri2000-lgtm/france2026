@@ -285,6 +285,15 @@ footer{border-top:1px solid var(--line);padding:30px 0 44px;color:var(--muted);f
 <button class="btn fab" id="fabUpload">📸 הוסיפו תמונות</button>
 <input type="file" id="fileInput" accept="image/*" multiple hidden>
 
+<!-- one-time Android upload tip -->
+<div class="overlay" id="androidTipOverlay">
+  <div class="modal">
+    <h3>טיפ קטן 📸</h3>
+    <p>בחלק ממכשירי גלקסי נפתח "הקבצים" במקום הגלריה. אם זה קורה — חפשו בתפריט למעלה <b>"גלריה"</b> או <b>"תמונות"</b> ובחרו משם. (הכי חלק: לפתוח את האלבום ב-Chrome.)</p>
+    <div class="row"><button class="btn" id="androidTipGo">הבנתי, ממשיכים</button></div>
+  </div>
+</div>
+
 <!-- selection action bar -->
 <div class="selbar" id="selBar">
   <div class="wrap">
@@ -429,7 +438,20 @@ $('confName').addEventListener('keydown',e=>{if(e.key==='Enter')$('confGo').clic
    widget), then we POST each file to Cloudinary's unsigned endpoint with our
    own progress bar. */
 $('fabUpload').addEventListener('click',()=>{if(getIdentity())triggerPicker();else openIdentityModal(true)});
-function triggerPicker(){$('fileInput').value='';$('fileInput').click()}
+const IS_ANDROID=/Android/i.test(navigator.userAgent);
+function openPicker(){$('fileInput').value='';$('fileInput').click()}
+function triggerPicker(){
+  /* Android/Samsung sometimes opens Files instead of the gallery — show a
+     one-time tip first so family members know where to look. */
+  if(IS_ANDROID&&!localStorage.getItem('f26_androidTip')){$('androidTipOverlay').classList.add('open');return}
+  openPicker();
+}
+$('androidTipGo').addEventListener('click',()=>{
+  localStorage.setItem('f26_androidTip','1');
+  $('androidTipOverlay').classList.remove('open');
+  openPicker();
+});
+$('androidTipOverlay').addEventListener('click',e=>{if(e.target===$('androidTipOverlay')){localStorage.setItem('f26_androidTip','1');$('androidTipOverlay').classList.remove('open');openPicker()}});
 $('fileInput').addEventListener('change',e=>{const f=e.target.files;if(f&&f.length)uploadFiles(f)});
 const ctxEscape=v=>String(v).replace(/([=|])/g,'\\$1');
 function cldUpload(file,id,onProg){
